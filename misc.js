@@ -1081,7 +1081,7 @@ function rabbit() {
     this.XP = 10;
     this.nbLoot = 2;
     this.loots = [new loot(listCraftItems[0], 100), new loot(listCraftItems[1], 100)];
-    this.img = "http://www.pokebip.com/pokemon/pokedex/images/bw_animes/032.gif";
+    this.img = "images/rabbit.png";
 }
 
 function chicken() {
@@ -1093,7 +1093,7 @@ function chicken() {
     this.XP = 30;
     this.nbLoot = 2;
     this.loots = [new loot(listCraftItems[2], 100), new loot(listCraftItems[3], 50)];
-    this.img = "http://www.pokebip.com/pokemon/pokedex/images/bw_animes/255.gif";
+    this.img = "images/chicken.png";
 }
 
 var monsters = [new rabbit, new chicken, new rabbit];
