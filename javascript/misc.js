@@ -142,9 +142,6 @@ function updateDisplayCharSheet() {
   document.getElementById("char_AGI").innerHTML = cfAGI;
 
   document.getElementById("char_points").innerHTML = cavPoint;
-
-  if (cavPoint > 0) document.getElementById("menu_char").innerHTML = "<b>Character (" + cavPoint + ")</b>";
-  else document.getElementById("menu_char").innerHTML = "Character";
 }
 
 //------------------//
@@ -1200,25 +1197,11 @@ function displayGathering() {
   //-   Menu items   -//
   //------------------//
 
-  function displayMenuChar() {
-    elmcstats = document.getElementById('main_char_stats_window');
-    if (elmcstats.style.display == "inline") elmcstats.style.display = "none";
-    else {
-      document.getElementById('main_char_tailoring_window').style.display = "none";
-      elmcstats.style.display = "inline";
-      document.getElementById('main_char_quests_window').style.display = "none";
-      document.getElementById('main_char_inventory_window').style.display = "none";
-      document.getElementById('worldmap_window').style.display = "none";
-      document.getElementById('shop_window').style.display = "none";
-    }
-  }
-
   function displayMenuQuests() {
     elmcquests = document.getElementById('main_char_quests_window');
     if (elmcquests.style.display == "inline") elmcquests.style.display = "none";
     else {
       document.getElementById('main_char_tailoring_window').style.display = "none";
-      document.getElementById('main_char_stats_window').style.display = "none";
       elmcquests.style.display = "inline";
       document.getElementById('main_char_inventory_window').style.display = "none";
       document.getElementById('worldmap_window').style.display = "none";
@@ -1231,7 +1214,6 @@ function displayGathering() {
     if (elmcinventory.style.display == "inline") elmcinventory.style.display = "none";
     else {
       document.getElementById('main_char_tailoring_window').style.display = "none";
-      document.getElementById('main_char_stats_window').style.display = "none";
       document.getElementById('main_char_quests_window').style.display = "none";
       elmcinventory.style.display = "inline";
       document.getElementById('worldmap_window').style.display = "none";
@@ -1244,7 +1226,6 @@ function displayGathering() {
     if (elworldmap.style.display == "inline") elworldmap.style.display = "none";
     else {
       document.getElementById('main_char_tailoring_window').style.display = "none";
-      document.getElementById('main_char_stats_window').style.display = "none";
       document.getElementById('main_char_quests_window').style.display = "none";
       document.getElementById('main_char_inventory_window').style.display = "none";
       document.getElementById('shop_window').style.display = "none";
@@ -1256,7 +1237,6 @@ function displayGathering() {
     elTail = document.getElementById('main_char_tailoring_window');
     if (elTail.style.display == "inline") elTail.style.display = "none";
     else {
-      document.getElementById('main_char_stats_window').style.display = "none";
       document.getElementById('main_char_quests_window').style.display = "none";
       document.getElementById('main_char_inventory_window').style.display = "none";
       document.getElementById('worldmap_window').style.display = "none";
@@ -1270,7 +1250,6 @@ function displayGathering() {
     elShop = document.getElementById('shop_window');
     if (elShop.style.display == "inline") elShop.style.display = "none";
     else {
-      document.getElementById('main_char_stats_window').style.display = "none";
       document.getElementById('main_char_quests_window').style.display = "none";
       document.getElementById('main_char_inventory_window').style.display = "none";
       document.getElementById('worldmap_window').style.display = "none";
@@ -1284,7 +1263,6 @@ function displayGathering() {
     elGath = document.getElementById('gathering_window');
     if (elGath.style.display == "inline") elGath.style.display = "none";
     else {
-      document.getElementById('main_char_stats_window').style.display = "none";
       document.getElementById('main_char_quests_window').style.display = "none";
       document.getElementById('main_char_inventory_window').style.display = "none";
       document.getElementById('worldmap_window').style.display = "none";
