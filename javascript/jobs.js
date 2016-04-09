@@ -48,11 +48,9 @@ function job(options) {
   id = nbJobs++;
 }
 
-var opts_tailoring = {"name":"Tailoring", "details":""};
-var opts_mining = {"name":"Mining", "details":"Mineral"};
-
-var listJobs = [new job(opts_tailoring), new job(opts_mining)];
-
+var listJobs = [];
+listJobs.push(new job({"name":"Tailoring", "details":""}));
+listJobs.push(new job({"name":"Mining", "details":"Mineral"}));
 listJobs.push(new job({"name":"Smithing", "details":""}));
 //TODO Initialiser ça dans init() => function pour retirer variables globales
 /*Tailoring recipes*/

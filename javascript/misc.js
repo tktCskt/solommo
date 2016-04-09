@@ -59,7 +59,7 @@ var dead = false;
 var cArmor = "";
 var cDef = 0;
 
-var cWeapon = new sword;
+var cWeapon = searchByName(listWeapons,"Sword");
 var cAtk = cWeapon.damage;
 
 //------------------//
@@ -932,16 +932,6 @@ function displayGathering() {
   //-   Equipment    -//
   //------------------//
 
-  function fists() {
-    this.name = "Fists";
-    this.damage = 4;
-  }
-
-  function sword() {
-    this.name = "Sword";
-    this.damage = 9;
-  }
-
   function equipGearItems(i) {
     var item = gearItems[i];
     if (item.type == "Armor") {
@@ -1080,37 +1070,6 @@ function displayInventory() {
   //-    Monsters    -//
   //------------------//
 
-  function loot(item, percentage) {
-    this.item = item;
-    this.percentage = percentage;
-  }
-
-  function rabbit() {
-    this.exist = true;
-    this.maxHP = 16;
-    this.currHP = this.maxHP;
-    this.name = "Rabbit";
-    this.atk = 5;
-    this.XP = 10;
-    this.nbLoot = 2;
-    this.loots = [new loot(listCraftItems[0], 100), new loot(listCraftItems[1], 100)];
-    this.img = "images/rabbit.png";
-  }
-
-  function chicken() {
-    this.exist = true;
-    this.maxHP = 34;
-    this.currHP = this.maxHP;
-    this.name = "Chicken";
-    this.atk = 30;
-    this.XP = 30;
-    this.nbLoot = 2;
-    this.loots = [new loot(listCraftItems[2], 100), new loot(listCraftItems[3], 50)];
-    this.img = "images/chicken.png";
-  }
-
-  var monsters = [new rabbit, new chicken, new rabbit];
-
   function monsterDeath(md_monster, k) {
     log("You defeated the <b>" + monsters[k].name + "</b> and earned " + monsters[k].XP + "xp.", "INFO");
 
@@ -1141,10 +1100,10 @@ function displayInventory() {
 
   function clickmonster(i) {
     if (dead) log("You can't do that when you're dead.", "ERROR");
-    else if (monsters[i].exist) {
+    else if (monsters[i].currHP > 0) {
       changemHP(i, -((cAtk + cbDmg) * cmDmg));
 
-      if (monsters[i].exist) {
+      if (monsters[i].currHP > 0) {
         var damage = -monsters[i].atk + cDef;
         if (damage > 0) damage = 0;
         changecHP(damage);
@@ -1252,7 +1211,7 @@ function displayInventory() {
 
   var dialogGeneral = ["[1] <b>Chin chong</b>: Sell 3 000 000 000 gold for 1 000$! Check it out in mmomaster-farmgold.com !", "[1] <b>Sayorg the ugly</b>: Someone to play LoL or HotS here?"];
   var dialogCommerce = ["[2] <b>Leroy Jenkins</b>: Buy chickens"];
-  var dialogRecruitment = ["[4] <b>DarkSasuke</b>: I recruit members in my new guild Revenge of Akatsuki. Leader lvl 57. No noob pls!"];
+  var dialogRecruitment = ["[4] <b>DarkSasuke</b>: I recruit members in my new guild Revenge of Akatsuki. Leader lvl 57. No noob pls!", "[4]<b>JayPee</b>: I've never eaten seeds..."];
 
   //------------------//
   //- Initialization -//
@@ -1288,6 +1247,7 @@ function displayInventory() {
     updateInventory();
 
     // monsters
+    monsters=[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Rabbit")];
     for (var i = 0; i < 3; i++) {
       document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
       changemHP(i, 0);
