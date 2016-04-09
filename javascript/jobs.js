@@ -53,6 +53,8 @@ var opts_mining = {"name":"Mining", "details":"Mineral"};
 
 var listJobs = [new job(opts_tailoring), new job(opts_mining)];
 
+listJobs.push(new job({"name":"Smithing", "details":""}));
+//TODO Initialiser ça dans init() => function pour retirer variables globales
 /*Tailoring recipes*/
 var opts_recipe_clothArmor = {"item" : searchByName(listChestArmors,"Cloth armor"), "ingredients" : [searchByName(listCraftItems,"Rabbit hide"),searchByName(listCraftItems,"Carrot")], "numbers":[2,1], "level":0};
 var opts_recipe_leatherArmor = {"item" : searchByName(listChestArmors,"Leather armor"), "ingredients" : [searchByName(listCraftItems,"Chicken egg"),searchByName(listCraftItems,"Carrot"),searchByName(listCraftItems,"Chicken feather")], "numbers":[1,1,1], "level":0};
@@ -60,6 +62,16 @@ var opts_recipe_leatherArmor = {"item" : searchByName(listChestArmors,"Leather a
 var Tailoring = searchByName(listJobs,"Tailoring");
 Tailoring.recipes.push(new recipe(opts_recipe_clothArmor));
 Tailoring.recipes.push(new recipe(opts_recipe_leatherArmor));
+
+/*Smithing recipes*/
+var opts_recipe_sword = {"item":searchByName(listWeapons,"Sword"), "ingredients":[searchByName(listCraftItems,"Iron")], "numbers":[10], "level":0};
+var opts_recipe_sword2 = {"item":searchByName(listWeapons,"Sword2"), "ingredients":[searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper")], "numbers":[20,10], "level":3};
+var opts_recipe_sword3 = {"item":searchByName(listWeapons,"Sword3"), "ingredients":[searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper"), searchByName(listCraftItems,"Gold")], "numbers":[30,20,10], "level":5};
+
+var Smithing = searchByName(listJobs,"Smithing");
+Smithing.recipes.push(new recipe(opts_recipe_sword));
+Smithing.recipes.push(new recipe(opts_recipe_sword2));
+Smithing.recipes.push(new recipe(opts_recipe_sword3));
 
 /*Fonctions pour tous les métiers*/
 function updatejProgress(job, number) {

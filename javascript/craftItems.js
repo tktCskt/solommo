@@ -15,6 +15,8 @@ var opts_chickenEgg = {"name":"Chicken egg", "price":50, "type2":"Egg"};
 /*Minerals*/
 var opts_iron = {"name":"Iron", "price":10, "type2":"Mineral"};
 var opts_copper = {"name":"Copper", "price":20, "type2":"Mineral"};
+var opts_gold = {"name":"Gold", "price":50, "type2":"Mineral"};
 
 
-listCraftItems = [new craftItem(opts_rabbitHide) ,new craftItem(opts_carrot) ,new craftItem(opts_chickenFeather) ,new craftItem(opts_chickenEgg) ,new craftItem(opts_iron) ,new craftItem(opts_copper)];
+listCraftItems = [new craftItem(opts_rabbitHide) ,new craftItem(opts_carrot) ,new craftItem(opts_chickenFeather) ,new craftItem(opts_chickenEgg) ,new craftItem(opts_iron) ,new craftItem(opts_copper),
+                  new craftItem(opts_gold)];
