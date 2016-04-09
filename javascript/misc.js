@@ -72,7 +72,7 @@ function initChar() {
 
   player.curHP = player.maxHP;
   player.curMP = player.maxMP;
-  player.weapon = new sword;
+  player.weapon = searchByName(listWeapons, 'Sword');
   player.atk = player.weapon.damage;
 
   displayHPbar();
@@ -929,16 +929,6 @@ function displayGathering() {
 //-   Equipment    -//
 //------------------//
 
-function fists() {
-  this.name = "Fists";
-  this.damage = 4;
-}
-
-function sword() {
-  this.name = "Sword";
-  this.damage = 9;
-}
-
 function equipGearItems(i) {
   var item = gearItems[i];
   if (item.type == "Armor") {
@@ -1010,7 +1000,24 @@ function displayGold() {
 }
 
 function displayInventory() {
+  //TODO revoir ce bordel
   var elInventory = document.getElementById('main_char_inventory_window');
+
+  elInventory.innerHTML = "";
+  var inventoryTitle  = document.createElement('div');
+  inventoryTitle.setAttribute("class","menu_window_frame_title");
+  inventoryTitle.innerHTML = "Inventory";
+  var inventoryGold = document.createElement('div');
+  inventoryGold.setAttribute("class","menu_inventory_gold");
+
+
+  var inventoryGoldAmount = document.createElement('span');
+  inventoryGoldAmount.setAttribute("id","char_gold");
+
+  inventoryGold.appendChild(inventoryGoldAmount);
+  elInventory.appendChild(inventoryTitle);
+  elInventory.appendChild(inventoryGold);
+
   var elItem;
   var i;
 
@@ -1032,64 +1039,11 @@ function displayInventory() {
       }
     }
   }
-
-  //gear
-
-  for (i = 0; i < gearItems.length; i++) {
-    elItem = document.getElementById('char_gInventory' + i)
-
-    if (elItem != null) {
-      elItem.innerHTML = gearItems[i].name + "<br/>";
-    } else {
-      elItem = document.createElement('span');
-      elItem.id = 'char_gInventory' + i;
-      elItem.innerHTML = gearItems[i].name + "<br/>";
-      elInventory.appendChild(elItem);
-    }
-    elItem.setAttribute('iItem', i);
-    elItem.onclick = function () {
-      equipGearItems(this.getAttribute('iItem'));
-    }
-
-  }
-
-
 }
 
 //------------------//
 //-    Monsters    -//
 //------------------//
-
-function loot(item, percentage) {
-  this.item = item;
-  this.percentage = percentage;
-}
-
-function rabbit() {
-  this.exist = true;
-  this.maxHP = 16;
-  this.currHP = this.maxHP;
-  this.name = "Rabbit";
-  this.atk = 5;
-  this.XP = 10;
-  this.nbLoot = 2;
-  this.loots = [new loot(listCraftItems[0], 100), new loot(listCraftItems[1], 100)];
-  this.img = "images/rabbit.png";
-}
-
-function chicken() {
-  this.exist = true;
-  this.maxHP = 34;
-  this.currHP = this.maxHP;
-  this.name = "Chicken";
-  this.atk = 30;
-  this.XP = 30;
-  this.nbLoot = 2;
-  this.loots = [new loot(listCraftItems[2], 100), new loot(listCraftItems[3], 50)];
-  this.img = "images/chicken.png";
-}
-
-var monsters = [new rabbit, new chicken, new rabbit];
 
 function monsterDeath(md_monster, k) {
   log("You defeated the <b>" + monsters[k].name + "</b> and earned " + monsters[k].XP + "xp.", "INFO");
@@ -1097,7 +1051,7 @@ function monsterDeath(md_monster, k) {
   // Earn XP
   changecXP(md_monster.XP);
   var i;
-  for (i = 0; i < md_monster.nbLoot; i++) {
+  for (i = 0; i < md_monster.loots.length; i++) {
     if ((Math.random() * 100 <= md_monster.loots[i].percentage)) {
       addcItem(md_monster.loots[i].item, 1);
     }
@@ -1121,10 +1075,10 @@ function monsterDeath(md_monster, k) {
 
 function clickmonster(i) {
   if (player.dead) log("You can't do that when you're dead.", "ERROR");
-  else if (monsters[i].exist) {
+  else if (monsters[i].currHP > 0) {
     changemHP(i, -((player.atk + player.bDMG) * player.mDMG));
 
-    if (monsters[i].exist) {
+    if (monsters[i].currHP > 0) {
       var damage = -monsters[i].atk + player.def;
       if (damage > 0) damage = 0;
       changecHP(damage);
@@ -1319,6 +1273,7 @@ function initDisplay() {
 }
 
 function initMonster() {
+  monsters=[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Wolf")];
   for (var i = 0; i < 3; i++) {
     document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
     changemHP(i, 0);
@@ -1343,5 +1298,4 @@ function newgame() {
   listAcceptedQuests = [];
   listAvailableQuests = [];
   listAvailableQuests.push(new quest("kill", "Rabbit", 2, "The cereal killers", 100, "Wheatcity", "Wheatcity", 1, "none", "Hello there! Are you new here? I am John Knajo. You are searching for a job? There's actually some rabbits annoying us in the corn fields. They're eating our crops and that's bad for business. Kill some of them for me and I will gladly pay you for your help.", "I knew I could count on you; there, take these few coppers and stay around. My family might find some jobs for you too.", 50, [searchByName(listQuests, "There's more of them?"), searchByName(listQuests, "A feast for a mayor"), searchByName(listQuests, "Sewing socks for winter")]));
-
 }
