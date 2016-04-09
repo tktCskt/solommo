@@ -2,11 +2,11 @@ nbChestArmors = 0;
 
 function chestArmor(options)
 {
-    this.type = "Armor";
-    this.name = options.name;
-    this.def = options.def;
-    this.price = options.price;
-    this.id = nbChestArmors++;
+  this.type = "Armor";
+  this.name = options.name;
+  this.def = options.def;
+  this.price = options.price;
+  this.id = nbChestArmors++;
 }
 
 var opts_nothing = {"name" : "Nothing", "def" : 0, "price" : 0};
