@@ -60,7 +60,7 @@ var dead = false;
 var cArmor = "";
 var cDef = 0;
 
-var cWeapon = new sword;
+var cWeapon = searchByName(listWeapons,"Sword");
 var cAtk = cWeapon.damage;
 
 //------------------//
@@ -574,11 +574,6 @@ function displayShopSell() {
 }
 
 
-
-//------------------//
-//-    Monsters    -//
-//------------------//
-
 //------------------//
 //-    Talents     -//
 //------------------//
@@ -586,27 +581,6 @@ function displayShopSell() {
 function updateDisplayTalentSheet() {
     document.getElementById("menu_talent").innerHTML = "<b>Talents (" + cavTalent + ")</b>";
 }
-
-//------------------//
-//-     Armors     -//
-//------------------//
-
-var nbChestArmors = 0;
-
-function chestArmor(name, def, price) {
-    this.type = "Armor";
-    this.name = name;
-    this.def = def;
-    this.price = price;
-    this.id = nbChestArmors;
-    nbChestArmors++;
-}
-
-var listChestArmors = [new chestArmor("Nothing", 0, 0), new chestArmor("Rags", 1, 5), new chestArmor("Cloth armor", 5, 50), new chestArmor("Leather armor", 10, 85), new chestArmor("Ganjo armor", 54592, 3628800)];
-
-//------------------//
-//-    Weapons     -//
-//------------------//
 
 //------------------//
 //-   Equipment    -//
@@ -648,22 +622,6 @@ function equipment(item, enchants, quality) {
     this.price = Math.round(item.price * this.modif); //TODO ajuster selon qualité/Enchant
 }
 
-//------------------//
-//-     Items      -//
-//------------------//
-
-var nbCraftItem = 0;
-
-function craftItem(name, price, type2) {
-    this.id = nbCraftItem
-    nbCraftItem++;
-    this.name = name;
-    this.price = price;
-    this.type = "Craft item";
-	this.type2 = type2;
-}
-
-var listCraftItems = [new craftItem("Rabbit hide", 50, "Hide"), new craftItem("Carrot", 20, "Vegetable"), new craftItem("Feather", 30, "Feather"), new craftItem("Egg", 50, "Egg"), new craftItem("Iron", 10, "Mineral"), new craftItem("Copper", 20, "Mineral")];
 
 //------------------//
 //-  Hunting zone  -//
@@ -687,136 +645,19 @@ var listZones = [new zone("Wheatcity",[],[],[searchByName(listCraftItems,"Iron")
 //-  Jobs / Craft  -//
 //------------------//
 
-var nbJobs = 0;
-var nbRecipes = 0;
 
-function recipe(item, ingredients, numbers, level) {
-    this.ingredients = ingredients;
-    this.item = item;
-    this.numbers = numbers;
-    this.level = level;
-    this.progress = 0;
-    this.xp = 0;
-    this.id = nbRecipes;
-    nbRecipes++;
-}
-
-function job(name, details) {
-    this.name = name;
-    this.max = 100;
-    this.progress = 1;
-    this.xp = 0;
-    this.recipes = [];
-	this.details = details;
-    id = nbJobs;
-    nbJobs++;
-}
-
-function updatejProgress(job, number) {
-    log("+" + number + " in " + job.name, "INFO");
-    job.progress += number;
-    updateTailoring();
-}
-function gather (zone,job)
-{
-	var i;
-	for(i=0;i<zone.listResources.length;i++)
-	{
-		var K = 0.03;
-		if(zone.listResources[i].type2 == job.details)
-		{
-			var n = K * zone.resourcesRate[i] * Math.sqrt(job.progress);
-			var number = Math.trunc(n);
-			var r = Math.random();
-			if(r < n - number) //
-			{
-				number++;
-			}
-			addcItem(zone.listResources[i],number);
-
-		}
-	}
-}
-function craft(job, iRecipe) {
-    var recipe = listRecipesTailoring[iRecipe];
-    //TODO job.recipe[iRecipe].. ajouter les recipe dans job avant.
-    var i;
-
-    var N = job.progress - recipe.level;
-    var crappy = Math.max(0, 25 - N);
-    var rubbish = Math.max(0, 25 - (N / 2));
-    var passable = Math.max(0, 25 - (N / 4));
-    var great = 5 + (N / 2.5);
-    var legendary = Math.trunc(N / 50);
-    var perfect = N / 2 - legendary;
-    var normal = 100 - (crappy + rubbish + passable + great + legendary + perfect);
-
-    crappy = crappy;
-    rubbish = crappy + rubbish;
-    passable = rubbish + passable;
-    normal = passable + normal;
-    great = normal + great;
-    perfect = great + perfect;
-    legendary = perfect + legendary;
-
-    for (i = 0; i < recipe.ingredients.length; i++) {
-        ing_id = recipe.ingredients[i].id;
-        if (nbCraftItems[ing_id] < recipe.numbers[i]) {
-            log("You don't have the ingredients.", "ERROR");
-            return;
-        }
-    }
-
-    // TODO Create a formula
-    var recipexpearned = 10;
-
-    job.xp += recipexpearned;
-    while (job.xp >= 100) {
-        job.progress++;
-        job.xp -= 100;
-    }
-    if (recipe.progress < 10) { // craft lvl max
-        recipe.xp += recipexpearned*2;
-        while (recipe.xp >= 100) {
-            recipe.progress++;
-            recipe.xp -= 100;
-        }
-    }
-
-    log("You crafted a " + recipe.item.name + ".", "INFO");
-    log(job.name + ": You earned " + recipexpearned + "xp.", "INFO");
-
-    for (i = 0; i < recipe.ingredients.length; i++)
-    	addcItem(recipe.ingredients[i], -recipe.numbers[i]);
-
-    //TODO formule de craft qualité
-    var quality;
-    var rand = Math.random() * 100;
-    if (rand <= crappy) quality = 0;
-    else if (rand <= rubbish) quality = 1;
-    else if (rand <= passable) quality = 2;
-    else if (rand <= normal) quality = 3;
-    else if (rand <= great) quality = 4;
-    else if (rand <= perfect) quality = 5;
-    else quality = 6;
-
-    addgItem(new equipment(recipe.item, [], quality));
-    updateTailoring();
-}
-
-var listJobs = [new job("Tailoring", ""), new job("Mining", "Mineral")];
-var listRecipesTailoring = [new recipe(searchByName(listChestArmors, "Cloth armor"), [searchByName(listCraftItems, "Rabbit hide"), searchByName(listCraftItems, "Carrot")], [2, 1], 0), new recipe(searchByName(listChestArmors, "Leather armor"), [searchByName(listCraftItems, "Egg"), searchByName(listCraftItems, "Carrot"), searchByName(listCraftItems, "Feather")], [1, 1, 1], 0), new recipe(searchByName(listChestArmors, "Ganjo armor"), [], [], -1)];
-
-function updateTailoring() {
+/*TODO tailoring -> job*/
+function updateJob(String_job) {
+	var job = searchByName(listJobs,String_job);
     var elTailoring = document.getElementById('tailoring_craft_boxes');
     document.getElementById('tailoring_barcur_XP').style.width = searchByName(listJobs, "Tailoring").xp / 100 * 300 + 'px';
     document.getElementById('tailoring_cur_XP').innerHTML = searchByName(listJobs, "Tailoring").xp;
     document.getElementById('tailoring_max_XP').innerHTML = 100;
     document.getElementById('tailoring_level').innerHTML = searchByName(listJobs, "Tailoring").progress;
 
-    for (var i = 0; i < listRecipesTailoring.length; i++) {
-        var recipe = listRecipesTailoring[i];
-        if (searchByName(listJobs, "Tailoring").progress >= recipe.level) {
+    for (var i = 0; i < job.recipes.length; i++) {
+        var recipe = job.recipes[i];
+        if (job.progress >= recipe.level) {
             var elRecipe = document.getElementById('char_tailoring' + i);
             var isNew = false;
 
@@ -936,15 +777,6 @@ function displayGathering() {
 //-   Equipment    -//
 //------------------//
 
-function fists() {
-    this.name = "Fists";
-    this.damage = 4;
-}
-
-function sword() {
-    this.name = "Sword";
-    this.damage = 9;
-}
 
 function equipGearItems(i) {
     var item = gearItems[i];
@@ -1067,36 +899,6 @@ function displayInventory() {
 //-    Monsters    -//
 //------------------//
 
-function loot(item, percentage) {
-    this.item = item;
-    this.percentage = percentage;
-}
-
-function rabbit() {
-    this.exist = true;
-    this.maxHP = 16;
-    this.currHP = this.maxHP;
-    this.name = "Rabbit";
-    this.atk = 5;
-    this.XP = 10;
-    this.nbLoot = 2;
-    this.loots = [new loot(listCraftItems[0], 100), new loot(listCraftItems[1], 100)];
-    this.img = "images/rabbit.png";
-}
-
-function chicken() {
-    this.exist = true;
-    this.maxHP = 34;
-    this.currHP = this.maxHP;
-    this.name = "Chicken";
-    this.atk = 30;
-    this.XP = 30;
-    this.nbLoot = 2;
-    this.loots = [new loot(listCraftItems[2], 100), new loot(listCraftItems[3], 50)];
-    this.img = "images/chicken.png";
-}
-
-var monsters = [new rabbit, new chicken, new rabbit];
 
 function monsterDeath(md_monster, k) {
     log("You defeated the <b>" + monsters[k].name + "</b> and earned " + monsters[k].XP + "xp.", "INFO");
@@ -1104,7 +906,7 @@ function monsterDeath(md_monster, k) {
     // Earn XP
     changecXP(md_monster.XP);
     var i;
-    for (i = 0; i < md_monster.nbLoot; i++) {
+    for (i = 0; i < md_monster.loots.length; i++) {
         if ((Math.random() * 100 <= md_monster.loots[i].percentage)) {
             addcItem(md_monster.loots[i].item, 1);
         }
@@ -1128,10 +930,9 @@ function monsterDeath(md_monster, k) {
 
 function clickmonster(i) {
     if (dead) log("You can't do that when you're dead.", "ERROR");
-    else if (monsters[i].exist) {
+    else if (monsters[i].currHP > 0) {
         changemHP(i, -((cAtk + cbDmg) * cmDmg));
-
-        if (monsters[i].exist) {
+        if (monsters[i].currHP > 0) {
             var damage = -monsters[i].atk + cDef;
             if (damage > 0) damage = 0;
             changecHP(damage);
@@ -1141,7 +942,6 @@ function clickmonster(i) {
 
 function changemHP(i, dmg) {
     monsters[i].currHP += dmg;
-
     if (monsters[i].currHP > monsters[i].maxHP) monsters[i].currHP = monsters[i].maxHP;
     else if (monsters[i].currHP <= 0) {
         monsterDeath(monsters[i], i);
@@ -1264,7 +1064,7 @@ function displayMenuTailoring() {
         document.getElementById('shop_window').style.display = "none";
         elTail.style.display = "inline";
     }
-    updateTailoring();
+    updateJob("Tailoring");
 }
 
 function displayMenuShop() {
@@ -1374,13 +1174,14 @@ function newgame() {
     updateInventory();
 
     // monsters
+	monsters = [Object.create(searchByName(listMonsters,"Rabbit")),Object.create(searchByName(listMonsters,"Chicken")),Object.create(searchByName(listMonsters,"Rabbit"))]
     for (var i = 0; i < 3; i++) {
         document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
         changemHP(i, 0);
     }
 
     // TESTING JOB
-    updateTailoring();
+    updateJob("Tailoring");
 
     // Begin game
     goto("Wheatcity");
