@@ -1076,7 +1076,7 @@ function displayInventory() {
     // Earn XP
     changecXP(md_monster.XP);
     var i;
-    for (i = 0; i < md_monster.nbLoot; i++) {
+    for (i = 0; i < md_monster.loots.length; i++) {
       if ((Math.random() * 100 <= md_monster.loots[i].percentage)) {
         addcItem(md_monster.loots[i].item, 1);
       }
