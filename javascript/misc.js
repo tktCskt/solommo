@@ -1247,7 +1247,7 @@ function displayInventory() {
     updateInventory();
 
     // monsters
-    monsters=[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Rabbit")];
+    monsters=[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Wolf")];
     for (var i = 0; i < 3; i++) {
       document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
       changemHP(i, 0);

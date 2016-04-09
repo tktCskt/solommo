@@ -26,6 +26,7 @@ function monster(options)
 
 var opts_rabbit = {"name":"Rabbit", "maxHP":16, "atk":5, "loot":[0,100,1,100], "XP":10, "img":"images/rabbit.png"};
 var opts_chicken = {"name":"Chicken", "maxHP":30, "atk":10, "loot":[2,100,3,50], "XP":25,"img":"images/chicken.png"};
+var opts_wolf = {"name":"Wolf", "maxHP":85, "atk":35, "loot":[], "XP":70, "img":"images/rabbit.png"};
 
 /*xp*/
-listMonsters = [new monster(opts_rabbit),new monster(opts_chicken)];
+listMonsters = [new monster(opts_rabbit),new monster(opts_chicken), new monster(opts_wolf)];
