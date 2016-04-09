@@ -71,8 +71,7 @@ function updatejProgress(job, number) {
 
 function gather (zone,job)
 {
-  var i;
-  for(i=0;i<zone.listResources.length;i++)
+  for(var i=0;i<zone.listResources.length;i++)
   {
     var K = 0.03;
     if(zone.listResources[i].type2 == job.details)
@@ -91,8 +90,7 @@ function gather (zone,job)
 
 
 function craft(job, iRecipe) {
-  var recipe = Tailoring.recipes[iRecipe];
-  //TODO job.recipe[iRecipe].. ajouter les recipe dans job avant.
+  var recipe = job.recipes[iRecipe];
   var i;
 
   var N = job.progress - recipe.level;
@@ -142,7 +140,6 @@ function craft(job, iRecipe) {
   for (i = 0; i < recipe.ingredients.length; i++)
   addcItem(recipe.ingredients[i], -recipe.numbers[i]);
 
-  //TODO formule de craft qualité
   var quality;
   var rand = Math.random() * 100;
   if (rand <= crappy) quality = 0;
@@ -154,5 +151,5 @@ function craft(job, iRecipe) {
   else quality = 6;
 
   addgItem(new equipment(recipe.item, [], quality));
-  updateJob("Tailoring");
+  updateJob(job.name);
 }
