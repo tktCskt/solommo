@@ -82,7 +82,7 @@ function displayMenuTailoring() {
     document.getElementById('shop_window').style.display = "none";
     elTail.style.display = "inline";
   }
-  updateTailoring();
+  updateJob(Tailoring);
 }
 
 function displayMenuShop() {

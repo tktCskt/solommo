@@ -56,10 +56,12 @@ listJobs.push(new job({"name":"Smithing", "details":""}));
 /*Tailoring recipes*/
 var opts_recipe_clothArmor = {"item" : searchByName(listChestArmors,"Cloth armor"), "ingredients" : [searchByName(listCraftItems,"Rabbit hide"),searchByName(listCraftItems,"Carrot")], "numbers":[2,1], "level":0};
 var opts_recipe_leatherArmor = {"item" : searchByName(listChestArmors,"Leather armor"), "ingredients" : [searchByName(listCraftItems,"Chicken egg"),searchByName(listCraftItems,"Carrot"),searchByName(listCraftItems,"Chicken feather")], "numbers":[1,1,1], "level":0};
+var opts_armureTest = {"item":searchByName(listChestArmors,"Leather armor"), "ingredients":[], "level":0};
 
 var Tailoring = searchByName(listJobs,"Tailoring");
 Tailoring.recipes.push(new recipe(opts_recipe_clothArmor));
 Tailoring.recipes.push(new recipe(opts_recipe_leatherArmor));
+Tailoring.recipes.push(new recipe(opts_armureTest));
 
 /*Smithing recipes*/
 var opts_recipe_sword = {"item":searchByName(listWeapons,"Sword"), "ingredients":[searchByName(listCraftItems,"Iron")], "numbers":[10], "level":0};
@@ -161,5 +163,5 @@ function craft(job, iRecipe) {
   else quality = 6;
 
   addgItem(new equipment(recipe.item, [], quality));
-  updateJob(job.name);
+  updateJob(job);
 }
