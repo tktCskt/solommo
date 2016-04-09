@@ -846,7 +846,24 @@ function displayGold() {
 }
 
 function displayInventory() {
+  //TODO revoir ce bordel
     var elInventory = document.getElementById('main_char_inventory_window');
+    
+    elInventory.innerHTML = "";
+    var inventoryTitle  = document.createElement('div');
+    inventoryTitle.setAttribute("class","menu_window_frame_title");
+    inventoryTitle.innerHTML = "Inventory";
+    var inventoryGold = document.createElement('div');
+    inventoryGold.setAttribute("class","menu_inventory_gold");
+    
+    
+    var inventoryGoldAmount = document.createElement('span');
+    inventoryGoldAmount.setAttribute("id","char_gold");
+    
+    inventoryGold.appendChild(inventoryGoldAmount);
+    elInventory.appendChild(inventoryTitle);
+    elInventory.appendChild(inventoryGold);
+    
     var elItem;
     var i;
 
