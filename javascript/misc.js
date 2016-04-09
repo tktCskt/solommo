@@ -2,78 +2,83 @@
 //- Character data -//
 //------------------//
 
-var curArea = "";
-
-var cNom = "Alexstrasza";
-var cClass = "Novice";
-var cLevel = 1;
-var cXP = 0;
-var cMoney = 0;
-
-var cavPoint = 0;
-var cavTalent = 0;
-
-var cSTR = 10;
-var cbSTR = 0;
-var cmSTR = 1;
-var cfSTR;
-
-var cDEX = 10;
-var cbDEX = 0;
-var cmDEX = 1;
-var cfDEX;
-
-var cINT = 10;
-var cbINT = 0;
-var cmINT = 1;
-var cfINT;
-
-var cWIS = 10;
-var cbWIS = 0;
-var cmWIS = 1;
-var cfWIS;
-
-var cCON = 10;
-var cbCON = 0;
-var cmCON = 1;
-var cfCON;
-
-var cAGI = 10;
-var cbAGI = 0;
-var cmAGI = 1;
-var cfAGI;
-
-var cmaxHP;
-var ccurHP;
-var cregenHP;
-
-var cmaxMP;
-var ccurMP;
-var cregenMP;
-
-var cbDmg = 0;
-var cmDmg = 1;
-
-var dead = false;
-
-var cArmor = "";
-var cDef = 0;
-
-var cWeapon = new sword;
-var cAtk = cWeapon.damage;
+var player = {};
+var gameData = {};
 
 //------------------//
 //-      Init      -//
 //------------------//
 
 function initChar() {
+  player = {
+    curArea:"Wheatcity",
+    name:"Alexstrasza",
+    class:"Novice",
+    level:1,
+    xp:0,
+    money:0,
+
+    avPoint:0,
+    avTalent:0,
+
+    STR:10,
+    bSTR:0,
+    mSTR:1,
+    fSTR:10,
+
+    DEX:10,
+    bDEX:0,
+    mDEX:1,
+    fDEX:10,
+
+    INT:10,
+    bINT:0,
+    mINT:1,
+    fINT:10,
+
+    WIS:10,
+    bWIS:0,
+    mWIS:1,
+    fWIS:10,
+
+    CON:10,
+    bCON:0,
+    mCON:1,
+    fCON:10,
+
+    AGI:10,
+    bAGI:0,
+    mAGI:1,
+    fAGI:10,
+
+    maxHP:100,
+    curHP:100,
+    regenHP:1,
+
+    maxMP:10,
+    curMP:10,
+    regenMP:0.1,
+
+    bDMG:0,
+    mDMG:1,
+
+    dead:false,
+
+    armor:"",
+    def:0
+  }
+
   updateStat();
 
-  ccurHP = cmaxHP;
-  ccurMP = cmaxMP;
+  player.curHP = player.maxHP;
+  player.curMP = player.maxMP;
+  player.weapon = new sword;
+  player.atk = player.weapon.damage;
 
   displayHPbar();
   displayMPbar();
+
+  gameData.player = player;
 }
 
 //------------------//
@@ -81,20 +86,20 @@ function initChar() {
 //------------------//
 
 function updateStat() {
-  cfSTR = (cSTR + cbSTR) * cmSTR;
-  cfDEX = (cDEX + cbDEX) * cmDEX;
-  cfINT = (cINT + cbINT) * cmINT;
-  cfWIS = (cWIS + cbWIS) * cmWIS;
-  cfCON = (cCON + cbCON) * cmCON;
-  cfAGI = (cAGI + cbAGI) * cmAGI;
+  player.fSTR = (player.STR + player.bSTR) * player.mSTR;
+  player.fDEX = (player.DEX + player.bDEX) * player.mDEX;
+  player.fINT = (player.INT + player.bINT) * player.mINT;
+  player.fWIS = (player.WIS + player.bWIS) * player.mWIS;
+  player.fCON = (player.CON + player.bCON) * player.mCON;
+  player.fAGI = (player.AGI + player.bAGI) * player.mAGI;
 
-  cmDmg = cfSTR / 10;
+  player.mDMG = player.fSTR / 10;
 
-  cmaxMP = cfINT * 1;
-  cregenMP = cfINT * 0.01;
+  player.maxMP = player.fINT * 1;
+  player.regenMP = player.fINT * 0.01;
 
-  cmaxHP = cfCON * 10;
-  cregenHP = cfCON * 0.1;
+  player.maxHP = player.fCON * 10;
+  player.regenHP = player.fCON * 0.1;
 
   displayHPbar();
   displayMPbar();
@@ -102,28 +107,28 @@ function updateStat() {
 }
 
 function addcPoint(value) {
-  if (cavPoint > 0) {
+  if (player.avPoint > 0) {
     switch (value) {
       case 'STR':
-      cSTR++;
+      player.STR++;
       break;
       case 'DEX':
-      cDEX++;
+      player.DEX++;
       break;
       case 'INT':
-      cINT++;
+      player.INT++;
       break;
       case 'WIS':
-      cWIS++;
+      player.WIS++;
       break;
       case 'CON':
-      cCON++;
+      player.CON++;
       break;
       case 'AGI':
-      cAGI++;
+      player.AGI++;
       break;
     }
-    cavPoint--;
+    player.avPoint--;
     updateStat();
   } else {
     log("You don't have any point available.", "ERROR");
@@ -131,17 +136,17 @@ function addcPoint(value) {
 }
 
 function updateDisplayCharSheet() {
-  document.getElementById("char_HP").innerHTML = cmaxHP;
-  document.getElementById("char_MP").innerHTML = cmaxMP;
+  document.getElementById("char_HP").innerHTML = player.maxHP;
+  document.getElementById("char_MP").innerHTML = player.maxMP;
 
-  document.getElementById("char_STR").innerHTML = cfSTR;
-  document.getElementById("char_DEX").innerHTML = cfDEX;
-  document.getElementById("char_INT").innerHTML = cfINT;
-  document.getElementById("char_WIS").innerHTML = cfWIS;
-  document.getElementById("char_CON").innerHTML = cfCON;
-  document.getElementById("char_AGI").innerHTML = cfAGI;
+  document.getElementById("char_STR").innerHTML = player.fSTR;
+  document.getElementById("char_DEX").innerHTML = player.fDEX;
+  document.getElementById("char_INT").innerHTML = player.fINT;
+  document.getElementById("char_WIS").innerHTML = player.fWIS;
+  document.getElementById("char_CON").innerHTML = player.fCON;
+  document.getElementById("char_AGI").innerHTML = player.fAGI;
 
-  document.getElementById("char_points").innerHTML = cavPoint;
+  document.getElementById("char_points").innerHTML = player.avPoint;
 }
 
 //------------------//
@@ -149,92 +154,92 @@ function updateDisplayCharSheet() {
 //------------------//
 
 function changecHP(dmg) {
-  ccurHP += dmg;
+  player.curHP += dmg;
 
-  if (ccurHP < 0) ccurHP = 0;
-  else if (ccurHP > cmaxHP) ccurHP = cmaxHP;
+  if (player.curHP < 0) player.curHP = 0;
+  else if (player.curHP > player.maxHP) player.curHP = player.maxHP;
 
-  if (dead && ccurHP == cmaxHP) {
+  if (player.dead && player.curHP == player.maxHP) {
     log("You feel well again!", "INFO");
-    dead = false;
-  } else if (ccurHP == 0) {
+    player.dead = false;
+  } else if (player.curHP == 0) {
     log("You died.", "INFO");
-    dead = true;
+    player.dead = true;
   }
 
   displayHPbar();
 }
 
 function changecMP(mana) {
-  ccurMP += mana;
+  player.curMP += mana;
 
-  if (ccurMP < 0) ccurMP = 0;
-  else if (ccurMP > cmaxMP) ccurMP = cmaxMP;
+  if (player.curMP < 0) player.curMP = 0;
+  else if (player.curMP > player.maxMP) player.curMP = player.maxMP;
 
   displayMPbar();
 }
 
 function changecXP(xp) {
-  cXP += xp;
+  player.xp += xp;
 
-  while (cXP >= xptolvlup()) lvlup();
+  while (player.xp >= xptolvlup()) lvlup();
 
   displayXPbar();
 }
 
 function xptolvlup() {
-  if (cLevel == 1) return 100
-  else if (cLevel == 2) return 130;
-  else return cLevel * cLevel * 20;
+  if (player.level == 1) return 100
+  else if (player.level == 2) return 130;
+  else return player.level * player.level * 20;
 }
 
 function lvlup() {
-  cXP = cXP - (xptolvlup());
-  cLevel++;
+  player.xp = player.xp - (xptolvlup());
+  player.level++;
 
-  cavTalent++;
-  cavPoint += 5;
+  player.avTalent++;
+  player.avPoint += 5;
 
-  changecHP(cmaxHP);
-  changecMP(cmaxMP);
+  changecHP(player.maxHP);
+  changecMP(player.maxMP);
 
   updateDisplayCharSheet();
   updateDisplayTalentSheet();
 
-  log("Level up! You are level <b>" + cLevel + "</b>.", "INFO");
+  log("Level up! You are level <b>" + player.level + "</b>.", "INFO");
 }
 
 function displayHPbar() {
   var elbarHP = document.getElementById('HUD_character_barcur_HP');
 
-  document.getElementById('main_char_curHP').innerHTML = Math.floor(ccurHP);
-  document.getElementById('main_char_maxHP').innerHTML = cmaxHP;
-  elbarHP.style.width = ccurHP / cmaxHP * 150 + "px";
+  document.getElementById('main_char_curHP').innerHTML = Math.floor(player.curHP);
+  document.getElementById('main_char_maxHP').innerHTML = player.maxHP;
+  elbarHP.style.width = player.curHP / player.maxHP * 150 + "px";
 
-  if (dead) {
+  if (player.dead) {
     elbarHP.style.backgroundColor = "#ff0000";
-  } else if (ccurHP / cmaxHP < 0.25) {
+  } else if (player.curHP / player.maxHP < 0.25) {
     elbarHP.style.backgroundColor = "#E96D37";
-  } else if (ccurHP / cmaxHP < 0.5) {
+  } else if (player.curHP / player.maxHP < 0.5) {
     elbarHP.style.backgroundColor = "#DBA744";
-  } else if (ccurHP / cmaxHP < 1) {
+  } else if (player.curHP / player.maxHP < 1) {
     elbarHP.style.backgroundColor = "#7ABA2F";
-  } else if (ccurHP == cmaxHP) {
+  } else if (player.curHP == player.maxHP) {
     elbarHP.style.backgroundColor = "#5CAB00";
   }
 }
 
 function displayMPbar() {
-  document.getElementById('main_char_curMP').innerHTML = Math.floor(ccurMP);
-  document.getElementById('main_char_maxMP').innerHTML = cmaxMP;
-  document.getElementById('HUD_character_barcur_MP').style.width = ccurMP / cmaxMP * 150 + "px";
+  document.getElementById('main_char_curMP').innerHTML = Math.floor(player.curMP);
+  document.getElementById('main_char_maxMP').innerHTML = player.maxMP;
+  document.getElementById('HUD_character_barcur_MP').style.width = player.curMP / player.maxMP * 150 + "px";
 }
 
 function displayXPbar() {
-  document.getElementById('main_char_level').innerHTML = cLevel;
-  document.getElementById('main_char_curXP').innerHTML = cXP;
+  document.getElementById('main_char_level').innerHTML = player.level;
+  document.getElementById('main_char_curXP').innerHTML = player.xp;
   document.getElementById('main_char_maxXP').innerHTML = xptolvlup();
-  document.getElementById('HUD_character_barcur_XP').style.width = cXP / xptolvlup() * 150 + "px";
+  document.getElementById('HUD_character_barcur_XP').style.width = player.xp / xptolvlup() * 150 + "px";
 }
 
 //------------------//
@@ -266,9 +271,9 @@ function quest(type, details, number, name, XP, areabegin, areaend, available, u
   this.unlockedQ = unlockedQ;
 }
 
-listAcceptedQuests = [];
-listAvailableQuests = [];
-listQuests = [new quest("kill", "Rabbit", 20, "There's more of them?", 100, "Wheatcity", "Wheatcity", 0, "none", "Hello again, adventurer! We've got even more rabbits than before here. It almost looks like a sabotage...-- Haha, that's silly, everybody likes us here! Could you take care of that again for me, please?", "Oh, thank you my friend but... I have bad news. Do you remember when I spoke to you about sabotage?", 0, "none"), new quest("kill", "Chicken", 5, "A feast for a mayor", 100, "Wheatcity", "Wheatcity", 0, "none", "Hi, I'm Granny Knajo. Would you mind catching some chickens for me with that sword of yours? I got an order from the mayor for tonight; I don't have time for this. Take care, they're the strongest chickens around!", "Oh, thank you for your help dear. You can keep your loot then, I'll just take the meat. Here, have a chicken.", 0, "none"), new quest("collect", "Rabbit hide", 3, "Sewing socks for winter", 100, "Wheatcity", "Wheatcity", 0, "Tailoring", "They announced a strong winter this year. With all these rabbits, we could make some socks and such. Go bring me some rabbit hides. ... What? Yeah, that's the first time seeing you too and so what? My nephew talked about you but he never mentioned you were this chatty. Less talk, more hides, and I'll teach you how to make an armor.", "Hah, once you don't talk, you're effective! Good. There, I'll show you.", 50, "none")];
+var listAcceptedQuests = [];
+var listAvailableQuests = [];
+var listQuests = [new quest("kill", "Rabbit", 20, "There's more of them?", 100, "Wheatcity", "Wheatcity", 0, "none", "Hello again, adventurer! We've got even more rabbits than before here. It almost looks like a sabotage...-- Haha, that's silly, everybody likes us here! Could you take care of that again for me, please?", "Oh, thank you my friend but... I have bad news. Do you remember when I spoke to you about sabotage?", 0, "none"), new quest("kill", "Chicken", 5, "A feast for a mayor", 100, "Wheatcity", "Wheatcity", 0, "none", "Hi, I'm Granny Knajo. Would you mind catching some chickens for me with that sword of yours? I got an order from the mayor for tonight; I don't have time for this. Take care, they're the strongest chickens around!", "Oh, thank you for your help dear. You can keep your loot then, I'll just take the meat. Here, have a chicken.", 0, "none"), new quest("collect", "Rabbit hide", 3, "Sewing socks for winter", 100, "Wheatcity", "Wheatcity", 0, "Tailoring", "They announced a strong winter this year. With all these rabbits, we could make some socks and such. Go bring me some rabbit hides. ... What? Yeah, that's the first time seeing you too and so what? My nephew talked about you but he never mentioned you were this chatty. Less talk, more hides, and I'll teach you how to make an armor.", "Hah, once you don't talk, you're effective! Good. There, I'll show you.", 50, "none")];
 
 function removeAvailableQuest(name) {
   var i;
@@ -381,7 +386,7 @@ function displayQuickCharQuest() {
 //------------------//
 
 function goto(newZone) {
-  curArea = searchByName(listZones,newZone);
+  player.curArea = searchByName(listZones,newZone);
   if (document.getElementById('worldmap_window').style.display != "none") document.getElementById('worldmap_window').style.display = "none";
   document.getElementById('HUD_zone_location').innerHTML = newZone;
   if (newZone == "Knajo fields") {
@@ -413,7 +418,7 @@ function displayCityQuest() {
   elAvQuest.innerHTML = "";
 
   for (i = 0; i < listAcceptedQuests.length; i++) {
-    if (listAcceptedQuests[i].finished == true && listAcceptedQuests[i].areaend == curArea.name) {
+    if (listAcceptedQuests[i].finished == true && listAcceptedQuests[i].areaend == player.curArea.name) {
       elQuest = document.createElement('span');
       elQuest.id = 'char_avacquest' + i;
       elQuest.className = 'city_available_quest';
@@ -428,7 +433,7 @@ function displayCityQuest() {
 
   for (i = 0; i < listAvailableQuests.length; i++) {
     elQuest = document.getElementById('char_city_available_quest' + i)
-    if (listAvailableQuests[i].available == 1 && listAvailableQuests[i].areabegin == curArea.name) {
+    if (listAvailableQuests[i].available == 1 && listAvailableQuests[i].areabegin == player.curArea.name) {
       elQuest = document.createElement('span');
       elQuest.id = 'char_city_available_quest' + i;
       elQuest.className = 'city_available_quest';
@@ -507,14 +512,14 @@ function calculateSellPrice(item) {
 }
 
 function sellCraftItem(i) {
-  changecMoney(calculateSellPrice(listCraftItems[i]));
+  changeplayer.money(calculateSellPrice(listCraftItems[i]));
   nbCraftItems[i]--;
   updateInventory();
   displayShopSell();
 }
 
 function sellGearItem(i) {
-  changecMoney(calculateSellPrice(gearItems[i]));
+  changeplayer.money(calculateSellPrice(gearItems[i]));
   gearItems.splice(i, 1);
   var elShopSell = document.getElementById('shop_window_sell');
   var elItem = document.getElementById('shopSG' + gearItems.length);
@@ -569,18 +574,12 @@ function displayShopSell() {
   }
 }
 
-
-
-//------------------//
-//-    Monsters    -//
-//------------------//
-
 //------------------//
 //-    Talents     -//
 //------------------//
 
 function updateDisplayTalentSheet() {
-  document.getElementById("menu_talent").innerHTML = "<b>Talents (" + cavTalent + ")</b>";
+  document.getElementById("menu_talent").innerHTML = "<b>Talents (" + player.avTalent + ")</b>";
 }
 
 //------------------//
@@ -599,10 +598,6 @@ function chestArmor(name, def, price) {
 }
 
 var listChestArmors = [new chestArmor("Nothing", 0, 0), new chestArmor("Rags", 1, 5), new chestArmor("Cloth armor", 5, 50), new chestArmor("Leather armor", 10, 85), new chestArmor("Ganjo armor", 54592, 3628800)];
-
-//------------------//
-//-    Weapons     -//
-//------------------//
 
 //------------------//
 //-   Equipment    -//
@@ -713,7 +708,8 @@ function updatejProgress(job, number) {
   job.progress += number;
   updateTailoring();
 }
-function gather (zone,job)
+
+function gather(zone,job)
 {
   var i;
   for(i=0;i<zone.listResources.length;i++)
@@ -733,6 +729,7 @@ function gather (zone,job)
     }
   }
 }
+
 function craft(job, iRecipe) {
   var recipe = listRecipesTailoring[iRecipe];
   //TODO job.recipe[iRecipe].. ajouter les recipe dans job avant.
@@ -924,364 +921,427 @@ function displayGathering() {
   }
   elTxt.innerHTML = "Stones&Metal(lvl "+searchByName(listJobs,"Mining").progress+")<br/>";
   elTxt.onclick = function() {
-    gather(curArea,searchByName(listJobs,"Mining"));};
+    gather(player.curArea,searchByName(listJobs,"Mining"));
+  };
+}
 
+//------------------//
+//-   Equipment    -//
+//------------------//
+
+function fists() {
+  this.name = "Fists";
+  this.damage = 4;
+}
+
+function sword() {
+  this.name = "Sword";
+  this.damage = 9;
+}
+
+function equipGearItems(i) {
+  var item = gearItems[i];
+  if (item.type == "Armor") {
+    gearItems.splice(i, 1);
+    changeChestArmor(item);
   }
+}
 
-  //------------------//
-  //-   Equipment    -//
-  //------------------//
+function changeWeapon(newWeapon) {
+  player.weapon = newWeapon;
+  player.atk = player.weapon.damage;
+  document.getElementById('main_char_weapon').innerHTML = player.weapon.name;
+  document.getElementById('main_char_weaponatk').innerHTML = player.weapon.damage;
+}
 
-  function fists() {
-    this.name = "Fists";
-    this.damage = 4;
+function changeChestArmor(newArmor) {
+  if (player.armor != "") {
+    addgItem(player.armor);
   }
+  player.armor = newArmor;
+  player.def = player.armor.def;
+  document.getElementById('main_char_armor').innerHTML = player.armor.name;
+  document.getElementById('main_char_armordef').innerHTML = player.armor.def;
+}
 
-  function sword() {
-    this.name = "Sword";
-    this.damage = 9;
-  }
+//------------------//
+//-   Inventory    -//
+//------------------//
 
-  function equipGearItems(i) {
-    var item = gearItems[i];
-    if (item.type == "Armor") {
-      gearItems.splice(i, 1);
-      changeChestArmor(item);
+function changecMoney(n) {
+  player.money += n;
+  log("You got " + n + " gold coins.", "INFO");
+}
+
+var nbCraftItems = [];
+var gearItems = [];
+
+function addgItem(item) {
+  gearItems.push(item);
+  log("You got " + " <b>[" + item.name + "]</b>", "INFO");
+  updateInventory();
+}
+
+function addcItem(item, number) {
+  var i;
+  if (number>=0)
+  log("You got " + number + " <b>[" + item.name + "]</b>", "INFO");
+  else
+  log("You lost " + Math.abs(number) + " <b>[" + item.name + "]</b>", "INFO");
+  nbCraftItems[item.id] += number;
+
+  updateInventory();
+
+  for (i = 0; i < listAcceptedQuests.length; i++) {
+    if (item.name == listAcceptedQuests[i].details && listAcceptedQuests[i].type == "collect") {
+      updateProgress(listAcceptedQuests[i], number);
     }
   }
+}
 
-  function changeWeapon(newWeapon) {
-    cWeapon = newWeapon;
-    cAtk = cWeapon.damage;
-    document.getElementById('main_char_weapon').innerHTML = cWeapon.name;
-    document.getElementById('main_char_weaponatk').innerHTML = cWeapon.damage;
-  }
+function updateInventory() {
+  displayInventory();
+  displayGold();
+}
 
-  function changeChestArmor(newArmor) {
-    if (cArmor != "") {
-      addgItem(cArmor);
-    }
-    cArmor = newArmor;
-    cDef = cArmor.def;
-    document.getElementById('main_char_armor').innerHTML = cArmor.name;
-    document.getElementById('main_char_armordef').innerHTML = cArmor.def;
-  }
+function displayGold() {
+  document.getElementById('char_gold').innerHTML = player.money;
+  document.getElementById('char_gold_shop').innerHTML = player.money;
+}
 
-  //------------------//
-  //-   Inventory    -//
-  //------------------//
+function displayInventory() {
+  var elInventory = document.getElementById('main_char_inventory_window');
+  var elItem;
+  var i;
 
-  function changecMoney(n) {
-    cMoney += n;
-    log("You got " + n + " gold coins.", "INFO");
-  }
-
-  var nbCraftItems = [];
-  var gearItems = [];
-
-  function addgItem(item) {
-    gearItems.push(item);
-    log("You got " + " <b>[" + item.name + "]</b>", "INFO");
-    updateInventory();
-  }
-
-  function addcItem(item, number) {
-    var i;
-    if (number>=0)
-    log("You got " + number + " <b>[" + item.name + "]</b>", "INFO");
-    else
-    log("You lost " + Math.abs(number) + " <b>[" + item.name + "]</b>", "INFO");
-    nbCraftItems[item.id] += number;
-
-    updateInventory();
-
-    for (i = 0; i < listAcceptedQuests.length; i++) {
-      if (item.name == listAcceptedQuests[i].details && listAcceptedQuests[i].type == "collect") {
-        updateProgress(listAcceptedQuests[i], number);
-      }
-    }
-  }
-
-  function updateInventory() {
-    displayInventory();
-    displayGold();
-  }
-
-  function displayGold() {
-    document.getElementById('char_gold').innerHTML = cMoney;
-    document.getElementById('char_gold_shop').innerHTML = cMoney;
-  }
-
-  function displayInventory() {
-    var elInventory = document.getElementById('main_char_inventory_window');
-    var elItem;
-    var i;
-
-    //Craft items
-    for (i = 0; i < nbCraftItem; i++) {
-      elItem = document.getElementById('char_cInventory' + i);
-      if (nbCraftItems[i] > 0) {
-        if (elItem != null) {
-          elItem.innerHTML = nbCraftItems[i] + " " + listCraftItems[i].name + "<br/>";
-        } else {
-          elItem = document.createElement('span');
-          elItem.id = 'char_cInventory' + i;
-          elItem.innerHTML = nbCraftItems[i] + " " + listCraftItems[i].name + "<br/>";
-          elInventory.appendChild(elItem);
-        }
-      } else {
-        if (elItem != null) {
-          elInventory.removeChild(elItem);
-        }
-      }
-    }
-
-    //gear
-
-    for (i = 0; i < gearItems.length; i++) {
-      elItem = document.getElementById('char_gInventory' + i)
-
+  //Craft items
+  for (i = 0; i < nbCraftItem; i++) {
+    elItem = document.getElementById('char_cInventory' + i);
+    if (nbCraftItems[i] > 0) {
       if (elItem != null) {
-        elItem.innerHTML = gearItems[i].name + "<br/>";
+        elItem.innerHTML = nbCraftItems[i] + " " + listCraftItems[i].name + "<br/>";
       } else {
         elItem = document.createElement('span');
-        elItem.id = 'char_gInventory' + i;
-        elItem.innerHTML = gearItems[i].name + "<br/>";
+        elItem.id = 'char_cInventory' + i;
+        elItem.innerHTML = nbCraftItems[i] + " " + listCraftItems[i].name + "<br/>";
         elInventory.appendChild(elItem);
       }
-      elItem.setAttribute('iItem', i);
-      elItem.onclick = function () {
-        equipGearItems(this.getAttribute('iItem'));
-      }
-
-    }
-
-
-  }
-
-  //------------------//
-  //-    Monsters    -//
-  //------------------//
-
-  function loot(item, percentage) {
-    this.item = item;
-    this.percentage = percentage;
-  }
-
-  function rabbit() {
-    this.exist = true;
-    this.maxHP = 16;
-    this.currHP = this.maxHP;
-    this.name = "Rabbit";
-    this.atk = 5;
-    this.XP = 10;
-    this.nbLoot = 2;
-    this.loots = [new loot(listCraftItems[0], 100), new loot(listCraftItems[1], 100)];
-    this.img = "images/rabbit.png";
-  }
-
-  function chicken() {
-    this.exist = true;
-    this.maxHP = 34;
-    this.currHP = this.maxHP;
-    this.name = "Chicken";
-    this.atk = 30;
-    this.XP = 30;
-    this.nbLoot = 2;
-    this.loots = [new loot(listCraftItems[2], 100), new loot(listCraftItems[3], 50)];
-    this.img = "images/chicken.png";
-  }
-
-  var monsters = [new rabbit, new chicken, new rabbit];
-
-  function monsterDeath(md_monster, k) {
-    log("You defeated the <b>" + monsters[k].name + "</b> and earned " + monsters[k].XP + "xp.", "INFO");
-
-    // Earn XP
-    changecXP(md_monster.XP);
-    var i;
-    for (i = 0; i < md_monster.nbLoot; i++) {
-      if ((Math.random() * 100 <= md_monster.loots[i].percentage)) {
-        addcItem(md_monster.loots[i].item, 1);
-      }
-    }
-
-    // Display update
-    monsters[k].exist = false;
-    document.getElementById('monster_name' + k).innerHTML = "";
-    document.getElementById('monster_curHPbar' + k).style.width = "0px";
-    document.getElementById('monster_avatar' + k).src = "";
-    document.getElementById('monster_curHP' + k).innerHTML = "";
-    document.getElementById('monster_maxHP' + k).innerHTML = "";
-
-    // Update Quests
-    for (i = 0; i < listAcceptedQuests.length; i++) {
-      if (md_monster.name == listAcceptedQuests[i].details && listAcceptedQuests[i].type == "kill") {
-        updateProgress(listAcceptedQuests[i], 1);
+    } else {
+      if (elItem != null) {
+        elInventory.removeChild(elItem);
       }
     }
   }
 
-  function clickmonster(i) {
-    if (dead) log("You can't do that when you're dead.", "ERROR");
-    else if (monsters[i].exist) {
-      changemHP(i, -((cAtk + cbDmg) * cmDmg));
+  //gear
 
-      if (monsters[i].exist) {
-        var damage = -monsters[i].atk + cDef;
-        if (damage > 0) damage = 0;
-        changecHP(damage);
+  for (i = 0; i < gearItems.length; i++) {
+    elItem = document.getElementById('char_gInventory' + i)
+
+    if (elItem != null) {
+      elItem.innerHTML = gearItems[i].name + "<br/>";
+    } else {
+      elItem = document.createElement('span');
+      elItem.id = 'char_gInventory' + i;
+      elItem.innerHTML = gearItems[i].name + "<br/>";
+      elInventory.appendChild(elItem);
+    }
+    elItem.setAttribute('iItem', i);
+    elItem.onclick = function () {
+      equipGearItems(this.getAttribute('iItem'));
+    }
+
+  }
+
+
+}
+
+//------------------//
+//-    Monsters    -//
+//------------------//
+
+function loot(item, percentage) {
+  this.item = item;
+  this.percentage = percentage;
+}
+
+function rabbit() {
+  this.exist = true;
+  this.maxHP = 16;
+  this.currHP = this.maxHP;
+  this.name = "Rabbit";
+  this.atk = 5;
+  this.XP = 10;
+  this.nbLoot = 2;
+  this.loots = [new loot(listCraftItems[0], 100), new loot(listCraftItems[1], 100)];
+  this.img = "images/rabbit.png";
+}
+
+function chicken() {
+  this.exist = true;
+  this.maxHP = 34;
+  this.currHP = this.maxHP;
+  this.name = "Chicken";
+  this.atk = 30;
+  this.XP = 30;
+  this.nbLoot = 2;
+  this.loots = [new loot(listCraftItems[2], 100), new loot(listCraftItems[3], 50)];
+  this.img = "images/chicken.png";
+}
+
+var monsters = [new rabbit, new chicken, new rabbit];
+
+function monsterDeath(md_monster, k) {
+  log("You defeated the <b>" + monsters[k].name + "</b> and earned " + monsters[k].XP + "xp.", "INFO");
+
+  // Earn XP
+  changecXP(md_monster.XP);
+  var i;
+  for (i = 0; i < md_monster.nbLoot; i++) {
+    if ((Math.random() * 100 <= md_monster.loots[i].percentage)) {
+      addcItem(md_monster.loots[i].item, 1);
+    }
+  }
+
+  // Display update
+  monsters[k].exist = false;
+  document.getElementById('monster_name' + k).innerHTML = "";
+  document.getElementById('monster_curHPbar' + k).style.width = "0px";
+  document.getElementById('monster_avatar' + k).src = "";
+  document.getElementById('monster_curHP' + k).innerHTML = "";
+  document.getElementById('monster_maxHP' + k).innerHTML = "";
+
+  // Update Quests
+  for (i = 0; i < listAcceptedQuests.length; i++) {
+    if (md_monster.name == listAcceptedQuests[i].details && listAcceptedQuests[i].type == "kill") {
+      updateProgress(listAcceptedQuests[i], 1);
+    }
+  }
+}
+
+function clickmonster(i) {
+  if (player.dead) log("You can't do that when you're dead.", "ERROR");
+  else if (monsters[i].exist) {
+    changemHP(i, -((player.atk + player.bDMG) * player.mDMG));
+
+    if (monsters[i].exist) {
+      var damage = -monsters[i].atk + player.def;
+      if (damage > 0) damage = 0;
+      changecHP(damage);
+    }
+  }
+}
+
+function changemHP(i, dmg) {
+  monsters[i].currHP += dmg;
+
+  if (monsters[i].currHP > monsters[i].maxHP) monsters[i].currHP = monsters[i].maxHP;
+  else if (monsters[i].currHP <= 0) {
+    monsterDeath(monsters[i], i);
+    return;
+  }
+
+  var elmbarHP = document.getElementById('monster_curHPbar' + i);
+
+  document.getElementById('monster_curHP' + i).innerHTML = monsters[i].currHP;
+  document.getElementById('monster_maxHP' + i).innerHTML = monsters[i].maxHP;
+  elmbarHP.style.width = monsters[i].currHP / monsters[i].maxHP * 50 + "px";
+
+  if (monsters[i].currHP / monsters[i].maxHP < 0.25) {
+    elmbarHP.style.backgroundColor = "#E75D21";
+  } else if (monsters[i].currHP / monsters[i].maxHP < 0.5) {
+    elmbarHP.style.backgroundColor = "#DBA744";
+  } else if (monsters[i].currHP / monsters[i].maxHP < 1) {
+    elmbarHP.style.backgroundColor = "#66A366";
+  } else if (monsters[i].currHP == monsters[i].maxHP) {
+    elmbarHP.style.backgroundColor = "#006600";
+  }
+}
+
+//------------------//
+//- Misc functions -//
+//------------------//
+
+function searchByName(list, name) {
+  var i = 0;
+  for (i = 0; i < list.length; i++) {
+    if (list[i].name == name) {
+      return list[i];
+    }
+  }
+}
+
+function log(txt, canal) {
+  if (canal == "INFO") fontcolor = "#8080ff";
+  else if (canal == "ERROR") fontcolor = "#ff0000";
+  else if (canal == "GENERAL") fontcolor = "#c08080";
+  else if (canal == "COMMERCE") fontcolor = "#c08080";
+  else if (canal == "RECRUITMENT") fontcolor = "#c08080";
+  else if (canal == "GUILD") fontcolor = "#40ff40";
+  else if (canal == "TEAM") fontcolor = "#ff7f00";
+  else if (canal == "WHISP") fontcolor = "#ff80ff";
+
+  txt = "<font color='" + fontcolor + "'>" + txt + "</font>";
+
+  document.getElementById('log5').innerHTML = document.getElementById('log4').innerHTML;
+  document.getElementById('log4').innerHTML = document.getElementById('log3').innerHTML;
+  document.getElementById('log3').innerHTML = document.getElementById('log2').innerHTML;
+  document.getElementById('log2').innerHTML = document.getElementById('log1').innerHTML;
+  document.getElementById('log1').innerHTML = txt;
+}
+
+function clearChatLog() {
+  document.getElementById('log5').innerHTML = "";
+  document.getElementById('log4').innerHTML = "";
+  document.getElementById('log3').innerHTML = "";
+  document.getElementById('log2').innerHTML = "";
+  document.getElementById('log1').innerHTML = "";
+}
+
+//------------------//
+//-      Idle      -//
+//------------------//
+
+var idle = function () {
+  // character regeneration
+  if (player.curHP < player.maxHP) changecHP(player.regenHP);
+  if (player.curMP < player.maxMP) changecMP(player.regenMP);
+
+  // skills regeneration
+
+  // repop
+  var i;
+  for (i = 0; i < 3; i++) {
+    if (monsters[i].exist == 0) {
+      if (Math.random() * 100 < 10) {
+        monsters[i].exist = true;
+        monsters[i].currHP = monsters[i].maxHP;
+        document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
+        document.getElementById('monster_curHPbar' + i).style.width = "50px";
+        document.getElementById('monster_avatar' + i).src = monsters[i].img;
+        document.getElementById('monster_curHP' + i).innerHTML = monsters[i].currHP;
+        document.getElementById('monster_maxHP' + i).innerHTML = monsters[i].maxHP;
+        document.getElementById('monster_curHPbar' + i).style.backgroundColor = "#006600";
       }
     }
   }
 
-  function changemHP(i, dmg) {
-    monsters[i].currHP += dmg;
-
-    if (monsters[i].currHP > monsters[i].maxHP) monsters[i].currHP = monsters[i].maxHP;
-    else if (monsters[i].currHP <= 0) {
-      monsterDeath(monsters[i], i);
-      return;
-    }
-
-    var elmbarHP = document.getElementById('monster_curHPbar' + i);
-
-    document.getElementById('monster_curHP' + i).innerHTML = monsters[i].currHP;
-    document.getElementById('monster_maxHP' + i).innerHTML = monsters[i].maxHP;
-    elmbarHP.style.width = monsters[i].currHP / monsters[i].maxHP * 50 + "px";
-
-    if (monsters[i].currHP / monsters[i].maxHP < 0.25) {
-      elmbarHP.style.backgroundColor = "#E75D21";
-    } else if (monsters[i].currHP / monsters[i].maxHP < 0.5) {
-      elmbarHP.style.backgroundColor = "#DBA744";
-    } else if (monsters[i].currHP / monsters[i].maxHP < 1) {
-      elmbarHP.style.backgroundColor = "#66A366";
-    } else if (monsters[i].currHP == monsters[i].maxHP) {
-      elmbarHP.style.backgroundColor = "#006600";
-    }
+  // chat event
+  if (Math.random() * 300 < 1) {
+    var canal = Math.floor(Math.random() * 3);
+    if (canal == 0) log(dialogGeneral[Math.floor(Math.random() * dialogGeneral.length)], "GENERAL");
+    else if (canal == 1) log(dialogCommerce[Math.floor(Math.random() * dialogCommerce.length)], "COMMERCE");
+    else if (canal == 2) log(dialogRecruitment[Math.floor(Math.random() * dialogRecruitment.length)], "RECRUITMENT");
   }
 
-  //------------------//
-  //- Misc functions -//
-  //------------------//
+  // save
+  localStorage.setItem('gameData', JSON.stringify(gameData));
 
-  function searchByName(list, name) {
-    var i = 0;
-    for (i = 0; i < list.length; i++) {
-      if (list[i].name == name) {
-        return list[i];
-      }
-    }
-  }
+  // wait 1s
+  setTimeout(idle, 1000);
+}
 
-  function log(txt, canal) {
-    if (canal == "INFO") fontcolor = "#8080ff";
-    else if (canal == "ERROR") fontcolor = "#ff0000";
-    else if (canal == "GENERAL") fontcolor = "#c08080";
-    else if (canal == "COMMERCE") fontcolor = "#c08080";
-    else if (canal == "RECRUITMENT") fontcolor = "#c08080";
-    else if (canal == "GUILD") fontcolor = "#40ff40";
-    else if (canal == "TEAM") fontcolor = "#ff7f00";
-    else if (canal == "WHISP") fontcolor = "#ff80ff";
+var dialogGeneral = ["[1] <b>Chin chong</b>: Sell 3 000 000 000 gold for 1 000$! Check it out in mmomaster-farmgold.com !", "[1] <b>Sayorg the ugly</b>: Someone to play LoL or HotS here?"];
+var dialogCommerce = ["[2] <b>Leroy Jenkins</b>: Buy chickens"];
+var dialogRecruitment = ["[4] <b>DarkSasuke</b>: I recruit members in my new guild Revenge of Akatsuki. Leader lvl 57. No noob pls!"];
 
-    txt = "<font color='" + fontcolor + "'>" + txt + "</font>";
+//------------------//
+//- Initialization -//
+//------------------//
 
-    document.getElementById('log5').innerHTML = document.getElementById('log4').innerHTML;
-    document.getElementById('log4').innerHTML = document.getElementById('log3').innerHTML;
-    document.getElementById('log3').innerHTML = document.getElementById('log2').innerHTML;
-    document.getElementById('log2').innerHTML = document.getElementById('log1').innerHTML;
-    document.getElementById('log1').innerHTML = txt;
-  }
+window.onload = init;
 
-  //------------------//
-  //-      Idle      -//
-  //------------------//
+function resetgame() {
+  localStorage.clear();
+  clearChatLog();
+  init();
+}
 
-  var idle = function () {
-    // character regeneration
-    if (ccurHP < cmaxHP) changecHP(cregenHP);
-    if (ccurMP < cmaxMP) changecMP(cregenMP);
-
-    // skills regeneration
-
-    // repop
-    var i;
-    for (i = 0; i < 3; i++) {
-      if (monsters[i].exist == 0) {
-        if (Math.random() * 100 < 10) {
-          monsters[i].exist = true;
-          monsters[i].currHP = monsters[i].maxHP;
-          document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
-          document.getElementById('monster_curHPbar' + i).style.width = "50px";
-          document.getElementById('monster_avatar' + i).src = monsters[i].img;
-          document.getElementById('monster_curHP' + i).innerHTML = monsters[i].currHP;
-          document.getElementById('monster_maxHP' + i).innerHTML = monsters[i].maxHP;
-          document.getElementById('monster_curHPbar' + i).style.backgroundColor = "#006600";
-        }
-      }
-    }
-
-    // chat event
-    if (Math.random() * 300 < 1) {
-      var canal = Math.floor(Math.random() * 3);
-      if (canal == 0) log(dialogGeneral[Math.floor(Math.random() * dialogGeneral.length)], "GENERAL");
-      else if (canal == 1) log(dialogCommerce[Math.floor(Math.random() * dialogCommerce.length)], "COMMERCE");
-      else if (canal == 2) log(dialogRecruitment[Math.floor(Math.random() * dialogRecruitment.length)], "RECRUITMENT");
-    }
-
-    // wait 1s
-    setTimeout(idle, 1000);
-  }
-
-  var dialogGeneral = ["[1] <b>Chin chong</b>: Sell 3 000 000 000 gold for 1 000$! Check it out in mmomaster-farmgold.com !", "[1] <b>Sayorg the ugly</b>: Someone to play LoL or HotS here?"];
-  var dialogCommerce = ["[2] <b>Leroy Jenkins</b>: Buy chickens"];
-  var dialogRecruitment = ["[4] <b>DarkSasuke</b>: I recruit members in my new guild Revenge of Akatsuki. Leader lvl 57. No noob pls!"];
-
-  //------------------//
-  //- Initialization -//
-  //------------------//
-
-  window.onload = init
-
-  function init() {
+function init() {
+  if (!localStorage.getItem('gameData'))
+  {
+    log("Welcome to MMO Master!", "INFO");
     newgame();
   }
+  else
+  {
+    log("Welcome back to MMO Master!", "INFO");
+    gameData = JSON.parse(localStorage.getItem('gameData'));
+    player = gameData.player;
+    listAcceptedQuests = gameData.listAcceptedQuests;
+    listAvailableQuests = gameData.listAvailableQuests;
+    listQuests = gameData.listQuests;
+    nbCraftItems = gameData.nbCraftItems;
+    gearItems = gameData.gearItems;
 
-  function newgame() {
-    // create character
-    initChar();
-
-    // data
-    changeChestArmor(new equipment(searchByName(listChestArmors, "Rags"), [], 3));
-    curArea = searchByName(listZones,"Wheatcity");
-    for (var i = 0; i < nbCraftItem; i++)
-    nbCraftItems.push(0);
-    listAvailableQuests.push(new quest("kill", "Rabbit", 2, "The cereal killers", 100, "Wheatcity", "Wheatcity", 1, "none", "Hello there! Are you new here? I am John Knajo. You are searching for a job? There's actually some rabbits annoying us in the corn fields. They're eating our crops and that's bad for business. Kill some of them for me and I will gladly pay you for your help.", "I knew I could count on you; there, take these few coppers and stay around. My family might find some jobs for you too.", 50, [searchByName(listQuests, "There's more of them?"), searchByName(listQuests, "A feast for a mayor"), searchByName(listQuests, "Sewing socks for winter")]));
-
-    // display
-    document.getElementById('main_char_name').innerHTML = cNom;
-    document.getElementById('main_char_class').innerHTML = cClass;
-    displayXPbar();
-    displayHPbar();
-    document.getElementById('main_char_weapon').innerHTML = cWeapon.name;
-    document.getElementById('main_char_weaponatk').innerHTML = cWeapon.damage;
-    document.getElementById('main_char_armor').innerHTML = cArmor.name;
-    document.getElementById('main_char_armordef').innerHTML = cArmor.def;
-    displayQuests();
-    updateInventory();
-
-    // monsters
-    for (var i = 0; i < 3; i++) {
-      document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
-      changemHP(i, 0);
-    }
-
-    // TESTING JOB
-    updateTailoring();
-
-    // Begin game
-    goto("Wheatcity");
-    log("Welcome to MMO Master!", "INFO");
-
-    idle();
+    player.curArea = "Wheatcity";
   }
+
+  // TESTING JOB
+  updateTailoring();
+
+  // display
+  initDisplay();
+  initMonster();
+  initLocalStorage();
+
+  // begin game
+  goto(player.curArea);
+
+  idle();
+}
+
+function initLocalStorage() {
+  gameData.player = player;
+  gameData.listAcceptedQuests = listAcceptedQuests;
+  gameData.listAvailableQuests = listAvailableQuests;
+  gameData.listQuests = listQuests;
+  gameData.nbCraftItems = nbCraftItems;
+  gameData.gearItems = gearItems;
+}
+
+function initDisplay() {
+  document.getElementById('main_char_name').innerHTML = player.name;
+  document.getElementById('main_char_class').innerHTML = player.class;
+  displayXPbar();
+  displayHPbar();
+  displayMPbar();
+
+  document.getElementById('main_char_weapon').innerHTML = player.weapon.name;
+  document.getElementById('main_char_weaponatk').innerHTML = player.weapon.damage;
+  document.getElementById('main_char_armor').innerHTML = player.armor.name;
+  document.getElementById('main_char_armordef').innerHTML = player.armor.def;
+
+  displayQuests();
+  updateInventory();
+
+  updateStat();
+}
+
+function initMonster() {
+  for (var i = 0; i < 3; i++) {
+    document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
+    changemHP(i, 0);
+  }
+}
+
+function newgame() {
+  player.curArea = searchByName(listZones,"Wheatcity");
+
+  // create character
+  initChar();
+
+  // data
+  changeChestArmor(new equipment(searchByName(listChestArmors, "Rags"), [], 3));
+
+  for (var i = 0; i < nbCraftItem; i++)
+    nbCraftItems.push(0);
+
+  gearItems = [];
+
+  listQuests = [new quest("kill", "Rabbit", 20, "There's more of them?", 100, "Wheatcity", "Wheatcity", 0, "none", "Hello again, adventurer! We've got even more rabbits than before here. It almost looks like a sabotage...-- Haha, that's silly, everybody likes us here! Could you take care of that again for me, please?", "Oh, thank you my friend but... I have bad news. Do you remember when I spoke to you about sabotage?", 0, "none"), new quest("kill", "Chicken", 5, "A feast for a mayor", 100, "Wheatcity", "Wheatcity", 0, "none", "Hi, I'm Granny Knajo. Would you mind catching some chickens for me with that sword of yours? I got an order from the mayor for tonight; I don't have time for this. Take care, they're the strongest chickens around!", "Oh, thank you for your help dear. You can keep your loot then, I'll just take the meat. Here, have a chicken.", 0, "none"), new quest("collect", "Rabbit hide", 3, "Sewing socks for winter", 100, "Wheatcity", "Wheatcity", 0, "Tailoring", "They announced a strong winter this year. With all these rabbits, we could make some socks and such. Go bring me some rabbit hides. ... What? Yeah, that's the first time seeing you too and so what? My nephew talked about you but he never mentioned you were this chatty. Less talk, more hides, and I'll teach you how to make an armor.", "Hah, once you don't talk, you're effective! Good. There, I'll show you.", 50, "none")];
+  listAcceptedQuests = [];
+  listAvailableQuests = [];
+  listAvailableQuests.push(new quest("kill", "Rabbit", 2, "The cereal killers", 100, "Wheatcity", "Wheatcity", 1, "none", "Hello there! Are you new here? I am John Knajo. You are searching for a job? There's actually some rabbits annoying us in the corn fields. They're eating our crops and that's bad for business. Kill some of them for me and I will gladly pay you for your help.", "I knew I could count on you; there, take these few coppers and stay around. My family might find some jobs for you too.", 50, [searchByName(listQuests, "There's more of them?"), searchByName(listQuests, "A feast for a mayor"), searchByName(listQuests, "Sewing socks for winter")]));
+
+}
