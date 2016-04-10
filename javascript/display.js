@@ -111,3 +111,17 @@ function displayMenuGathering() {
     elGath.style.display = "inline";
   }
 }
+
+function updateDisplayCharSheet() {
+  document.getElementById("char_HP").innerHTML = player.maxHP;
+  document.getElementById("char_MP").innerHTML = player.maxMP;
+
+  document.getElementById("char_STR").innerHTML = player.fSTR;
+  document.getElementById("char_DEX").innerHTML = player.fDEX;
+  document.getElementById("char_INT").innerHTML = player.fINT;
+  document.getElementById("char_WIS").innerHTML = player.fWIS;
+  document.getElementById("char_CON").innerHTML = player.fCON;
+  document.getElementById("char_AGI").innerHTML = player.fAGI;
+
+  document.getElementById("char_points").innerHTML = player.avPoint;
+}

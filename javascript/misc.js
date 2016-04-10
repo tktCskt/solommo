@@ -2,152 +2,10 @@
 //- Character data -//
 //------------------//
 
-var player = {};
+
 var gameData = {};
 
-//------------------//
-//-      Init      -//
-//------------------//
 
-function initChar() {
-  player = {
-    curArea:"Wheatcity",
-    name:"Alexstrasza",
-    class:"Novice",
-    level:1,
-    xp:0,
-    money:0,
-
-    avPoint:0,
-    avTalent:0,
-
-    STR:10,
-    bSTR:0,
-    mSTR:1,
-    fSTR:10,
-
-    DEX:10,
-    bDEX:0,
-    mDEX:1,
-    fDEX:10,
-
-    INT:10,
-    bINT:0,
-    mINT:1,
-    fINT:10,
-
-    WIS:10,
-    bWIS:0,
-    mWIS:1,
-    fWIS:10,
-
-    CON:10,
-    bCON:0,
-    mCON:1,
-    fCON:10,
-
-    AGI:10,
-    bAGI:0,
-    mAGI:1,
-    fAGI:10,
-
-    maxHP:100,
-    curHP:100,
-    regenHP:1,
-
-    maxMP:10,
-    curMP:10,
-    regenMP:0.1,
-
-    bDMG:0,
-    mDMG:1,
-
-    dead:false,
-
-    armor:"",
-    def:0
-  }
-
-  updateStat();
-
-  player.curHP = player.maxHP;
-  player.curMP = player.maxMP;
-  player.weapon = searchByName(listWeapons, 'Sword');
-  player.atk = player.weapon.damage;
-
-  displayHPbar();
-  displayMPbar();
-
-  gameData.player = player;
-}
-
-//------------------//
-//-   Char sheet   -//
-//------------------//
-
-function updateStat() {
-  player.fSTR = (player.STR + player.bSTR) * player.mSTR;
-  player.fDEX = (player.DEX + player.bDEX) * player.mDEX;
-  player.fINT = (player.INT + player.bINT) * player.mINT;
-  player.fWIS = (player.WIS + player.bWIS) * player.mWIS;
-  player.fCON = (player.CON + player.bCON) * player.mCON;
-  player.fAGI = (player.AGI + player.bAGI) * player.mAGI;
-
-  player.mDMG = player.fSTR / 10;
-
-  player.maxMP = player.fINT * 1;
-  player.regenMP = player.fINT * 0.01;
-
-  player.maxHP = player.fCON * 10;
-  player.regenHP = player.fCON * 0.1;
-
-  displayHPbar();
-  displayMPbar();
-  updateDisplayCharSheet();
-}
-
-function addcPoint(value) {
-  if (player.avPoint > 0) {
-    switch (value) {
-      case 'STR':
-      player.STR++;
-      break;
-      case 'DEX':
-      player.DEX++;
-      break;
-      case 'INT':
-      player.INT++;
-      break;
-      case 'WIS':
-      player.WIS++;
-      break;
-      case 'CON':
-      player.CON++;
-      break;
-      case 'AGI':
-      player.AGI++;
-      break;
-    }
-    player.avPoint--;
-    updateStat();
-  } else {
-    log("You don't have any point available.", "ERROR");
-  }
-}
-
-function updateDisplayCharSheet() {
-  document.getElementById("char_HP").innerHTML = player.maxHP;
-  document.getElementById("char_MP").innerHTML = player.maxMP;
-
-  document.getElementById("char_STR").innerHTML = player.fSTR;
-  document.getElementById("char_DEX").innerHTML = player.fDEX;
-  document.getElementById("char_INT").innerHTML = player.fINT;
-  document.getElementById("char_WIS").innerHTML = player.fWIS;
-  document.getElementById("char_CON").innerHTML = player.fCON;
-  document.getElementById("char_AGI").innerHTML = player.fAGI;
-
-  document.getElementById("char_points").innerHTML = player.avPoint;
-}
 
 //------------------//
 //-   Char frame   -//
@@ -674,36 +532,6 @@ function zone(name, listMonsters, monstersRate, listResources, resourcesRate) {
 var listZones = [new zone("Wheatcity",[],[],[searchByName(listCraftItems,"Iron")],[50]),
 new zone("Knajo fields",[],[],[searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper")],[75,75])];
 
-//------------------//
-//-  Jobs / Craft  -//
-//------------------//
-
-function updatejProgress(job, number) {
-  log("+" + number + " in " + job.name, "INFO");
-  job.progress += number;
-  updateJob(job);
-}
-
-function gather(zone,job)
-{
-  var i;
-  for(i=0;i<zone.listResources.length;i++)
-  {
-    var K = 0.03;
-    if(zone.listResources[i].type2 == job.details)
-    {
-      var n = K * zone.resourcesRate[i] * Math.sqrt(job.progress);
-      var number = Math.trunc(n);
-      var r = Math.random();
-      if(r < n - number) //
-      {
-        number++;
-      }
-      addcItem(zone.listResources[i],number);
-
-    }
-  }
-}
 
 function updateJob(job) {
   var elTailoring = document.getElementById('tailoring_craft_boxes');
@@ -1038,45 +866,6 @@ function changemHP(i, dmg) {
   }
 }
 
-//------------------//
-//- Misc functions -//
-//------------------//
-
-function searchByName(list, name) {
-  var i = 0;
-  for (i = 0; i < list.length; i++) {
-    if (list[i].name == name) {
-      return list[i];
-    }
-  }
-}
-
-function log(txt, canal) {
-  if (canal == "INFO") fontcolor = "#8080ff";
-  else if (canal == "ERROR") fontcolor = "#ff0000";
-  else if (canal == "GENERAL") fontcolor = "#c08080";
-  else if (canal == "COMMERCE") fontcolor = "#c08080";
-  else if (canal == "RECRUITMENT") fontcolor = "#c08080";
-  else if (canal == "GUILD") fontcolor = "#40ff40";
-  else if (canal == "TEAM") fontcolor = "#ff7f00";
-  else if (canal == "WHISP") fontcolor = "#ff80ff";
-
-  txt = "<font color='" + fontcolor + "'>" + txt + "</font>";
-
-  document.getElementById('log5').innerHTML = document.getElementById('log4').innerHTML;
-  document.getElementById('log4').innerHTML = document.getElementById('log3').innerHTML;
-  document.getElementById('log3').innerHTML = document.getElementById('log2').innerHTML;
-  document.getElementById('log2').innerHTML = document.getElementById('log1').innerHTML;
-  document.getElementById('log1').innerHTML = txt;
-}
-
-function clearChatLog() {
-  document.getElementById('log5').innerHTML = "";
-  document.getElementById('log4').innerHTML = "";
-  document.getElementById('log3').innerHTML = "";
-  document.getElementById('log2').innerHTML = "";
-  document.getElementById('log1').innerHTML = "";
-}
 
 //------------------//
 //-      Idle      -//
@@ -1199,7 +988,7 @@ function initDisplay() {
 }
 
 function initMonster() {
-  monsters=[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Wolf")];
+  monsters=[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Rabbit")];
   for (var i = 0; i < 3; i++) {
     document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
     changemHP(i, 0);
