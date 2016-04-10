@@ -2,10 +2,7 @@
 //- Character data -//
 //------------------//
 
-
 var gameData = {};
-
-
 
 //------------------//
 //-   Char frame   -//
@@ -530,7 +527,7 @@ function zone(name, listMonsters, monstersRate, listResources, resourcesRate) {
 }
 
 var listZones = [new zone("Wheatcity",[],[],[searchByName(listCraftItems,"Iron")],[50]),
-new zone("Knajo fields",[],[],[searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper")],[75,75])];
+new zone("Knajo fields",[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")],[60,80,100],[searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper")],[75,75])];
 
 
 function updateJob(job) {
@@ -772,7 +769,7 @@ function displayInventory() {
       }
     }
   }
-  
+
    //gear
 
   for (i = 0; i < gearItems.length; i++) {
@@ -879,10 +876,19 @@ var idle = function () {
   // skills regeneration
 
   // repop
-  var i;
-  for (i = 0; i < 3; i++) {
-    if (monsters[i].exist == 0) {
+  for (var i = 0; i < 3; i++) {
+    if (!monsters[i].exist) {
       if (Math.random() * 100 < 10) {
+        var thisarea = searchByName(listZones, "Knajo fields");
+        var monsterRate = Math.random() * 100;
+        for (var j = 0; j < thisarea.listMonsters.length; j++) {
+          if (monsterRate <= thisarea.monstersRate[j]) {
+            thisarea.monstersRate;
+            monsters[i] = thisarea.listMonsters[j];
+            break;
+          }
+        }
+
         monsters[i].exist = true;
         monsters[i].currHP = monsters[i].maxHP;
         document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
@@ -988,7 +994,9 @@ function initDisplay() {
 }
 
 function initMonster() {
-  monsters=[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Rabbit")];
+//  activeMonsters = [searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")];
+//  area.availableMonsters = [searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")];
+  monsters=[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")];
   for (var i = 0; i < 3; i++) {
     document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
     changemHP(i, 0);
