@@ -1,7 +1,7 @@
 
-//-----------------//
-//-   Tabs main   -//
-//-----------------//
+//----------------------//
+//-  Main | Tabs main  -//
+//----------------------//
 
 function toggleActiveTabGame() {
   document.getElementById('tabs_game').classList.add('tabs_btn_active');
@@ -31,10 +31,9 @@ function toggleActiveTabCraft() {
   document.getElementById('tabs_content_craft').classList.add('tabs_content_active');
 }
 
-
-//----------------//
-//-  Menu items  -//
-//----------------//
+//-----------------------//
+//-  Game | Menu items  -//
+//-----------------------//
 
 function displayMenuQuests() {
   elmcquests = document.getElementById('main_char_quests_window');
@@ -111,6 +110,23 @@ function displayMenuGathering() {
     elGath.style.display = "inline";
   }
 }
+
+//-------------------------//
+//-  Game | Hunting zone  -//
+//-------------------------//
+
+function displayNewMonster(i, monster) {
+  document.getElementById('monster_name' + i).innerHTML = monster.name;
+  document.getElementById('monster_curHPbar' + i).style.width = "50px";
+  document.getElementById('monster_avatar' + i).src = monster.img;
+  document.getElementById('monster_curHP' + i).innerHTML = monster.currHP;
+  document.getElementById('monster_maxHP' + i).innerHTML = monster.maxHP;
+  document.getElementById('monster_curHPbar' + i).style.backgroundColor = "#006600";
+}
+
+//---------------//
+//-  Character  -//
+//---------------//
 
 function updateDisplayCharSheet() {
   document.getElementById("char_HP").innerHTML = player.maxHP;

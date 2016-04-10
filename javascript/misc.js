@@ -527,7 +527,7 @@ function zone(name, listMonsters, monstersRate, listResources, resourcesRate) {
 }
 
 var listZones = [new zone("Wheatcity",[],[],[searchByName(listCraftItems,"Iron")],[50]),
-new zone("Knajo fields",[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")],[60,80,100],[searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper")],[75,75])];
+new zone("Knajo fields",[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")],[60,95,100],[searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper")],[75,75])];
 
 
 function updateJob(job) {
@@ -884,19 +884,15 @@ var idle = function () {
         for (var j = 0; j < thisarea.listMonsters.length; j++) {
           if (monsterRate <= thisarea.monstersRate[j]) {
             thisarea.monstersRate;
-            monsters[i] = thisarea.listMonsters[j];
+            monsters[i] = Object.assign({}, thisarea.listMonsters[j]);
             break;
           }
         }
 
         monsters[i].exist = true;
         monsters[i].currHP = monsters[i].maxHP;
-        document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
-        document.getElementById('monster_curHPbar' + i).style.width = "50px";
-        document.getElementById('monster_avatar' + i).src = monsters[i].img;
-        document.getElementById('monster_curHP' + i).innerHTML = monsters[i].currHP;
-        document.getElementById('monster_maxHP' + i).innerHTML = monsters[i].maxHP;
-        document.getElementById('monster_curHPbar' + i).style.backgroundColor = "#006600";
+
+        displayNewMonster(i, monsters[i]);
       }
     }
   }
@@ -994,13 +990,27 @@ function initDisplay() {
 }
 
 function initMonster() {
-//  activeMonsters = [searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")];
 //  area.availableMonsters = [searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")];
-  monsters=[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")];
-  for (var i = 0; i < 3; i++) {
-    document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
-    changemHP(i, 0);
+
+  monsters = [];
+  for (var i=0; i<3; i++) {
+    var thisarea = searchByName(listZones, "Knajo fields");
+    var monsterRate = Math.random() * 100;
+    for (var j = 0; j < thisarea.listMonsters.length; j++) {
+      if (monsterRate <= thisarea.monstersRate[j]) {
+        thisarea.monstersRate;
+        monsters[i] = Object.assign({}, thisarea.listMonsters[j]);
+        break;
+      }
+    }
+    displayNewMonster(i, monsters[i])
   }
+  //if (Math.random() * 100 < 10) {
+  //monsters=[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")];
+  //for (var i = 0; i < 3; i++) {
+    //document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
+    //changemHP(i, 0);
+
 }
 
 function newgame() {
