@@ -1026,6 +1026,7 @@ function newgame() {
     nbCraftItems.push(0);
 
   gearItems = [];
+  nbCraftItems = [];
 
   listQuests = [new quest("kill", "Rabbit", 20, "There's more of them?", 100, "Wheatcity", "Wheatcity", 0, "none", "Hello again, adventurer! We've got even more rabbits than before here. It almost looks like a sabotage...-- Haha, that's silly, everybody likes us here! Could you take care of that again for me, please?", "Oh, thank you my friend but... I have bad news. Do you remember when I spoke to you about sabotage?", 0, "none"), new quest("kill", "Chicken", 5, "A feast for a mayor", 100, "Wheatcity", "Wheatcity", 0, "none", "Hi, I'm Granny Knajo. Would you mind catching some chickens for me with that sword of yours? I got an order from the mayor for tonight; I don't have time for this. Take care, they're the strongest chickens around!", "Oh, thank you for your help dear. You can keep your loot then, I'll just take the meat. Here, have a chicken.", 0, "none"), new quest("collect", "Rabbit hide", 3, "Sewing socks for winter", 100, "Wheatcity", "Wheatcity", 0, "Tailoring", "They announced a strong winter this year. With all these rabbits, we could make some socks and such. Go bring me some rabbit hides. ... What? Yeah, that's the first time seeing you too and so what? My nephew talked about you but he never mentioned you were this chatty. Less talk, more hides, and I'll teach you how to make an armor.", "Hah, once you don't talk, you're effective! Good. There, I'll show you.", 50, "none")];
   listAcceptedQuests = [];
