@@ -2,24 +2,43 @@
 /*  General  */
 /*************/
 
+html, body {
+  height:100%;
+}
 body {
+  margin: 0;
   font-family: 'Lato', sans-serif;
 }
 
-.title_game {
-  margin-bottom:10px;
+#wrap {
+  position: relative;
+  min-height:100%;
+}
+
+header {
+  position:absolute;
+  top:0px;
+  width:100%;
   background-color: #DCD1B8;
-  border:1px solid #CBBB96;
-  padding:2px;
+}
+
+.content {
+  display:flex;
+  padding: 5px;
+  padding-top: 40px;
+  padding-bottom: 30px;
+}
+
+footer {
+  position:absolute;
+  bottom:0px;
+  width:100%;
+  text-align:center;
 }
 
 /***************/
 /*  Tabs_main  */
 /***************/
-
-.tabs_main {
-  display:flex;
-}
 
 .tabs_btn_main {
   margin-right:5px;
