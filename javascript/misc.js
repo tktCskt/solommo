@@ -434,7 +434,6 @@ function displayShopSell() {
 //------------------//
 
 function updateDisplayTalentSheet() {
-  document.getElementById("menu_talent").innerHTML = "<b>Talents (" + player.avTalent + ")</b>";
 }
 
 //------------------//
