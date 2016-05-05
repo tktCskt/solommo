@@ -988,7 +988,7 @@ function initDisplay() {
 }
 
 function initMonster() {
-  monsters=[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Rabbit")];
+  monsters=[new Object(searchByName(listMonsters,"Rabbit")),new Object(searchByName(listMonsters,"Chicken")),new Object(searchByName(listMonsters,"Rabbit"))];
   for (var i = 0; i < 3; i++) {
     document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
     changemHP(i, 0);
