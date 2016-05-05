@@ -13,250 +13,246 @@
   <script type="text/javascript" src="javascript/monsters.js"></script>
   <script type="text/javascript" src="javascript/display.js"></script>
   <script type="text/javascript" src="javascript/misc.js"></script>
+
   <link rel="stylesheet" type="text/css" href="css/style.css">
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,300italic,700' rel='stylesheet' type='text/css'>
+  <!--<link href='https://fonts.googleapis.com/css?family=Fira+Mono' rel='stylesheet' type='text/css'>-->
 </head>
 
 <body>
-  <div class="title_game">Guild Master - Idle edition</div>
+  <div id="wrap">
+    <header>Guild Master - Idle edition</header>
 
-  <div class="tabs_main">
-    <div class="tabs_btn_main">
-      <div class="tabs_btn tabs_btn_active" onclick="toggleActiveTabGame();" id="tabs_game">Game</div>
-      <div class="tabs_btn" onclick="toggleActiveTabChar();" id="tabs_char">Character</div>
-      <div class="tabs_btn" onclick="toggleActiveTabCraft();" id="tabs_craft">Crafting</div>
-      <div class="tabs_btn" onclick="resetgame();" id="tabs_craft">New game</div>
-    </div>
+    <div class="content">
+      <div class="tabs_btn_main">
+        <div class="btn btn_active tabs_btn tabs_btn_active" onclick="toggleActiveTabGame();" id="tabs_game">Game</div>
+        <div class="btn tabs_btn" onclick="toggleActiveTabChar();" id="tabs_char">Character</div>
+        <div class="btn btn_disabled tabs_btn">Inventory</div>
+        <div class="btn tabs_btn" onclick="toggleActiveTabCraft();" id="tabs_craft">Craft</div>
+        <div class="btn btn_disabled tabs_btn">Quests</div>
+        <hr>
+        <div class="btn btn_disabled tabs_btn">Social</div>
+        <div class="btn btn_disabled tabs_btn">Guild</div>
+        <div class="btn btn_disabled tabs_btn">Achie-vements</div>
+        <hr>
+        <div class="btn btn_disabled tabs_btn">Options</div>
+        <div class="btn tabs_btn" onclick="resetgame();">New game</div>
+      </div>
 
-    <div class="tabs_content_main">
-      <div class="tabs_content tabs_content_active" id="tabs_content_game">
-        <div class="HUD_character">
-          <div class="HUD_character_avatar">
-            <img style="vertical-align:middle;" src="images/characterhead01.png">
-          </div>
-          <span class="char_name" id="main_char_name"></span> - <span class="char_class" id="main_char_class"></span> lvl <span class="char_level" id="main_char_level"></span>
+      <div class="tabs_content_main">
+        <div class="tabs_content tabs_content_active" id="tabs_content_game">
+          <div class="HUD_character">
+            <div class="HUD_character_avatar">
+              <img style="vertical-align:middle;" src="images/characterhead01.png">
+            </div>
+            <span class="char_name" id="main_char_name"></span> - <span class="char_class" id="main_char_class"></span> lvl <span class="char_level" id="main_char_level"></span>
 
-          <div id="HUD_character_barcur_HP" class="HUD_character_barcur">&nbsp;</div>
-          <div id="HUD_character_bar_HP" class="HUD_character_bar"> <span id="main_char_curHP"></span> / <span id="main_char_maxHP"></span> HP</div>
-          <div id="HUD_character_barcur_MP" class="HUD_character_barcur">&nbsp;</div>
-          <div id="HUD_character_bar_MP" class="HUD_character_bar"> <span id="main_char_curMP"></span> / <span id="main_char_maxMP"></span> MP</div>
-          <div id="HUD_character_barcur_XP" class="HUD_character_barcur">&nbsp;</div>
-          <div id="HUD_character_bar_XP" class="HUD_character_bar"> <span id="main_char_curXP"></span> / <span id="main_char_maxXP"></span> XP</div>
-        </div>
-        <div class="HUD_minimap"><span id="generalLocation">Appomy</span>
-          <br/> <span id="HUD_zone_location">Knajo fields</span>
-          <br/>It is 12:34
-        </div>
-        <div class="HUD_quests">
-          <div class="HUD_quests_title">Quests</div> <span id="char_curquest0"></span>
-          <br/><span id="char_curquest1"></span>
-          <br/><span id="char_curquest2"></span>
-        </div>
-        <div class="menu_window_frame" id="main_char_quests_window">
-          <div class="menu_window_frame_title">Quests</div>
-        </div>
-        <div class="menu_window_frame" id="main_char_tailoring_window">
-          <div class="menu_window_frame_title">Tailoring</div>
-          <div class="job_barcur_XP" id="tailoring_barcur_XP">&nbsp;</div>
-          <div class="job_bar_XP">
-            <span id="tailoring_cur_XP"></span> / <span id="tailoring_max_XP"></span>
+            <div id="HUD_character_barcur_HP" class="HUD_character_barcur">&nbsp;</div>
+            <div id="HUD_character_bar_HP" class="HUD_character_bar"> <span id="main_char_curHP"></span> / <span id="main_char_maxHP"></span> HP</div>
+            <div id="HUD_character_barcur_MP" class="HUD_character_barcur">&nbsp;</div>
+            <div id="HUD_character_bar_MP" class="HUD_character_bar"> <span id="main_char_curMP"></span> / <span id="main_char_maxMP"></span> MP</div>
+            <div id="HUD_character_barcur_XP" class="HUD_character_barcur">&nbsp;</div>
+            <div id="HUD_character_bar_XP" class="HUD_character_bar"> <span id="main_char_curXP"></span> / <span id="main_char_maxXP"></span> XP</div>
           </div>
-          <div class="job_level">lvl <span id="tailoring_level"></span></div>
-          <div class="craft_block_box" id="tailoring_craft_boxes"></div>
-        </div>
-        <div class="menu_window_frame" id="gathering_window">
-          <div class="menu_window_frame_title">Gathering</div>
-        </div>
-        <div class="menu_window_frame" id="shop_window">
-          <div class="menu_window_frame_title">Shop</div>
-          <div class="shop_buy" id="shop_window_buy"><div class="shop_buy_title">Buy</div></div>
-          <div class="shop_sell" id="shop_window_sell"><div class="shop_sell_title">Sell</div></div>
-          <div class="menu_inventory_gold"><span id="char_gold_shop"></span> gold</div>
-        </div>
-        <div class="menu_window_frame" id="main_char_inventory_window">
-          <div class="menu_window_frame_title">Inventory</div>
-          <div class="menu_inventory_gold"><span id="char_gold"></span> gold</div>
-        </div>
-        <div class="menu_window_frame" id="worldmap_window">
-          <div class="menu_window_frame_title">Map</div><span>Appomy</span>
-          <br/>- <span class="menu_worldmap_zone" onclick="goto('Wheatcity')">Wheatcity</span>
-          <br/>- <span class="menu_worldmap_zone" onclick="goto('Knajo fields')">Knajo fields</span>
-          <br/>
-        </div>
-        <div class="zone_frame" id="hunting_zone">
-          <div class="zone_frame_title">Knajo fields</div>
-          <div class="monster_frame" id="monster_frame0" onclick="clickmonster(0)">
-            <div class="monster_avatar">
-              <img class="img_center" id="monster_avatar0" src="images/rabbit.png">
-            </div> <span id="monster_name0">unknown monster</span>
-            <div id="monster_curHPbar0" class="monster_barcur_HP">&nbsp;</div>
-            <div id="monster_HPbar0" class="monster_bar_HP"> <span id="monster_curHP0"></span> / <span id="monster_maxHP0"></span>
-            </div>
+          <div class="HUD_minimap"><span id="generalLocation">Appomy</span>
+            <br/> <span id="HUD_zone_location">Knajo fields</span>
+            <br/>It is 12:34
           </div>
-          <div class="monster_frame" id="monster_frame1" onclick="clickmonster(1)">
-            <div class="monster_avatar">
-              <img class="img_center" id="monster_avatar1" src="images/chicken.png">
-            </div> <span id="monster_name1">unknown monster</span>
-            <div id="monster_curHPbar1" class="monster_barcur_HP">&nbsp;</div>
-            <div id="monster_HPbar1" class="monster_bar_HP"> <span id="monster_curHP1"></span> / <span id="monster_maxHP1"></span>
-            </div>
+          <div class="HUD_quests">
+            <div class="HUD_quests_title">Quests</div> <span id="char_curquest0"></span>
+            <br/><span id="char_curquest1"></span>
+            <br/><span id="char_curquest2"></span>
           </div>
-          <div class="monster_frame" id="monster_frame2" onclick="clickmonster(2)">
-            <div class="monster_avatar">
-              <img class="img_center" id="monster_avatar2" src="images/rabbit.png">
-            </div> <span id="monster_name2">unknown monster</span>
-            <div id="monster_curHPbar2" class="monster_barcur_HP">&nbsp;</div>
-            <div id="monster_HPbar2" class="monster_bar_HP"> <span id="monster_curHP2"></span> / <span id="monster_maxHP2"></span>
-            </div>
+          <div class="menu_window_frame" id="main_char_quests_window">
+            <div class="menu_window_frame_title">Quests</div>
           </div>
-        </div>
-        <div class="zone_frame" id="city_zone">
-          <div class="zone_frame_title">Wheatcity</div>
-          <div class="city_zone_left">
-            <div class="city_zone_title">Reputation</div>
-            <div class="city_zone_reputation">&#9733; &#9734; &#9734; &#9734; &#9734;</div>
+          <div class="menu_window_frame" id="gathering_window">
+            <div class="menu_window_frame_title">Gathering</div>
+          </div>
+          <div class="menu_window_frame" id="shop_window">
+            <div class="menu_window_frame_title">Shop</div>
+            <div class="shop_buy" id="shop_window_buy"><div class="shop_buy_title">Buy</div></div>
+            <div class="shop_sell" id="shop_window_sell"><div class="shop_sell_title">Sell</div></div>
+            <div class="menu_inventory_gold"><span id="char_gold_shop"></span> gold</div>
+          </div>
+          <div class="menu_window_frame" id="main_char_inventory_window">
+            <div class="menu_window_frame_title">Inventory</div>
+            <div class="menu_inventory_gold"><span id="char_gold"></span> gold</div>
+          </div>
+          <div class="menu_window_frame" id="worldmap_window">
+            <div class="menu_window_frame_title">Map</div><span>Appomy</span>
+            <br/>- <span class="menu_worldmap_zone" onclick="goto('Wheatcity')">Wheatcity</span>
+            <br/>- <span class="menu_worldmap_zone" onclick="goto('Knajo fields')">Knajo fields</span>
             <br/>
-            <div class="city_zone_title">Available quests</div>
-            <div id="avcityquest"></div>
-            <div class="city_facilities"><span class="city_facilities_btn" onclick="displayMenuShop()">Shop</span>  <span class="city_facilities_btn disabled">Inn</span>
+          </div>
+          <div class="zone_frame" id="hunting_zone">
+            <div class="zone_frame_title">Knajo fields</div>
+            <div class="monster_frame" id="monster_frame0" onclick="clickmonster(0)">
+              <div class="monster_avatar">
+                <img class="img_center" id="monster_avatar0">
+              </div> <span id="monster_name0">unknown monster</span>
+              <div id="monster_curHPbar0" class="monster_barcur_HP">&nbsp;</div>
+              <div id="monster_HPbar0" class="monster_bar_HP"> <span id="monster_curHP0"></span> / <span id="monster_maxHP0"></span>
+              </div>
+            </div>
+            <div class="monster_frame" id="monster_frame1" onclick="clickmonster(1)">
+              <div class="monster_avatar">
+                <img class="img_center" id="monster_avatar1">
+              </div> <span id="monster_name1">unknown monster</span>
+              <div id="monster_curHPbar1" class="monster_barcur_HP">&nbsp;</div>
+              <div id="monster_HPbar1" class="monster_bar_HP"> <span id="monster_curHP1"></span> / <span id="monster_maxHP1"></span>
+              </div>
+            </div>
+            <div class="monster_frame" id="monster_frame2" onclick="clickmonster(2)">
+              <div class="monster_avatar">
+                <img class="img_center" id="monster_avatar2">
+              </div> <span id="monster_name2">unknown monster</span>
+              <div id="monster_curHPbar2" class="monster_barcur_HP">&nbsp;</div>
+              <div id="monster_HPbar2" class="monster_bar_HP"> <span id="monster_curHP2"></span> / <span id="monster_maxHP2"></span>
+              </div>
             </div>
           </div>
-          <div class="city_zone_right">
-            <div class="city_zone_description" id="city_status">You're walking in the busy streets of Wheatcity...
+
+          <div class="zone_frame" id="city_zone">
+            <div class="zone_frame_title">Wheatcity</div>
+            <div class="city_zone_left">
+              <div class="city_zone_title">Reputation</div>
+              <div class="city_zone_reputation">&#9733; &#9734; &#9734; &#9734; &#9734;</div>
               <br/>
-              <br/>You've just arrived, so nobody knows you yet. You should build your reputation by helping the inhabitants.
-              <br/>
-              <br/>Apparently there's some rabbits spreading panic in the fields, it could be a good first step.
+              <div class="city_zone_title">Available quests</div>
+              <div id="avcityquest"></div>
+              <div class="city_facilities">
+                <span class="city_facilities_btn" onclick="displayMenuShop()">Shop</span>
+                <span class="city_facilities_btn disabled">Inn</span>
+              </div>
             </div>
-            <div class="city_zone_description" id="quest_status"><span id="city_quest_description">test</span>
-              <br/>
-              <br/><span class="city_quest_btn accept" onclick="acceptcheckQuest()">Accept</span>  <span class="city_quest_btn decline" onclick="refusecheckQuest()">Decline</span>
+            <div class="city_zone_right">
+              <div class="city_zone_description" id="city_status">You're walking in the busy streets of Wheatcity...
+                <br/>
+                <br/>You've just arrived, so nobody knows you yet. You should build your reputation by helping the inhabitants.
+                <br/>
+                <br/>Apparently there are some rabbits spreading panic in the fields. It could be a good first step.
+              </div>
+              <div class="city_zone_description" id="quest_status">
+                <span id="city_quest_description"></span>
+                <br/><br/>
+                <span class="city_quest_btn accept" onclick="acceptcheckQuest()">Accept</span>
+                <span class="city_quest_btn decline" onclick="refusecheckQuest()">Decline</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="gathering">
+            <span class="gathering_item" onclick="displayMenuGathering()">Gathering</span>
+          </div>
+          <div class="menu_bar_fixed">
+            <div class="menu_bar">
+              <span class="menu_item" onclick="displayMenuInventory()">Inventory</span>
+              <span class="menu_item" onclick="displayMenuMap()">Map</span>
             </div>
           </div>
         </div>
-        <div class="skills"> <span class="skill_item" onclick="displayMenuTailoring()">Tailoring</span>
-          <span class="skill_item disabled">None</span>
-          <span class="skill_item disabled">None</span>
-          <span class="skill_item disabled">None</span>
+
+        <div class="tabs_content" id="tabs_content_char">
+          <div class="menu_window_frame_title">Character</div>
+          <span class="menu_character_avatar" id="char_stats_avatar">
+            <img style="vertical-align:middle;" src="images/character01.png">
+          </span>
+
+          <div class="menu_character_stat">
+            <div class="menu_character_stat_title">Stats</div>
+            <table>
+              <tr>
+                <td>HP</td>
+                <td><span id="char_HP"></span></td>
+                <td></td>
+              </tr>
+              <tr>
+                <td>MP</td>
+                <td><span id="char_MP"></span></td>
+                <td></td>
+              </tr>
+            </table>
+            <br/>
+            <table>
+              <tr>
+                <td>STR</td>
+                <td><span id="char_STR"></span></td>
+                <td><span onclick="addcPoint('STR')">+</span></td>
+              </tr>
+              <tr>
+                <td>DEX</td>
+                <td><span id="char_DEX"></span></td>
+                <td><span onclick="addcPoint('DEX')">+</span></td>
+              </tr>
+              <tr>
+                <td>INT</td>
+                <td><span id="char_INT"></span></td>
+                <td><span onclick="addcPoint('INT')">+</span></td>
+              </tr>
+              <tr>
+                <td>WIS</td>
+                <td><span id="char_WIS"></span></td>
+                <td><span onclick="addcPoint('WIS')">+</span></td>
+              </tr>
+              <tr>
+                <td>CON</td>
+                <td><span id="char_CON"></span></td>
+                <td><span onclick="addcPoint('CON')">+</span></td>
+              </tr>
+              <tr>
+                <td>AGI</td>
+                <td><span id="char_AGI"></span></td>
+                <td><span onclick="addcPoint('AGI')">+</span></td>
+              </tr>
+            </table>
+            <br/>
+            <br/>Points:
+            <span id="char_points">15</span>
+          </div>
+          <div class="menu_character_equipment">
+            <div class="menu_character_equipment_title">Equipment</div>
+            Weapon: <span class="equipment" id="main_char_weapon"></span> (Atk: <span id="main_char_weaponatk"></span>)
+            <br/>Body: <span class="equipment" id="main_char_armor"></span> (Def: <span id="main_char_armordef"></span>)
+          </div>
         </div>
-        <div class="gathering">
-          <span class="gathering_item" onclick="displayMenuGathering()">Gathering</span>
-        </div>
-        <div class="menu_bar_fixed">
-          <div class="menu_bar">
-            <span class="menu_item disabled" id="menu_talent" onclick="">Talents</span>
-            <span class="menu_item disabled" onclick="displayMenuQuests()">Quests</span>
-            <span class="menu_item" onclick="displayMenuInventory()">Inventory</span>
-            <span class="menu_item disabled" id="menuchar" onclick="">Guild stash</span>
-            <span class="menu_item disabled" onclick="">Guild</span>  <span class="menu_item" onclick="displayMenuMap()">Map</span>
-            <span class="menu_item disabled" onclick="">Menu</span>
+
+        <div class="tabs_content" id="tabs_content_craft">
+          <div class="craft_alljobs">
+            <div class="btn btn_active craft_job_btn">Tailoring</div>
+            <div class="btn btn_disabled craft_job_btn">None</div>
+            <div class="btn btn_disabled craft_job_btn">None</div>
+            <div class="btn btn_disabled craft_job_btn">None</div>
+            <div class="btn btn_disabled craft_job_btn">None</div>
+          </div>
+          <div class="craft_jobcontent">
+            <div class="menu_window_frame_title">Tailoring</div>
+            <div class="job_barcur_XP" id="tailoring_barcur_XP">&nbsp;</div>
+            <div class="job_bar_XP">
+              <span id="tailoring_cur_XP"></span> / <span id="tailoring_max_XP"></span>
+            </div>
+            <div class="job_level">lvl <span id="tailoring_level"></span></div>
+            <div class="craft_block_box" id="tailoring_craft_boxes"></div>
           </div>
         </div>
       </div>
 
-      <div class="tabs_content" id="tabs_content_char">
-        <div class="menu_window_frame_title">Character</div>
-        <span class="menu_character_avatar" id="char_stats_avatar">
-          <img style="vertical-align:middle;" src="images/character01.png">
-        </span>
-
-        <div class="menu_character_stat">
-          <div class="menu_character_stat_title">Stats</div>
-          <table>
-            <tr>
-              <td>HP</td>
-              <td>
-                <span id="char_HP"></span>
-              </td>
-              <td></td>
-            </tr>
-            <tr>
-              <td>MP</td>
-              <td>
-                <span id="char_MP"></span>
-              </td>
-              <td></td>
-            </tr>
-          </table>
-          <br/>
-          <table>
-            <tr>
-              <td>STR</td>
-              <td>
-                <span id="char_STR"></span>
-              </td>
-              <td>
-                <span onclick="addcPoint('STR')">+</span>
-              </td>
-            </tr>
-            <tr>
-              <td>DEX</td>
-              <td>
-                <span id="char_DEX"></span>
-              </td>
-              <td>
-                <span onclick="addcPoint('DEX')">+</span>
-              </td>
-            </tr>
-            <tr>
-              <td>INT</td>
-              <td>
-                <span id="char_INT"></span>
-              </td>
-              <td>
-                <span onclick="addcPoint('INT')">+</span>
-              </td>
-            </tr>
-            <tr>
-              <td>WIS</td>
-              <td>
-                <span id="char_WIS"></span>
-              </td>
-              <td>
-                <span onclick="addcPoint('WIS')">+</span>
-              </td>
-            </tr>
-            <tr>
-              <td>CON</td>
-              <td>
-                <span id="char_CON"></span>
-              </td>
-              <td>
-                <span onclick="addcPoint('CON')">+</span>
-              </td>
-            </tr>
-            <tr>
-              <td>AGI</td>
-              <td>
-                <span id="char_AGI"></span>
-              </td>
-              <td>
-                <span onclick="addcPoint('AGI')">+</span>
-              </td>
-            </tr>
-          </table>
-          <br/>
-          <br/>Points:
-          <span id="char_points">15</span>
-        </div>
-        <div class="menu_character_equipment">
-          <div class="menu_character_equipment_title">Equipment</div>
-          Weapon: <span class="equipment" id="main_char_weapon"></span> (Atk: <span id="main_char_weaponatk"></span>)
-          <br/>Body: <span class="equipment" id="main_char_armor"></span> (Def: <span id="main_char_armordef"></span>)
+      <div class="tabs_chat_main">
+        <div class="log">
+          <div id="log5"></div>
+          <div id="log4"></div>
+          <div id="log3"></div>
+          <div id="log2"></div>
+          <div id="log1"></div>
+          <div id="logentry">...</div>
         </div>
       </div>
-      <div class="tabs_content" id="tabs_content_craft">Crafting</div>
     </div>
 
-    <div class="tabs_chat_main">
-      <div class="log">
-        <div id="log5"></div>
-        <div id="log4"></div>
-        <div id="log3"></div>
-        <div id="log2"></div>
-        <div id="log1"></div>
-        <div id="logentry">...</div>
-      </div>
-    </div>
+    <footer>
+      <img src="images/vanillajs.png"/>
+    </footer>
+
   </div>
 
 </body>

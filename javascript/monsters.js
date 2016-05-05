@@ -15,6 +15,7 @@ function monster(options)
   this.atk = options.atk;
   this.XP = options.XP;
   this.img = options.img;
+  this.exist = true;
   /*Loot */
   this.loots = [];
   for(var i=0; i< options.loot.length; i+=2)
@@ -26,7 +27,7 @@ function monster(options)
 
 var opts_rabbit = {"name":"Rabbit", "maxHP":16, "atk":5, "loot":[0,100,1,100], "XP":10, "img":"images/rabbit.png"};
 var opts_chicken = {"name":"Chicken", "maxHP":30, "atk":10, "loot":[2,100,3,50], "XP":25,"img":"images/chicken.png"};
-var opts_wolf = {"name":"Wolf", "maxHP":85, "atk":35, "loot":[], "XP":70, "img":"images/rabbit.png"};
+var opts_bloodrabbit = {"name":"Blood Rabbit", "maxHP":85, "atk":35, "loot":[], "XP":70, "img":"images/bloodrabbit.png"};
 
 /*xp*/
-listMonsters = [new monster(opts_rabbit),new monster(opts_chicken), new monster(opts_wolf)];
+listMonsters = [new monster(opts_rabbit),new monster(opts_chicken), new monster(opts_bloodrabbit)];

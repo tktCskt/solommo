@@ -1,57 +1,59 @@
-
 /*************/
 /*  General  */
 /*************/
 
-.title_game {
-  background-color:#999;
-  margin-bottom:10px;
+html, body {
+  height:100%;
+}
+body {
+  margin: 0;
+  font-family: 'Lato', sans-serif;
+}
+
+#wrap {
+  position: relative;
+  min-height:100%;
+}
+
+header {
+  position:absolute;
+  top:0px;
+  width:100%;
+  background-color: #DCD1B8;
+}
+
+.content {
+  display:flex;
+  padding: 5px;
+  padding-top: 40px;
+  padding-bottom: 30px;
+}
+
+footer {
+  position:absolute;
+  bottom:0px;
+  width:100%;
+  text-align:center;
 }
 
 /***************/
 /*  Tabs_main  */
 /***************/
 
-.tabs_main {
-  display: flex;
-}
-
 .tabs_btn_main {
-  flex-basis:140px;
   margin-right:5px;
 }
 .tabs_btn {
-  cursor:pointer; cursor:hand;
-  background:#3498db;
-  border-radius:10px;
-  padding:5px 15px;
   margin:5px;
-  color:#ffffff;
-  font-size:20px;
-  width:100px;
-  text-align:center;
-  -webkit-user-select:none;
-  -khtml-user-select:none;
-  -moz-user-select:-moz-none;
-  -o-user-select:none;
-  user-select:none;
-}
-.tabs_btn:hover {
-  background:#3cb0fd;
-}
-.tabs_btn_active {
-  background-color:#660000;
-}
-.tabs_btn_active:hover {
-  background-color:#880000;
 }
 
 .tabs_content_main {
-  position: relative;
+  position:relative;
   flex: 2;
-  border:1px solid #000;
-  padding:5px 15px;
   min-height:600px;
+  background-color:#F5F2EB;
+  border:1px solid #000;
+  padding:5px;
 }
 .tabs_content {
   display:none;
@@ -63,15 +65,56 @@
 .tabs_chat_main {
   position: relative;
   flex: 1;
+  flex-basis:200px;
   margin-left:5px;
+  background-color:#F5F2EB;
   border:1px solid #000;
-  padding:10px;
+  padding:5px;
 }
 
 /*******************/
 /*  Miscellaneous  */
 /*******************/
 
+.btn {
+  width:70px;
+  background-color:#67A977;
+  box-shadow: 1px 1px 0px 0px #666;
+  border-color:#000;
+  color:#ffffff;
+  padding:5px;
+  overflow:hidden;
+  text-align:center;
+  cursor:pointer;
+  cursor:hand;
+  -webkit-user-select:none;
+  -khtml-user-select:none;
+  -moz-user-select:-moz-none;
+  -o-user-select:none;
+  user-select:none;
+}
+.btn:hover {
+  background-color:#85BA92;
+}
+
+.btn_active {
+  background-color:#875F52 !important;
+}
+.btn_active:hover {
+  background-color:#875F52 !important;
+}
+
+.btn_disabled {
+  background-color: #ccc !important;
+  cursor:not-allowed;
+}
+.btn_disabled:hover {
+  background-color: #ccc !important;
+}
+
+.item {
+  font-weight: bold;
+}
 .equipment {
   font-weight: bold;
 }
@@ -83,22 +126,24 @@
 .HUD_character {
   position: relative;
   float: left;
-  width: 250px;
+  width: 220px;
   height: 56px;
-  border-radius: 15px 15px 15px 15px;
-  background-color: #E7E0CF;
-  line-height:15px;
+  background-color: #DCD1B8;
+  border:1px solid #CBBB96;
+  border-radius: 5px;
   color: #000;
+  line-height: 15px;
+  font-size:14px;
 }
 .HUD_character_avatar {
   float: left;
+  width: 50px;
+  height: 50px;
   margin-right: 5px;
   margin-top: 3px;
   margin-left: 3px;
-  width: 50px;
-  height: 50px;
-  border-radius: 15px 15px 15px 15px;
   background-color: #fff;
+  border-radius: 10px;
   line-height:50px;
   text-align: center;
 }
@@ -113,12 +158,11 @@
   position: absolute;
   width:150px;
   margin-left: 56px;
-  line-height: 10px;
-  border:solid;
-  border-width:1px;
-  font-size: 11px;
-  text-align:center;
+  border:solid 1px;
   color:#fff;
+  font-size: 11px;
+  line-height: 10px;
+  text-align:center;
   z-index:1;
 }
 #HUD_character_barcur_HP {
@@ -150,10 +194,12 @@
   float: right;
   width: 100px;
   height: 56px;
-  border-radius: 15px 15px 15px 15px;
-  background-color: #E7E0CF;
-  text-align: center;
+  background-color: #DCD1B8;
+  border:1px solid #CBBB96;
+  border-radius: 5px;
   color: #000;
+  text-align: center;
+  font-size:14px;
 }
 #HUD_zone_location {
   font-style: italic;
@@ -280,17 +326,15 @@
 /***********************/
 
 .zone_frame {
-  clear: left;
+  display: none;
   position: relative;
   height: 250px;
-  display: none;
-  border-style: dotted;
-  border-width: 1px;
   margin-top: 66px;
-  margin-bottom: 50px;
   margin-right: 200px;
   margin-left: 200px;
-  padding: 10px 10px;
+  border-width: 1px;
+  border-style: dotted;
+  padding: 10px;
 }
 .zone_frame_title {
   width: 380px;
@@ -324,8 +368,12 @@
   float: left;
 }
 .city_zone_right {
+  height: 220px;
+  overflow: auto;
   width: 180px;
   float: right;
+  font-size: 14px;
+  text-align: justify;
 }
 .city_facilities {
   position: absolute;
@@ -560,6 +608,22 @@
 /*  Job interface  */
 /*******************/
 
+.craft_alljobs {
+  float:left;
+  width:85px;
+  height:100%;
+  border-right: 1px solid #000;
+}
+.craft_job_btn {
+  margin-bottom: 5px;
+}
+
+.craft_jobcontent {
+  position:relative;
+  float:right;
+  width:460px;
+}
+
 .job_bar_XP {
   position: absolute;
   width:300px;
@@ -679,6 +743,6 @@
   width: 95%;
   height: 20px;
   border-radius: 3px 3px 3px 3px;
-  background-color: #E7E0CF;
+  background-color: #DCD1B8;
   padding: 0 5px;
 }

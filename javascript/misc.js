@@ -2,10 +2,7 @@
 //- Character data -//
 //------------------//
 
-
 var gameData = {};
-
-
 
 //------------------//
 //-   Char frame   -//
@@ -437,7 +434,6 @@ function displayShopSell() {
 //------------------//
 
 function updateDisplayTalentSheet() {
-  document.getElementById("menu_talent").innerHTML = "<b>Talents (" + player.avTalent + ")</b>";
 }
 
 //------------------//
@@ -530,7 +526,7 @@ function zone(name, listMonsters, monstersRate, listResources, resourcesRate) {
 }
 
 var listZones = [new zone("Wheatcity",[],[],[searchByName(listCraftItems,"Iron")],[50]),
-new zone("Knajo fields",[],[],[searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper")],[75,75])];
+new zone("Knajo fields",[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")],[60,95,100],[searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper")],[75,75])];
 
 
 function updateJob(job) {
@@ -772,7 +768,7 @@ function displayInventory() {
       }
     }
   }
-  
+
    //gear
 
   for (i = 0; i < gearItems.length; i++) {
@@ -879,18 +875,23 @@ var idle = function () {
   // skills regeneration
 
   // repop
-  var i;
-  for (i = 0; i < 3; i++) {
-    if (monsters[i].exist == 0) {
+  for (var i = 0; i < 3; i++) {
+    if (!monsters[i].exist) {
       if (Math.random() * 100 < 10) {
+        var thisarea = searchByName(listZones, "Knajo fields");
+        var monsterRate = Math.random() * 100;
+        for (var j = 0; j < thisarea.listMonsters.length; j++) {
+          if (monsterRate <= thisarea.monstersRate[j]) {
+            thisarea.monstersRate;
+            monsters[i] = Object.assign({}, thisarea.listMonsters[j]);
+            break;
+          }
+        }
+
         monsters[i].exist = true;
         monsters[i].currHP = monsters[i].maxHP;
-        document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
-        document.getElementById('monster_curHPbar' + i).style.width = "50px";
-        document.getElementById('monster_avatar' + i).src = monsters[i].img;
-        document.getElementById('monster_curHP' + i).innerHTML = monsters[i].currHP;
-        document.getElementById('monster_maxHP' + i).innerHTML = monsters[i].maxHP;
-        document.getElementById('monster_curHPbar' + i).style.backgroundColor = "#006600";
+
+        displayNewMonster(i, monsters[i]);
       }
     }
   }
@@ -988,11 +989,34 @@ function initDisplay() {
 }
 
 function initMonster() {
+<<<<<<< HEAD
   monsters=[new Object(searchByName(listMonsters,"Rabbit")),new Object(searchByName(listMonsters,"Chicken")),new Object(searchByName(listMonsters,"Rabbit"))];
   for (var i = 0; i < 3; i++) {
     document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
     changemHP(i, 0);
+=======
+//  area.availableMonsters = [searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")];
+
+  monsters = [];
+  for (var i=0; i<3; i++) {
+    var thisarea = searchByName(listZones, "Knajo fields");
+    var monsterRate = Math.random() * 100;
+    for (var j = 0; j < thisarea.listMonsters.length; j++) {
+      if (monsterRate <= thisarea.monstersRate[j]) {
+        thisarea.monstersRate;
+        monsters[i] = Object.assign({}, thisarea.listMonsters[j]);
+        break;
+      }
+    }
+    displayNewMonster(i, monsters[i])
+>>>>>>> 67a35c6aab443d17c0db8c4f27d66f55d9e824ba
   }
+  //if (Math.random() * 100 < 10) {
+  //monsters=[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")];
+  //for (var i = 0; i < 3; i++) {
+    //document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
+    //changemHP(i, 0);
+
 }
 
 function newgame() {
@@ -1004,6 +1028,7 @@ function newgame() {
   // data
   changeChestArmor(new equipment(searchByName(listChestArmors, "Rags"), [], 3));
 
+  nbCraftItems = [];
   for (var i = 0; i < nbCraftItem; i++)
     nbCraftItems.push(0);
 

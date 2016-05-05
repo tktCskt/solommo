@@ -1,59 +1,44 @@
 
-//-----------------//
-//-   Tabs main   -//
-//-----------------//
+//----------------------//
+//-  Main | Tabs main  -//
+//----------------------//
 
 function toggleActiveTabGame() {
-  document.getElementById('tabs_game').classList.add('tabs_btn_active');
-  document.getElementById('tabs_char').classList.remove('tabs_btn_active');
-  document.getElementById('tabs_craft').classList.remove('tabs_btn_active');
+  document.getElementById('tabs_game').classList.add('btn_active');
+  document.getElementById('tabs_char').classList.remove('btn_active');
+  document.getElementById('tabs_craft').classList.remove('btn_active');
 
   document.getElementById('tabs_content_game').classList.add('tabs_content_active');
   document.getElementById('tabs_content_char').classList.remove('tabs_content_active');
   document.getElementById('tabs_content_craft').classList.remove('tabs_content_active');
 }
 function toggleActiveTabChar() {
-  document.getElementById('tabs_game').classList.remove('tabs_btn_active');
-  document.getElementById('tabs_char').classList.add('tabs_btn_active');
-  document.getElementById('tabs_craft').classList.remove('tabs_btn_active');
+  document.getElementById('tabs_game').classList.remove('btn_active');
+  document.getElementById('tabs_char').classList.add('btn_active');
+  document.getElementById('tabs_craft').classList.remove('btn_active');
 
   document.getElementById('tabs_content_game').classList.remove('tabs_content_active');
   document.getElementById('tabs_content_char').classList.add('tabs_content_active');
   document.getElementById('tabs_content_craft').classList.remove('tabs_content_active');
 }
 function toggleActiveTabCraft() {
-  document.getElementById('tabs_game').classList.remove('tabs_btn_active');
-  document.getElementById('tabs_char').classList.remove('tabs_btn_active');
-  document.getElementById('tabs_craft').classList.add('tabs_btn_active');
+  document.getElementById('tabs_game').classList.remove('btn_active');
+  document.getElementById('tabs_char').classList.remove('btn_active');
+  document.getElementById('tabs_craft').classList.add('btn_active');
 
   document.getElementById('tabs_content_game').classList.remove('tabs_content_active');
   document.getElementById('tabs_content_char').classList.remove('tabs_content_active');
   document.getElementById('tabs_content_craft').classList.add('tabs_content_active');
 }
 
-
-//----------------//
-//-  Menu items  -//
-//----------------//
-
-function displayMenuQuests() {
-  elmcquests = document.getElementById('main_char_quests_window');
-  if (elmcquests.style.display == "inline") elmcquests.style.display = "none";
-  else {
-    document.getElementById('main_char_tailoring_window').style.display = "none";
-    elmcquests.style.display = "inline";
-    document.getElementById('main_char_inventory_window').style.display = "none";
-    document.getElementById('worldmap_window').style.display = "none";
-    document.getElementById('shop_window').style.display = "none";
-  }
-}
+//-----------------------//
+//-  Game | Menu items  -//
+//-----------------------//
 
 function displayMenuInventory() {
   elmcinventory = document.getElementById('main_char_inventory_window');
   if (elmcinventory.style.display == "inline") elmcinventory.style.display = "none";
   else {
-    document.getElementById('main_char_tailoring_window').style.display = "none";
-    document.getElementById('main_char_quests_window').style.display = "none";
     elmcinventory.style.display = "inline";
     document.getElementById('worldmap_window').style.display = "none";
     document.getElementById('shop_window').style.display = "none";
@@ -64,8 +49,6 @@ function displayMenuMap() {
   elworldmap = document.getElementById('worldmap_window');
   if (elworldmap.style.display == "inline") elworldmap.style.display = "none";
   else {
-    document.getElementById('main_char_tailoring_window').style.display = "none";
-    document.getElementById('main_char_quests_window').style.display = "none";
     document.getElementById('main_char_inventory_window').style.display = "none";
     document.getElementById('shop_window').style.display = "none";
     elworldmap.style.display = "inline";
@@ -76,7 +59,6 @@ function displayMenuTailoring() {
   elTail = document.getElementById('main_char_tailoring_window');
   if (elTail.style.display == "inline") elTail.style.display = "none";
   else {
-    document.getElementById('main_char_quests_window').style.display = "none";
     document.getElementById('main_char_inventory_window').style.display = "none";
     document.getElementById('worldmap_window').style.display = "none";
     document.getElementById('shop_window').style.display = "none";
@@ -89,10 +71,8 @@ function displayMenuShop() {
   elShop = document.getElementById('shop_window');
   if (elShop.style.display == "inline") elShop.style.display = "none";
   else {
-    document.getElementById('main_char_quests_window').style.display = "none";
     document.getElementById('main_char_inventory_window').style.display = "none";
     document.getElementById('worldmap_window').style.display = "none";
-    document.getElementById('main_char_tailoring_window').style.display = "none";
     displayShopSell();
     elShop.style.display = "inline";
   }
@@ -102,15 +82,30 @@ function displayMenuGathering() {
   elGath = document.getElementById('gathering_window');
   if (elGath.style.display == "inline") elGath.style.display = "none";
   else {
-    document.getElementById('main_char_quests_window').style.display = "none";
     document.getElementById('main_char_inventory_window').style.display = "none";
     document.getElementById('worldmap_window').style.display = "none";
-    document.getElementById('main_char_tailoring_window').style.display = "none";
     document.getElementById('shop_window').style.display = "none";
     displayGathering();
     elGath.style.display = "inline";
   }
 }
+
+//-------------------------//
+//-  Game | Hunting zone  -//
+//-------------------------//
+
+function displayNewMonster(i, monster) {
+  document.getElementById('monster_name' + i).innerHTML = monster.name;
+  document.getElementById('monster_curHPbar' + i).style.width = "50px";
+  document.getElementById('monster_avatar' + i).src = monster.img;
+  document.getElementById('monster_curHP' + i).innerHTML = monster.currHP;
+  document.getElementById('monster_maxHP' + i).innerHTML = monster.maxHP;
+  document.getElementById('monster_curHPbar' + i).style.backgroundColor = "#006600";
+}
+
+//---------------//
+//-  Character  -//
+//---------------//
 
 function updateDisplayCharSheet() {
   document.getElementById("char_HP").innerHTML = player.maxHP;
