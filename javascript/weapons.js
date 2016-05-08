@@ -8,10 +8,19 @@ function weapon (options)
 	this.id = nbWeapons++;
 }
 
-var opts_fists = {"name":"Fists", "price":0, "damage":4};
-var opts_sword = {"name":"Sword", "price":20, "damage":9};
+/* JSON */
+var listWeaponsJSON = {
+  "Fists" : {"name":"Fists", "price":0, "damage":4},
+"Sword1" : {"name":"Sword", "price":20, "damage":9},
+  "Sword2" : {"name":"Sword2", "price":50, "damage":13},
+  "Sword3" : {"name":"Sword3", "price":120, "damage":18}
+};
 
-var listWeapons = [new weapon(opts_fists), new weapon(opts_sword)];
 
-listWeapons.push(new weapon({"name":"Sword2", "price":50, "damage":13}));
-listWeapons.push(new weapon({"name":"Sword3", "price":120, "damage":18}));
+var listWeapons = [];
+
+for (var property in listWeaponsJSON) {
+  if (listWeaponsJSON.hasOwnProperty(property)) {
+    listWeapons.push(new weapon(listWeaponsJSON[property]));
+  }
+}

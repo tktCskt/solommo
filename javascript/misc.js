@@ -989,12 +989,6 @@ function initDisplay() {
 }
 
 function initMonster() {
-<<<<<<< HEAD
-  monsters=[new Object(searchByName(listMonsters,"Rabbit")),new Object(searchByName(listMonsters,"Chicken")),new Object(searchByName(listMonsters,"Rabbit"))];
-  for (var i = 0; i < 3; i++) {
-    document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
-    changemHP(i, 0);
-=======
 //  area.availableMonsters = [searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")];
 
   monsters = [];
@@ -1009,7 +1003,6 @@ function initMonster() {
       }
     }
     displayNewMonster(i, monsters[i])
->>>>>>> 67a35c6aab443d17c0db8c4f27d66f55d9e824ba
   }
   //if (Math.random() * 100 < 10) {
   //monsters=[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")];
