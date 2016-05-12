@@ -38,6 +38,6 @@ listMonsters = [];
 
 for (var property in listMonstersJSON) {
   if (listMonstersJSON.hasOwnProperty(property)) {
-    listMonsters.push(new chestArmor(listMonstersJSON[property]));
+    listMonsters.push(new monster(listMonstersJSON[property]));
   }
 }
