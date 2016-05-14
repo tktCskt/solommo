@@ -213,14 +213,17 @@ function displayQuickCharQuest() {
 //------------------//
 
 function goto(newZone) {
-  player.curArea = searchByName(listZones,newZone);
+  newZone = searchByName(listZones, newZone);
+  initMonster();
+  player.curArea = newZone;
   if (document.getElementById('worldmap_window').style.display != "none") document.getElementById('worldmap_window').style.display = "none";
-  document.getElementById('HUD_zone_location').innerHTML = newZone;
-  if (newZone == "Knajo fields") {
-    displayHuntingzone("Knajo fields");
-    } else if (newZone == "Wheatcity") {
-    displayCityzone("Wheatcity");
+  document.getElementById('HUD_zone_location').innerHTML = newZone.name;
+  if(newZone.isHuntingZone) {
+    displayHuntingzone(newZone.name);
+    } else {
+    displayCityzone(newZone.name);
   }
+  
   displayQuests();
 }
 
@@ -832,23 +835,25 @@ var idle = function () {
   // skills regeneration
   
   // repop
-  for (var i = 0; i < 3; i++) {
-    if (!monsters[i].exist) {
-      if (Math.random() * 100 < 10) {
-        var thisarea = searchByName(listZones, "Knajo fields");
-        var monsterRate = Math.random() * 100;
-        for (var j = 0; j < thisarea.listMonsters.length; j++) {
-          if (monsterRate <= thisarea.monstersRate[j]) {
-            thisarea.monstersRate;
-            monsters[i] = Object.assign({}, thisarea.listMonsters[j]);
-            break;
+  var thisarea = player.curArea;
+  if(thisarea.listMonsters.length > 0) {
+    for (var i = 0; i < 3; i++) {
+      if (!monsters[i].exist) {
+        if (Math.random() * 100 < 25) {
+          var monsterRate = Math.random() * 100;
+          for (var j = 0; j < thisarea.listMonsters.length; j++) {
+            if (monsterRate <= thisarea.monstersRate[j]) {
+              thisarea.monstersRate;
+              monsters[i] = Object.assign({}, thisarea.listMonsters[j]);
+              break;
+            }
           }
+          
+          monsters[i].exist = true;
+          monsters[i].currHP = monsters[i].maxHP;
+          
+          displayNewMonster(i, monsters[i]);
         }
-        
-        monsters[i].exist = true;
-        monsters[i].currHP = monsters[i].maxHP;
-        
-        displayNewMonster(i, monsters[i]);
       }
     }
   }
@@ -868,7 +873,7 @@ var idle = function () {
   setTimeout(idle, 1000);
 }
 
-var dialogGeneral = ["[1] <b>Chin chong</b>: Sell 3 000 000 000 gold for 1 000$! Check it out in mmomaster-farmgold.com !", "[1] <b>Sayorg the ugly</b>: Someone to play LoL or HotS here?"];
+var dialogGeneral = ["[1] <b>Chin chong</b>: Sell 3 000 000 000 gold for 1 000$! Check it out in mmomaster-farmgold.com !", "[1] <b>Sayorg the ugly</b>: Someone to play LoL or HotS here?", "<b>Herta</b>: I AM NOT ANGRY OMG !!"];
 var dialogCommerce = ["[2] <b>Leroy Jenkins</b>: Buy chickens"];
 var dialogRecruitment = ["[4] <b>DarkSasuke</b>: I recruit members in my new guild Revenge of Akatsuki. Leader lvl 57. No noob pls!"];
 
@@ -957,17 +962,10 @@ function initDisplay() {
 
 function initMonster() {
   monsters = [];
-  for (var i=0; i<3; i++) {
-    var thisarea = searchByName(listZones, "Knajo fields");
-    var monsterRate = Math.random() * 100;
-    for (var j = 0; j < thisarea.listMonsters.length; j++) {
-      if (monsterRate <= thisarea.monstersRate[j]) {
-        thisarea.monstersRate;
-        monsters[i] = Object.assign({}, thisarea.listMonsters[j]);
-        break;
-      }
-    }
-    displayNewMonster(i, monsters[i])
+  for(var i = 0; i < 3; i++) {
+    monsters[i] = Object.assign({}, searchByName(listMonsters,"Rabbit"));
+    monsters[i].exist = false;
+    document.getElementById('monster_frame'+i).style.visibility = "hidden";
   }
 }
 

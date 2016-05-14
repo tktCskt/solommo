@@ -31,8 +31,13 @@ var listJobsJSON = {
 };
 
 var listTailoringRecipesJSON = {
-  "Cloth armor" : {"item" : searchByName(listChestArmors,"Cloth armor"), "ingredients" : [searchByName(listCraftItems,"Rabbit hide"),searchByName(listCraftItems,"Carrot")], "numbers":[2,1], "level":0},
-  "Leather armor" : {"item" : searchByName(listChestArmors,"Leather armor"), "ingredients" : [searchByName(listCraftItems,"Chicken egg"),searchByName(listCraftItems,"Carrot"),searchByName(listCraftItems,"Chicken feather")], "numbers":[1,1,1], "level":0},
+  "Carrot armor" : {"item" : searchByName(listChestArmors,"Cloth armor"), "ingredients" : [searchByName(listCraftItems,"Rabbit hide"),searchByName(listCraftItems,"Carrot")], "numbers":[1,5], "level":0},
+  "Leather armor" : {"item" : searchByName(listChestArmors,"Leather armor"), "ingredients" : [searchByName(listCraftItems,"Chicken egg"),searchByName(listCraftItems,"Carrot"),searchByName(listCraftItems,"Chicken feather")], "numbers":[1,1,1], "level":5},
+  "Leather gloves" : {"item" : searchByName(listHandsArmors,"Leather gloves"), "ingredients" : [searchByName(listCraftItems,"Rabbit hide"), searchByName(listCraftItems,"Chicken feather")], "numbers":[2,2], "level":1},
+  "Leather boots" : {"item" : searchByName(listFeetArmors,"Leather boots"), "ingredients" : [searchByName(listCraftItems,"Rabbit hide"), searchByName(listCraftItems,"Chicken feather")], "numbers":[3,1], "level":1},
+  "Leather legguards" : {"item" : searchByName(listLegsArmors,"Leather legguards"), "ingredients" : [searchByName(listCraftItems,"Rabbit hide"), searchByName(listCraftItems,"Chicken feather")], "numbers":[2,2], "level":2},
+  "Leather shoulders" : {"item" : searchByName(listShouldersArmors,"Leather shoulders"), "ingredients" : [searchByName(listCraftItems,"Rabbit hide"), searchByName(listCraftItems,"Chicken feather")], "numbers":[3,1], "level":3},
+  "Leather helmet" : {"item" : searchByName(listHeadArmors,"Leather helmet"), "ingredients" : [searchByName(listCraftItems,"Rabbit hide"), searchByName(listCraftItems,"Chicken feather")], "numbers":[3,1], "level":4},
   "Armure test" : {"item":searchByName(listChestArmors,"Leather armor"), "ingredients":[], "level":0}
 }
 
