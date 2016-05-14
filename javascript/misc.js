@@ -101,34 +101,6 @@ function displayXPbar() {
 //-  Quests data   -//
 //------------------//
 
-var c_nbQuests = 0;
-var maxQuests = 3;
-var nbQuests = 0;
-
-function quest(type, details, number, name, XP, areabegin, areaend, available, unlockedP, textbegin, textend, money, unlockedQ) {
-  this.id = nbQuests;
-  nbQuests++;
-  this.type = type;
-  this.details = details;
-  this.number = number;
-  this.name = name;
-  this.available = available;
-  this.active = 0;
-  this.progress = 0;
-  this.finished = false;
-  this.rewardXP = XP;
-  this.rewardMoney = money;
-  this.areabegin = areabegin;
-  this.areaend = areaend;
-  this.unlockedP = unlockedP;
-  this.textbegin = textbegin;
-  this.textend = textend;
-  this.unlockedQ = unlockedQ;
-}
-
-var listAcceptedQuests = [];
-var listAvailableQuests = [];
-var listQuests = [new quest("kill", "Rabbit", 20, "There's more of them?", 100, "Wheatcity", "Wheatcity", 0, "none", "Hello again, adventurer! We've got even more rabbits than before here. It almost looks like a sabotage...-- Haha, that's silly, everybody likes us here! Could you take care of that again for me, please?", "Oh, thank you my friend but... I have bad news. Do you remember when I spoke to you about sabotage?", 0, "none"), new quest("kill", "Chicken", 5, "A feast for a mayor", 100, "Wheatcity", "Wheatcity", 0, "none", "Hi, I'm Granny Knajo. Would you mind catching some chickens for me with that sword of yours? I got an order from the mayor for tonight; I don't have time for this. Take care, they're the strongest chickens around!", "Oh, thank you for your help dear. You can keep your loot then, I'll just take the meat. Here, have a chicken.", 0, "none"), new quest("collect", "Rabbit hide", 3, "Sewing socks for winter", 100, "Wheatcity", "Wheatcity", 0, "Tailoring", "They announced a strong winter this year. With all these rabbits, we could make some socks and such. Go bring me some rabbit hides. ... What? Yeah, that's the first time seeing you too and so what? My nephew talked about you but he never mentioned you were this chatty. Less talk, more hides, and I'll teach you how to make an armor.", "Hah, once you don't talk, you're effective! Good. There, I'll show you.", 50, "none")];
 
 function removeAvailableQuest(name) {
   var i;
@@ -173,7 +145,7 @@ function completeQuest(up_quest) {
       }
     }
   }
-  if (up_quest.unlockedQ != "none") {
+  if (up_quest.unlockedQ.length > 0) {
     for (i = 0; i < listQuests.length; i++) {
       for (j = 0; j < up_quest.unlockedQ.length; j++) {
         if (listQuests[i].name == up_quest.unlockedQ[j].name) {
@@ -436,22 +408,6 @@ function displayShopSell() {
 function updateDisplayTalentSheet() {
 }
 
-//------------------//
-//-     Armors     -//
-//------------------//
-
-var nbChestArmors = 0;
-
-function chestArmor(name, def, price) {
-  this.type = "Armor";
-  this.name = name;
-  this.def = def;
-  this.price = price;
-  this.id = nbChestArmors;
-  nbChestArmors++;
-}
-
-var listChestArmors = [new chestArmor("Nothing", 0, 0), new chestArmor("Rags", 1, 5), new chestArmor("Cloth armor", 5, 50), new chestArmor("Leather armor", 10, 85), new chestArmor("Ganjo armor", 54592, 3628800)];
 
 //------------------//
 //-   Equipment    -//
@@ -493,22 +449,6 @@ function equipment(item, enchants, quality) {
   this.price = Math.round(item.price * this.modif); //TODO ajuster selon qualité/Enchant
 }
 
-//------------------//
-//-     Items      -//
-//------------------//
-
-var nbCraftItem = 0;
-
-function craftItem(name, price, type2) {
-  this.id = nbCraftItem
-  nbCraftItem++;
-  this.name = name;
-  this.price = price;
-  this.type = "Craft item";
-  this.type2 = type2;
-}
-
-var listCraftItems = [new craftItem("Rabbit hide", 50, "Hide"), new craftItem("Carrot", 20, "Vegetable"), new craftItem("Feather", 30, "Feather"), new craftItem("Egg", 50, "Egg"), new craftItem("Iron", 10, "Mineral"), new craftItem("Copper", 20, "Mineral")];
 
 //------------------//
 //-  Hunting zone  -//
@@ -527,7 +467,6 @@ function zone(name, listMonsters, monstersRate, listResources, resourcesRate) {
 
 var listZones = [new zone("Wheatcity",[],[],[searchByName(listCraftItems,"Iron")],[50]),
 new zone("Knajo fields",[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")],[60,95,100],[searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper")],[75,75])];
-console.log(searchByName(listMonsters,"Rabbit"));
 
 function updateJob(job) {
   var elTailoring = document.getElementById('tailoring_craft_boxes');
@@ -1026,9 +965,5 @@ function newgame() {
     nbCraftItems.push(0);
 
   gearItems = [];
-
-  listQuests = [new quest("kill", "Rabbit", 20, "There's more of them?", 100, "Wheatcity", "Wheatcity", 0, "none", "Hello again, adventurer! We've got even more rabbits than before here. It almost looks like a sabotage...-- Haha, that's silly, everybody likes us here! Could you take care of that again for me, please?", "Oh, thank you my friend but... I have bad news. Do you remember when I spoke to you about sabotage?", 0, "none"), new quest("kill", "Chicken", 5, "A feast for a mayor", 100, "Wheatcity", "Wheatcity", 0, "none", "Hi, I'm Granny Knajo. Would you mind catching some chickens for me with that sword of yours? I got an order from the mayor for tonight; I don't have time for this. Take care, they're the strongest chickens around!", "Oh, thank you for your help dear. You can keep your loot then, I'll just take the meat. Here, have a chicken.", 0, "none"), new quest("collect", "Rabbit hide", 3, "Sewing socks for winter", 100, "Wheatcity", "Wheatcity", 0, "Tailoring", "They announced a strong winter this year. With all these rabbits, we could make some socks and such. Go bring me some rabbit hides. ... What? Yeah, that's the first time seeing you too and so what? My nephew talked about you but he never mentioned you were this chatty. Less talk, more hides, and I'll teach you how to make an armor.", "Hah, once you don't talk, you're effective! Good. There, I'll show you.", 50, "none")];
-  listAcceptedQuests = [];
-  listAvailableQuests = [];
-  listAvailableQuests.push(new quest("kill", "Rabbit", 2, "The cereal killers", 100, "Wheatcity", "Wheatcity", 1, "none", "Hello there! Are you new here? I am John Knajo. You are searching for a job? There's actually some rabbits annoying us in the corn fields. They're eating our crops and that's bad for business. Kill some of them for me and I will gladly pay you for your help.", "I knew I could count on you; there, take these few coppers and stay around. My family might find some jobs for you too.", 50, [searchByName(listQuests, "There's more of them?"), searchByName(listQuests, "A feast for a mayor"), searchByName(listQuests, "Sewing socks for winter")]));
+  initQuests();
 }
