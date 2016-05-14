@@ -10,35 +10,35 @@ var gameData = {};
 
 function changecHP(dmg) {
   player.curHP += dmg;
-
+  
   if (player.curHP < 0) player.curHP = 0;
   else if (player.curHP > player.maxHP) player.curHP = player.maxHP;
-
+  
   if (player.dead && player.curHP == player.maxHP) {
     log("You feel well again!", "INFO");
     player.dead = false;
-  } else if (player.curHP == 0) {
+    } else if (player.curHP == 0) {
     log("You died.", "INFO");
     player.dead = true;
   }
-
+  
   displayHPbar();
 }
 
 function changecMP(mana) {
   player.curMP += mana;
-
+  
   if (player.curMP < 0) player.curMP = 0;
   else if (player.curMP > player.maxMP) player.curMP = player.maxMP;
-
+  
   displayMPbar();
 }
 
 function changecXP(xp) {
   player.xp += xp;
-
+  
   while (player.xp >= xptolvlup()) lvlup();
-
+  
   displayXPbar();
 }
 
@@ -51,35 +51,35 @@ function xptolvlup() {
 function lvlup() {
   player.xp = player.xp - (xptolvlup());
   player.level++;
-
+  
   player.avTalent++;
   player.avPoint += 5;
-
+  
   changecHP(player.maxHP);
   changecMP(player.maxMP);
-
+  
   updateDisplayCharSheet();
   updateDisplayTalentSheet();
-
+  
   log("Level up! You are level <b>" + player.level + "</b>.", "INFO");
 }
 
 function displayHPbar() {
   var elbarHP = document.getElementById('HUD_character_barcur_HP');
-
+  
   document.getElementById('main_char_curHP').innerHTML = Math.floor(player.curHP);
   document.getElementById('main_char_maxHP').innerHTML = player.maxHP;
   elbarHP.style.width = player.curHP / player.maxHP * 150 + "px";
-
+  
   if (player.dead) {
     elbarHP.style.backgroundColor = "#ff0000";
-  } else if (player.curHP / player.maxHP < 0.25) {
+    } else if (player.curHP / player.maxHP < 0.25) {
     elbarHP.style.backgroundColor = "#E96D37";
-  } else if (player.curHP / player.maxHP < 0.5) {
+    } else if (player.curHP / player.maxHP < 0.5) {
     elbarHP.style.backgroundColor = "#DBA744";
-  } else if (player.curHP / player.maxHP < 1) {
+    } else if (player.curHP / player.maxHP < 1) {
     elbarHP.style.backgroundColor = "#7ABA2F";
-  } else if (player.curHP == player.maxHP) {
+    } else if (player.curHP == player.maxHP) {
     elbarHP.style.backgroundColor = "#5CAB00";
   }
 }
@@ -117,9 +117,9 @@ function updateProgress(up_quest, nb) {
   if (up_quest.finished == false) {
     var i;
     up_quest.progress += nb;
-
+    
     log("<b>[" + up_quest.name + "]</b>: " + up_quest.progress + "/" + up_quest.number + " " + up_quest.details);
-
+    
     if (up_quest.progress >= up_quest.number) {
       up_quest.finished = true;
     }
@@ -159,7 +159,7 @@ function completeQuest(up_quest) {
         listAvailableQuests.push(listQuests[i]);
         listQuests.splice(i, 1);
         i = 0;
-      } else {
+        } else {
         i++;
       }
     }
@@ -195,7 +195,7 @@ function displayQuestsSheet() {}
 function displayQuickCharQuest() {
   var j;
   var minusQuests = 0;
-
+  
   for (j = 0; j < listAcceptedQuests.length; j++) {
     if (document.getElementById('char_curquest' + j).innerHTML == "") curDisplayedQuests++;
     if (listAcceptedQuests[j].progress != listAcceptedQuests[j].number) document.getElementById('char_curquest' + j).innerHTML = "<b>" + listAcceptedQuests[j].name + "</b><br/>&#8250; " + listAcceptedQuests[j].type + " " + listAcceptedQuests[j].number + " " + listAcceptedQuests[j].details + " (" + listAcceptedQuests[j].progress + "/" + listAcceptedQuests[j].number + ")";
@@ -218,7 +218,7 @@ function goto(newZone) {
   document.getElementById('HUD_zone_location').innerHTML = newZone;
   if (newZone == "Knajo fields") {
     displayHuntingzone("Knajo fields");
-  } else if (newZone == "Wheatcity") {
+    } else if (newZone == "Wheatcity") {
     displayCityzone("Wheatcity");
   }
   displayQuests();
@@ -247,7 +247,7 @@ function displayCityQuest() {
   var elQuest;
   var i;
   elAvQuest.innerHTML = "";
-
+  
   for (i = 0; i < listAcceptedQuests.length; i++) {
     if (listAcceptedQuests[i].finished == true && listAcceptedQuests[i].areaend == player.curArea.name) {
       elQuest = document.createElement('span');
@@ -261,7 +261,7 @@ function displayCityQuest() {
       elAvQuest.appendChild(elQuest);
     }
   }
-
+  
   for (i = 0; i < listAvailableQuests.length; i++) {
     elQuest = document.getElementById('char_city_available_quest' + i)
     if (listAvailableQuests[i].available == 1 && listAvailableQuests[i].areabegin == player.curArea.name) {
@@ -312,7 +312,7 @@ function refusecheckQuest() {
 function acceptQuest(i) {
   if (c_nbQuests < maxQuests) {
     log("Quest <b>[" + listAvailableQuests[i].name + "]</b> accepted.", "INFO");
-
+    
     q = removeAvailableQuest(listAvailableQuests[i].name);
     listAcceptedQuests.push(q);
     q.available = 0;
@@ -327,9 +327,9 @@ function acceptQuest(i) {
         }
       }
     }
-
+    
     displayQuests();
-  } else {
+    } else {
     log("You can't have more than " + maxQuests + " quests active.", "ERROR");
   }
 }
@@ -369,7 +369,7 @@ function displayShopSell() {
     if (nbCraftItems[i] > 0) {
       if (elItem != null) {
         elItem.innerHTML = nbCraftItems[i] + " " + listCraftItems[i].name + "- " + calculateSellPrice(listCraftItems[i]) + " g/u" + "<br/>";
-      } else {
+        } else {
         elItem = document.createElement('span');
         elItem.id = 'shopSC' + i;
         elItem.innerHTML = nbCraftItems[i] + " " + listCraftItems[i].name + "- " + calculateSellPrice(listCraftItems[i]) + " g/u" + "<br/>";
@@ -379,20 +379,20 @@ function displayShopSell() {
           sellCraftItem(this.getAttribute('iItem'))
         }
       }
-    } else {
+      } else {
       if (elItem != null) {
         elShopSell.removeChild(elItem);
       }
     }
   }
   //gear
-
+  
   for (i = 0; i < gearItems.length; i++) {
     elItem = document.getElementById('shopSG' + i);
-
+    
     if (elItem != null) {
       elItem.innerHTML = gearItems[i].name + "- " + calculateSellPrice(gearItems[i]) + " g" + "<br/>";
-    } else {
+      } else {
       elItem = document.createElement('span');
       elItem.id = 'shopSG' + i;
       elItem.innerHTML = gearItems[i].name + "- " + calculateSellPrice(gearItems[i]) + " g" + "<br/>";
@@ -420,48 +420,48 @@ function updateJob(job) {
   document.getElementById('tailoring_cur_XP').innerHTML = searchByName(listJobs, "Tailoring").xp;
   document.getElementById('tailoring_max_XP').innerHTML = 100;
   document.getElementById('tailoring_level').innerHTML = searchByName(listJobs, "Tailoring").progress;
-
+  
   for (var i = 0; i < job.recipes.length; i++) {
     var recipe = job.recipes[i];
     if (job.progress >= recipe.level) {
       var elRecipe = document.getElementById('char_tailoring' + i);
       var isNew = false;
-
+      
       if (elRecipe == null) {
         isNew = true;
         elRecipe = document.createElement('div');
         elRecipe.setAttribute('class', 'craft_box');
         elRecipe.id = 'char_tailoring' + i;
-
+        
         elTailoring.appendChild(elRecipe);
       }
-
+      
       if (isNew) {
         var elRecipeTitle = document.createElement('div');
         elRecipeTitle.setAttribute('class', 'craft_box_title');
         elRecipeTitle.innerHTML = recipe.item.name;
-
+        
         elRecipe.appendChild(elRecipeTitle);
       }
-
+      
       var canbecrafted = true;
       for (var j = 0; j < recipe.ingredients.length; j++) {
         var ing_id = recipe.ingredients[j].id;
-
+        
         if (isNew) {
           var elRecipeIngredient = document.createElement('div');
           elRecipeIngredient.id = 'char_tailoring_ing_' + i + '_' + j;
           elRecipeIngredient.setAttribute('class', 'craft_box_ingredient');
-
+          
           var elRecipeIngredientTitle = document.createElement('div');
           elRecipeIngredientTitle.setAttribute('class', 'craft_box_ingredient_name');
           elRecipeIngredientTitle.innerHTML = recipe.ingredients[j].name;
-
+          
           var elRecipeIngredientNumber = document.createElement('div');
           elRecipeIngredientNumber.setAttribute('class', 'craft_box_ingredient_number');
           elRecipeIngredientNumber.id = 'char_tailoring_ingN_' + i + '_' + j;
           elRecipeIngredientNumber.innerHTML = nbCraftItems[ing_id] + "/" + recipe.numbers[j];
-
+          
           elRecipeIngredient.appendChild(elRecipeIngredientTitle);
           elRecipeIngredient.appendChild(elRecipeIngredientNumber);
           elRecipe.appendChild(elRecipeIngredient);
@@ -469,7 +469,7 @@ function updateJob(job) {
         else {
           document.getElementById('char_tailoring_ingN_' + i + '_' + j).innerHTML = nbCraftItems[ing_id] + "/" + recipe.numbers[j];
         }
-
+        
         if (nbCraftItems[ing_id] < recipe.numbers[j]) {
           document.getElementById('char_tailoring_ing_' + i + '_' + j).style.backgroundColor = "#EDE8DB";
           canbecrafted = false;
@@ -480,23 +480,23 @@ function updateJob(job) {
       }
       if (canbecrafted) elRecipe.style.backgroundColor = "#B9D6AD";
       else elRecipe.style.backgroundColor = "#E7E0CF";
-
+      
       if (isNew) {
         var elRecipeXP = document.createElement('div');
         elRecipeXP.setAttribute('class', 'craft_box_XP');
-
+        
         var elRecipeTextXP = document.createElement('span');
         elRecipeTextXP.id = 'tailoring_recipe_XP' + i;
-
+        
         var elRecipeBarXP = document.createElement('div');
         elRecipeBarXP.setAttribute('class', 'craft_box_bar_XP');
         elRecipeBarXP.innerHTML = "&nbsp;";
-
+        
         var elRecipeBarcurXP = document.createElement('div');
         elRecipeBarcurXP.setAttribute('class', 'craft_box_barcur_XP');
         elRecipeBarcurXP.id = 'tailoring_recipe_XPcur' + i;
         elRecipeBarcurXP.style.width = recipe.progress / 5 * 100 + 'px';
-
+        
         elRecipeXP.appendChild(elRecipeBarXP);
         elRecipeXP.appendChild(elRecipeBarcurXP);
         elRecipeBarXP.appendChild(elRecipeTextXP);
@@ -506,7 +506,7 @@ function updateJob(job) {
         document.getElementById('tailoring_recipe_XP' + i).innerHTML = recipe.progress;
         document.getElementById('tailoring_recipe_XPcur' + i).style.width = recipe.progress / 5 * 100 + 'px';
       }
-
+      
       elRecipe.setAttribute('iRecipe', i);
       elRecipe.onclick = function () {
         craft(searchByName(listJobs, "Tailoring"), this.getAttribute('iRecipe'));
@@ -517,7 +517,7 @@ function updateJob(job) {
 
 function displayGathering() {
   var elGathering = document.getElementById('gathering_window');
-
+  
   var elTxt = document.getElementById("gathering_txt");
   if (elTxt == null)
   {
@@ -547,36 +547,39 @@ function equipment(item, enchants, quality) {
   this.name = "";
   this.s_quality = "";
   this.modif = 1;
-
+  
   if (quality >= 6) {
     this.s_quality += "Legendary";
     this.modif = 2;
-  } else if (quality >= 5) {
+    } else if (quality >= 5) {
     this.s_quality += "Perfect";
     this.modif = 1.5;
-  } else if (quality >= 4) {
+    } else if (quality >= 4) {
     this.s_quality += "Great";
     this.modif = 1.2;
-  } else if (quality >= 3) {
+    } else if (quality >= 3) {
     this.s_quality += "";
     this.modif = 1;
-  } else if (quality >= 2) {
+    } else if (quality >= 2) {
     this.s_quality += "Passable";
     this.modif = 0.8;
-  } else if (quality >= 1) {
+    } else if (quality >= 1) {
     this.s_quality += "Rubbish";
     this.modif = 0.5;
-  } else {
+    } else {
     this.s_quality += "Crappy";
     this.modif = 0.0;
   }
-
+  
   if(this.s_quality != "") {
     this.name += this.s_quality + " ";
   }
   this.name += item.name; //TODO partie enchant du nom
   this.type = item.type;
-  if (item.type = "Armor") this.def = Math.round(item.def * this.modif);
+  if (item.type = "Armor") {
+    this.part = item.part;
+    this.def = Math.round(item.def * this.modif);
+  }
   this.price = Math.round(item.price * this.modif); //TODO ajuster selon qualité/Enchant
 }
 
@@ -584,10 +587,7 @@ function equipGearItems(i) {
   var item = gearItems[i];
   if (item.type == "Armor") {
     gearItems.splice(i, 1);
-    changeChestArmor(item);
-  } else if (item.type == "Head armor") {
-    gearItems.splice(i, 1);
-    changeHeadArmor(item);
+    changeArmor(item);
   }
 }
 
@@ -598,34 +598,48 @@ function changeWeapon(newWeapon) {
   document.getElementById('main_char_weaponatk').innerHTML = player.weapon.damage;
 }
 
-function changeChestArmor(newArmor) {
-  if (player.armor != "" && player.armor.name != "Nothing") {
-    addgItem(player.armor);
-    player.def -= player.armor.def;
-  } else {
-    updateInventory();
+function changeArmor(newArmor) {
+  var oldArmor = "";
+  switch(newArmor.part) {
+    case "Chest":
+    oldArmor = player.chestArmor;
+    player.chestArmor = newArmor;
+    break;
+    case "Head":
+    oldArmor = player.headArmor;
+    player.headArmor = newArmor;
+    break;
+    case "Hands":
+    oldArmor = player.handsArmor;
+    player.handsArmor = newArmor;
+    break;
+    case "Feet":
+    oldArmor = player.feetArmor;
+    player.feetArmor = newArmor;
+    break;
+    case "Legs":
+    oldArmor = player.legsArmor;
+    player.legsArmor = newArmor;
+    break;
+    case "Shoulders":
+    oldArmor = player.shouldersArmor;
+    player.shouldersArmor = newArmor;
+    break;
+    default:
+    console.log("changeArmor - error : unknown part for the following object : " + newArmor);
   }
   
-  player.armor = newArmor;
-  player.def += player.armor.def;
-  document.getElementById('main_char_armor').innerHTML = player.armor.name;
-  document.getElementById('main_char_armordef').innerHTML = player.armor.def;
-}
-
-function changeHeadArmor(newArmor) {
-  if (player.headArmor != "" && player.headArmor.name !== "Nothing") {
-    addgItem(player.headArmor);
-    player.def -= player.headArmor.def;
-  } else {
+  if (oldArmor != "" && oldArmor.name != "Nothing") {
+    addgItem(oldArmor);
+    player.def -= oldArmor.def;
+    } else {
     updateInventory();
   }
+  player.def += newArmor.def;
+  document.getElementById('main_char_' + newArmor.part + 'Armor').innerHTML = newArmor.name;
+  document.getElementById('main_char_' + newArmor.part + 'Armordef').innerHTML = newArmor.def;
   
-  player.headArmor = newArmor;
-  player.def += player.headArmor.def;
-  document.getElementById('main_char_headArmor').innerHTML = player.headArmor.name;
-  document.getElementById('main_char_headArmordef').innerHTML = player.headArmor.def;
 }
-
 //------------------//
 //-   Inventory    -//
 //------------------//
@@ -651,10 +665,10 @@ function addcItem(item, number) {
   else
   log("You lost " + Math.abs(number) + " <b>[" + item.name + "]</b>", "INFO");
   nbCraftItems[item.id] += number;
-
+  
   updateInventory();
   updateJob(Tailoring);
-
+  
   for (i = 0; i < listAcceptedQuests.length; i++) {
     if (item.name == listAcceptedQuests[i].details && listAcceptedQuests[i].type == "collect") {
       updateProgress(listAcceptedQuests[i], number);
@@ -674,68 +688,68 @@ function displayGold() {
 
 function displayInventory() {
   var elInventory = document.getElementById('tabs_content_inventory');
-
+  
   var inventoryGold = document.createElement('div');
   inventoryGold.setAttribute("class","menu_inventory_gold");
   var inventoryGoldAmount = document.createElement('span');
   inventoryGoldAmount.setAttribute("id","char_gold");
-
+  
   inventoryGold.appendChild(inventoryGoldAmount);
   elInventory.appendChild(inventoryGold);
-
+  
   var elInventoryResources = document.getElementById('menu_inventory_resources');
   elInventoryResources.innerHTML = "";
-
+  
   var elInventoryEquipments = document.getElementById('menu_inventory_equipments');
   elInventoryEquipments.innerHTML = "";
-
+  
   var elItem;
   var i;
-
+  
   //Resources
   for (i = 0; i < nbCraftItem; i++) {
     elItem = document.getElementById('char_cInventory' + i);
     if (nbCraftItems[i] > 0) {
       if (elItem != null) {
         elItem.innerHTML = nbCraftItems[i] + " " + listCraftItems[i].name;
-      } else {
+        } else {
         elItem = document.createElement('div');
         elItem.id = 'char_cInventory' + i;
         elItem.innerHTML = nbCraftItems[i] + " " + listCraftItems[i].name;
         elInventoryResources.appendChild(elItem);
       }
-    } else {
+      } else {
       if (elItem != null) {
         elInventoryResources.removeChild(elItem);
       }
     }
   }
-
+  
   //Items
-
+  
   //Equipments
   for (i = 0; i < gearItems.length; i++) {
     elItem = document.getElementById('char_gInventory' + i)
-
+    
     if (elItem != null) {
       elItem.innerHTML = gearItems[i].name + "<br/>";
-    } else {
+      } else {
       elItem = document.createElement('div');
       elItem.id = 'char_gInventory' + i;
       elItem.innerHTML = gearItems[i].name;
       if (gearItems[i].def != null)
-        elItem.title += "Defense " + gearItems[i].def;
+      elItem.title += "Defense " + gearItems[i].def;
       if (gearItems[i].damage != null)
-        elItem.title += "Damage " + gearItems[i].damage;
+      elItem.title += "Damage " + gearItems[i].damage;
       elInventoryEquipments.appendChild(elItem);
     }
     elItem.setAttribute('iItem', i);
     elItem.onclick = function () {
       equipGearItems(this.getAttribute('iItem'));
     }
-
+    
   }
-
+  
 }
 
 //------------------//
@@ -744,7 +758,7 @@ function displayInventory() {
 
 function monsterDeath(md_monster, k) {
   log("You defeated the <b>" + monsters[k].name + "</b> and earned " + monsters[k].XP + "xp.", "INFO");
-
+  
   // Process XP and loot
   changecXP(md_monster.XP);
   var i;
@@ -753,11 +767,11 @@ function monsterDeath(md_monster, k) {
       addcItem(md_monster.loots[i].item, 1);
     }
   }
-
+  
   // Hide this monster frame
   monsters[k].exist = false;
   document.getElementById('monster_frame'+k).style.visibility = "hidden";
-
+  
   // Update Quests
   for (i = 0; i < listAcceptedQuests.length; i++) {
     if (md_monster.name == listAcceptedQuests[i].details && listAcceptedQuests[i].type == "kill") {
@@ -770,7 +784,7 @@ function clickmonster(i) {
   if (player.dead) log("You can't do that when you're dead.", "ERROR");
   else if (monsters[i].currHP > 0) {
     changemHP(i, -((player.atk + player.bDMG) * player.mDMG));
-
+    
     if (monsters[i].currHP > 0) {
       var damage = -monsters[i].atk + player.def;
       if (damage > 0) damage = 0;
@@ -781,26 +795,26 @@ function clickmonster(i) {
 
 function changemHP(i, dmg) {
   monsters[i].currHP += dmg;
-
+  
   if (monsters[i].currHP > monsters[i].maxHP) monsters[i].currHP = monsters[i].maxHP;
   else if (monsters[i].currHP <= 0) {
     monsterDeath(monsters[i], i);
     return;
   }
-
+  
   var elmbarHP = document.getElementById('monster_curHPbar' + i);
-
+  
   document.getElementById('monster_curHP' + i).innerHTML = monsters[i].currHP;
   document.getElementById('monster_maxHP' + i).innerHTML = monsters[i].maxHP;
   elmbarHP.style.width = monsters[i].currHP / monsters[i].maxHP * 50 + "px";
-
+  
   if (monsters[i].currHP / monsters[i].maxHP < 0.25) {
     elmbarHP.style.backgroundColor = "#E75D21";
-  } else if (monsters[i].currHP / monsters[i].maxHP < 0.5) {
+    } else if (monsters[i].currHP / monsters[i].maxHP < 0.5) {
     elmbarHP.style.backgroundColor = "#DBA744";
-  } else if (monsters[i].currHP / monsters[i].maxHP < 1) {
+    } else if (monsters[i].currHP / monsters[i].maxHP < 1) {
     elmbarHP.style.backgroundColor = "#66A366";
-  } else if (monsters[i].currHP == monsters[i].maxHP) {
+    } else if (monsters[i].currHP == monsters[i].maxHP) {
     elmbarHP.style.backgroundColor = "#006600";
   }
 }
@@ -814,9 +828,9 @@ var idle = function () {
   // character regeneration
   if (player.curHP < player.maxHP) changecHP(player.regenHP);
   if (player.curMP < player.maxMP) changecMP(player.regenMP);
-
+  
   // skills regeneration
-
+  
   // repop
   for (var i = 0; i < 3; i++) {
     if (!monsters[i].exist) {
@@ -830,15 +844,15 @@ var idle = function () {
             break;
           }
         }
-
+        
         monsters[i].exist = true;
         monsters[i].currHP = monsters[i].maxHP;
-
+        
         displayNewMonster(i, monsters[i]);
       }
     }
   }
-
+  
   // chat event
   if (Math.random() * 300 < 1) {
     var canal = Math.floor(Math.random() * 3);
@@ -846,10 +860,10 @@ var idle = function () {
     else if (canal == 1) log(dialogCommerce[Math.floor(Math.random() * dialogCommerce.length)], "COMMERCE");
     else if (canal == 2) log(dialogRecruitment[Math.floor(Math.random() * dialogRecruitment.length)], "RECRUITMENT");
   }
-
+  
   // save
   localStorage.setItem('gameData', JSON.stringify(gameData));
-
+  
   // wait 1s
   setTimeout(idle, 1000);
 }
@@ -886,21 +900,21 @@ function init() {
     listQuests = gameData.listQuests;
     nbCraftItems = gameData.nbCraftItems;
     gearItems = gameData.gearItems;
-
+    
     player.curArea = "Wheatcity";
   }
-
+  
   // TESTING JOB
   updateJob(searchByName(listJobs,"Tailoring"));
-
+  
   // display
   initDisplay();
   initMonster();
   initLocalStorage();
-
+  
   // begin game
   goto(player.curArea);
-
+  
   idle();
 }
 
@@ -919,15 +933,25 @@ function initDisplay() {
   displayXPbar();
   displayHPbar();
   displayMPbar();
-
+  
   document.getElementById('main_char_weapon').innerHTML = player.weapon.name;
   document.getElementById('main_char_weaponatk').innerHTML = player.weapon.damage;
-  document.getElementById('main_char_armor').innerHTML = player.armor.name;
-  document.getElementById('main_char_armordef').innerHTML = player.armor.def;
-
+  document.getElementById('main_char_ChestArmor').innerHTML = player.chestArmor.name;
+  document.getElementById('main_char_ChestArmordef').innerHTML = player.chestArmor.def;
+  document.getElementById('main_char_HeadArmor').innerHTML = player.headArmor.name;
+  document.getElementById('main_char_HeadArmordef').innerHTML = player.headArmor.def;
+  document.getElementById('main_char_HandsArmor').innerHTML = player.handsArmor.name;
+  document.getElementById('main_char_HandsArmordef').innerHTML = player.handsArmor.def;
+  document.getElementById('main_char_LegsArmor').innerHTML = player.legsArmor.name;
+  document.getElementById('main_char_LegsArmordef').innerHTML = player.legsArmor.def;
+  document.getElementById('main_char_FeetArmor').innerHTML = player.feetArmor.name;
+  document.getElementById('main_char_FeetArmordef').innerHTML = player.feetArmor.def;
+  document.getElementById('main_char_ShouldersArmor').innerHTML = player.shouldersArmor.name;
+  document.getElementById('main_char_ShouldersArmordef').innerHTML = player.shouldersArmor.def;
+  
   displayQuests();
   updateInventory();
-
+  
   updateStat();
 }
 
@@ -949,20 +973,22 @@ function initMonster() {
 
 function newgame() {
   player.curArea = searchByName(listZones,"Wheatcity");
-
+  
   // create character
   initChar();
-
+  
   // data
-  changeChestArmor(new equipment(searchByName(listChestArmors, "Rags"), [], 3));
-  changeHeadArmor(new equipment(searchByName(listHeadArmors, "Nothing"), [], 3));
+  changeArmor(new equipment(searchByName(listChestArmors, "Rags"), [], 3));
+  changeArmor(new equipment(searchByName(listHeadArmors, "Nothing"), [], 3));
+  changeArmor(new equipment(searchByName(listHandsArmors, "Nothing"), [], 3));
+  changeArmor(new equipment(searchByName(listLegsArmors, "Nothing"), [], 3));
+  changeArmor(new equipment(searchByName(listFeetArmors, "Nothing"), [], 3));
+  changeArmor(new equipment(searchByName(listShouldersArmors, "Nothing"), [], 3));
   
   nbCraftItems = [];
   for (var i = 0; i < nbCraftItem; i++)
-    nbCraftItems.push(0);
-
+  nbCraftItems.push(0);
+  
   gearItems = [];
-  //TESTING
-  addgItem(searchByName(listHeadArmors, "Leather helmet"));
   initQuests();
 }
