@@ -56,6 +56,7 @@ function initChar() {
     dead:false,
 
     armor:"",
+    headArmor:"",
     def:0
   }
   updateStat();

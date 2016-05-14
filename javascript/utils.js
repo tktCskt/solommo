@@ -9,6 +9,7 @@ function searchByName(list, name) {
       return list[i];
     }
   }
+  console.log("searchByName - Error : can't find the following item : " + name);
 }
 
 var curLog = 0;

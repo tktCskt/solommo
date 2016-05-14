@@ -413,64 +413,6 @@ function updateDisplayTalentSheet() {
 }
 
 
-//------------------//
-//-   Equipment    -//
-//------------------//
-
-function equipment(item, enchants, quality) {
-  this.name = "";
-  this.s_quality = "";
-  this.modif = 1;
-
-  if (quality >= 6) {
-    this.s_quality += "Legendary";
-    this.modif = 2;
-  } else if (quality >= 5) {
-    this.s_quality += "Perfect";
-    this.modif = 1.5;
-  } else if (quality >= 4) {
-    this.s_quality += "Great";
-    this.modif = 1.2;
-  } else if (quality >= 3) {
-    this.s_quality += "";
-    this.modif = 1;
-  } else if (quality >= 2) {
-    this.s_quality += "Passable";
-    this.modif = 0.8;
-  } else if (quality >= 1) {
-    this.s_quality += "Rubbish";
-    this.modif = 0.5;
-  } else {
-    this.s_quality += "Crappy";
-    this.modif = 0.0;
-  }
-
-
-  this.name += this.s_quality + " ";
-  this.name += item.name; //TODO partie enchant du nom
-  this.type = item.type;
-  if (item.type = "Armor") this.def = Math.round(item.def * this.modif);
-  this.price = Math.round(item.price * this.modif); //TODO ajuster selon qualité/Enchant
-}
-
-
-//------------------//
-//-  Hunting zone  -//
-//------------------//
-
-var nbZones = 0;
-
-function zone(name, listMonsters, monstersRate, listResources, resourcesRate) {
-  this.name = name;
-  this.listMonsters = listMonsters;
-  this.monstersRate = monstersRate;
-  this.listResources = listResources;
-  this.resourcesRate = resourcesRate;
-  nbZones++;
-}
-
-var listZones = [new zone("Wheatcity",[],[],[searchByName(listCraftItems,"Iron")],[50]),
-new zone("Knajo fields",[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")],[60,95,100],[searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper")],[75,75])];
 
 function updateJob(job) {
   var elTailoring = document.getElementById('tailoring_craft_boxes');
@@ -601,11 +543,51 @@ function displayGathering() {
 //-   Equipment    -//
 //------------------//
 
+function equipment(item, enchants, quality) {
+  this.name = "";
+  this.s_quality = "";
+  this.modif = 1;
+
+  if (quality >= 6) {
+    this.s_quality += "Legendary";
+    this.modif = 2;
+  } else if (quality >= 5) {
+    this.s_quality += "Perfect";
+    this.modif = 1.5;
+  } else if (quality >= 4) {
+    this.s_quality += "Great";
+    this.modif = 1.2;
+  } else if (quality >= 3) {
+    this.s_quality += "";
+    this.modif = 1;
+  } else if (quality >= 2) {
+    this.s_quality += "Passable";
+    this.modif = 0.8;
+  } else if (quality >= 1) {
+    this.s_quality += "Rubbish";
+    this.modif = 0.5;
+  } else {
+    this.s_quality += "Crappy";
+    this.modif = 0.0;
+  }
+
+  if(this.s_quality != "") {
+    this.name += this.s_quality + " ";
+  }
+  this.name += item.name; //TODO partie enchant du nom
+  this.type = item.type;
+  if (item.type = "Armor") this.def = Math.round(item.def * this.modif);
+  this.price = Math.round(item.price * this.modif); //TODO ajuster selon qualité/Enchant
+}
+
 function equipGearItems(i) {
   var item = gearItems[i];
   if (item.type == "Armor") {
     gearItems.splice(i, 1);
     changeChestArmor(item);
+  } else if (item.type == "Head armor") {
+    gearItems.splice(i, 1);
+    changeHeadArmor(item);
   }
 }
 
@@ -617,13 +599,31 @@ function changeWeapon(newWeapon) {
 }
 
 function changeChestArmor(newArmor) {
-  if (player.armor != "") {
+  if (player.armor != "" && player.armor.name != "Nothing") {
     addgItem(player.armor);
+    player.def -= player.armor.def;
+  } else {
+    updateInventory();
   }
+  
   player.armor = newArmor;
-  player.def = player.armor.def;
+  player.def += player.armor.def;
   document.getElementById('main_char_armor').innerHTML = player.armor.name;
   document.getElementById('main_char_armordef').innerHTML = player.armor.def;
+}
+
+function changeHeadArmor(newArmor) {
+  if (player.headArmor != "" && player.headArmor.name !== "Nothing") {
+    addgItem(player.headArmor);
+    player.def -= player.headArmor.def;
+  } else {
+    updateInventory();
+  }
+  
+  player.headArmor = newArmor;
+  player.def += player.headArmor.def;
+  document.getElementById('main_char_headArmor').innerHTML = player.headArmor.name;
+  document.getElementById('main_char_headArmordef').innerHTML = player.headArmor.def;
 }
 
 //------------------//
@@ -653,6 +653,7 @@ function addcItem(item, number) {
   nbCraftItems[item.id] += number;
 
   updateInventory();
+  updateJob(Tailoring);
 
   for (i = 0; i < listAcceptedQuests.length; i++) {
     if (item.name == listAcceptedQuests[i].details && listAcceptedQuests[i].type == "collect") {
@@ -954,11 +955,14 @@ function newgame() {
 
   // data
   changeChestArmor(new equipment(searchByName(listChestArmors, "Rags"), [], 3));
-
+  changeHeadArmor(new equipment(searchByName(listHeadArmors, "Nothing"), [], 3));
+  
   nbCraftItems = [];
   for (var i = 0; i < nbCraftItem; i++)
     nbCraftItems.push(0);
 
   gearItems = [];
+  //TESTING
+  addgItem(searchByName(listHeadArmors, "Leather helmet"));
   initQuests();
 }
