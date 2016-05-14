@@ -1,5 +1,6 @@
 var nbJobs = 0;
 
+/* Constructors */
 function recipe(options) {
   this.item = options.item;
   this.ingredients = options.ingredients;
@@ -19,52 +20,59 @@ function job(options) {
   id = nbJobs++;
 }
 
+/* JSON */
+var listJobsJSON = {
+  "Tailoring" : {"name":"Tailoring", "details":""},
+  "Mining" : {"name":"Mining", "details":"Mineral"},
+  "Herbalism" : {"name":"Herbalism", "details":"Plant"},
+  "Fishing" : {"name":"Fishing", "details":"Fish"},
+  "Woodcutting" : {"name":"Woodcutting", "details":"Wood"},
+  "Smithing" : {"name":"Smithing", "details":""}
+};
+
+var listTailoringRecipesJSON = {
+  "Cloth armor" : {"item" : searchByName(listChestArmors,"Cloth armor"), "ingredients" : [searchByName(listCraftItems,"Rabbit hide"),searchByName(listCraftItems,"Carrot")], "numbers":[2,1], "level":0},
+  "Leather armor" : {"item" : searchByName(listChestArmors,"Leather armor"), "ingredients" : [searchByName(listCraftItems,"Chicken egg"),searchByName(listCraftItems,"Carrot"),searchByName(listCraftItems,"Chicken feather")], "numbers":[1,1,1], "level":0},
+  "Armure test" : {"item":searchByName(listChestArmors,"Leather armor"), "ingredients":[], "level":0}
+}
+
+var listSmithingRecipesJSON = {
+  "Sword1" : {"item":searchByName(listWeapons,"Sword"), "ingredients":[searchByName(listCraftItems,"Iron")], "numbers":[10], "level":0},
+  "Sword2" : {"item":searchByName(listWeapons,"Sword2"), "ingredients":[searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper")], "numbers":[20,10], "level":3},
+  "Sword3" : {"item":searchByName(listWeapons,"Sword3"), "ingredients":[searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper"), searchByName(listCraftItems,"Gold")], "numbers":[30,20,10], "level":5}
+}
+
+/*Jobs*/
 var listJobs = [];
-listJobs.push(new job({"name":"Tailoring", "details":""}));
-listJobs.push(new job({"name":"Mining", "details":"Mineral"}));
-listJobs.push(new job({"name":"Smithing", "details":""}));
-//TODO Initialiser ça dans init() => function pour retirer variables globales
-/*Tailoring recipes*/
-var opts_recipe_clothArmor = {"item" : searchByName(listChestArmors,"Cloth armor"), "ingredients" : [searchByName(listCraftItems,"Rabbit hide"),searchByName(listCraftItems,"Carrot")], "numbers":[2,1], "level":0};
-var opts_recipe_leatherArmor = {"item" : searchByName(listChestArmors,"Leather armor"), "ingredients" : [searchByName(listCraftItems,"Chicken egg"),searchByName(listCraftItems,"Carrot"),searchByName(listCraftItems,"Chicken feather")], "numbers":[1,1,1], "level":0};
-var opts_armureTest = {"item":searchByName(listChestArmors,"Leather armor"), "ingredients":[], "level":0};
 
-var Tailoring = searchByName(listJobs,"Tailoring");
-Tailoring.recipes.push(new recipe(opts_recipe_clothArmor));
-Tailoring.recipes.push(new recipe(opts_recipe_leatherArmor));
-Tailoring.recipes.push(new recipe(opts_armureTest));
-
-/*Smithing recipes*/
-var opts_recipe_sword = {"item":searchByName(listWeapons,"Sword"), "ingredients":[searchByName(listCraftItems,"Iron")], "numbers":[10], "level":0};
-var opts_recipe_sword2 = {"item":searchByName(listWeapons,"Sword2"), "ingredients":[searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper")], "numbers":[20,10], "level":3};
-var opts_recipe_sword3 = {"item":searchByName(listWeapons,"Sword3"), "ingredients":[searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper"), searchByName(listCraftItems,"Gold")], "numbers":[30,20,10], "level":5};
-
-var Smithing = searchByName(listJobs,"Smithing");
-Smithing.recipes.push(new recipe(opts_recipe_sword));
-Smithing.recipes.push(new recipe(opts_recipe_sword2));
-Smithing.recipes.push(new recipe(opts_recipe_sword3));
-
-/*Fonctions pour tous les métiers*/
-
-function gather (zone,job)
-{
-  for(var i=0;i<zone.listResources.length;i++)
-  {
-    var K = 0.03;
-    if(zone.listResources[i].type2 == job.details)
-    {
-      var n = K * zone.resourcesRate[i] * Math.sqrt(job.progress);
-      var number = Math.trunc(n);
-      var r = Math.random();
-      if(r < n - number) //
-      {
-        number++;
-      }
-      addcItem(zone.listResources[i],number);
-    }
+for (var property in listJobsJSON) {
+  if (listJobsJSON.hasOwnProperty(property)) {
+    listJobs.push(new job(listJobsJSON[property]));
   }
 }
 
+//TODO Initialiser ça dans init() => function pour retirer variables globales
+/*Tailoring recipes*/
+
+var Tailoring = searchByName(listJobs,"Tailoring");
+
+for (var property in listTailoringRecipesJSON) {
+  if (listTailoringRecipesJSON.hasOwnProperty(property)) {
+    Tailoring.recipes.push(new recipe(listTailoringRecipesJSON[property]));
+  }
+}
+
+/*Smithing recipes*/
+
+var Smithing = searchByName(listJobs,"Smithing");
+
+for (var property in listSmithingRecipesJSON) {
+  if (listSmithingRecipesJSON.hasOwnProperty(property)) {
+    Smithing.recipes.push(new recipe(listSmithingRecipesJSON[property]));
+  }
+}
+
+/*Fonctions pour tous les métiers*/
 
 function craft(job, iRecipe) {
   var recipe = job.recipes[iRecipe];
@@ -99,9 +107,9 @@ function craft(job, iRecipe) {
   var recipexpearned = 10;
 
   job.xp += recipexpearned;
-  while (job.xp >= 100) {
+  while (job.xp >= (job.progress+1)*50) {
+    job.xp -= (job.progress+1)*50;
     updatejProgress(job,1);
-    job.xp -= 100;
   }
   if (recipe.progress < 10) { // craft lvl max
     recipe.xp += recipexpearned*2;
@@ -153,7 +161,15 @@ function gather(zone,job)
         number++;
       }
       addcItem(zone.listResources[i],number);
-
     }
   }
+  var xpGathering = 10;
+  
+  log(job.name + ": You earned " + xpGathering + "xp.", "INFO");
+  job.xp += xpGathering;
+  while (job.xp >= (job.progress+1)*50) {
+    job.xp -= (job.progress+1)*50;
+    updatejProgress(job,1);
+  }
 }
+

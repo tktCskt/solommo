@@ -7,16 +7,28 @@ function craftItem(options) {
   this.type = "Craft item";
   this.type2 = options.type2;
 }
-var opts_rabbitHide = {"name":"Rabbit hide", "price":50, "type2":"Hide"};
-var opts_carrot = {"name":"Carrot", "price":20, "type2":"Vegetable"};
-var opts_chickenFeather = {"name":"Chicken feather", "price":30, "type2":"Feather"};
-var opts_chickenEgg = {"name":"Chicken egg", "price":50, "type2":"Egg"};
 
-/*Minerals*/
-var opts_iron = {"name":"Iron", "price":10, "type2":"Mineral"};
-var opts_copper = {"name":"Copper", "price":20, "type2":"Mineral"};
-var opts_gold = {"name":"Gold", "price":50, "type2":"Mineral"};
+/*JSON*/
+var listCraftItemsJSON = {
+  "Rabbit hide" : {"name":"Rabbit hide", "price":50, "type2":"Hide"},
+  "Carrot" : {"name":"Carrot", "price":20, "type2":"Vegetable"},
+  "Chicken feather" : {"name":"Chicken feather", "price":30, "type2":"Feather"},
+  "Chicken egg" : {"name":"Chicken egg", "price":50, "type2":"Egg"},
+  "Iron" : {"name":"Iron", "price":10, "type2":"Mineral"},
+  "Copper" : {"name":"Copper", "price":20, "type2":"Mineral"},
+  "Gold" : {"name":"Gold", "price":50, "type2":"Mineral"},
+  "Basic wood" : {"name":"Basic wood", "price":15, "type2":"Wood"},
+  "Solid wood" : {"name":"Solid wood", "price":50, "type2":"Wood"},
+  "Fish1" : {"name":"Fish1", "price":10, "type2":"Fish"},
+  "Fish2" : {"name":"Fish2", "price":20, "type2":"Fish"},
+  "Plant1" : {"name":"Plant1", "price":10, "type2":"Plant"},
+  "Plant2" : {"name":"Plant2", "price":20, "type2":"Plant"},
+};
 
+listCraftItems = [];
 
-listCraftItems = [new craftItem(opts_rabbitHide) ,new craftItem(opts_carrot) ,new craftItem(opts_chickenFeather) ,new craftItem(opts_chickenEgg) ,new craftItem(opts_iron) ,new craftItem(opts_copper),
-                  new craftItem(opts_gold)];
+for (var property in listCraftItemsJSON) {
+  if (listCraftItemsJSON.hasOwnProperty(property)) {
+    listCraftItems.push(new craftItem(listCraftItemsJSON[property]));
+  }
+}

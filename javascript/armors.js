@@ -9,10 +9,19 @@ function chestArmor(options)
   this.id = nbChestArmors++;
 }
 
-var opts_nothing = {"name" : "Nothing", "def" : 0, "price" : 0};
-var opts_rags = {"name" : "Rags", "def" : 1, "price" : 5};
-var opts_clothArmor = {"name" : "Cloth armor", "def" : 5, "price" : 50};
-var opts_leatherArmor = {"name" : "Leather armor", "def" : 10, "price" : 85};
+/* JSON */
+var listChestArmorsJSON = {
+  "Nothing" : {"name" : "Nothing", "def" : 0, "price" : 0},
+  "Rags" : {"name" : "Rags", "def" : 1, "price" : 5},
+  "Cloth armor" : {"name" : "Cloth armor", "def" : 5, "price" : 50},
+  "Leather armor" : {"name" : "Leather armor", "def" : 10, "price" : 85},
+};
 
 
-var listChestArmors = [new chestArmor(opts_nothing), new chestArmor(opts_rags), new chestArmor(opts_clothArmor), new chestArmor(opts_leatherArmor)];
+var listChestArmors = [];
+
+for (var property in listChestArmorsJSON) {
+  if (listChestArmorsJSON.hasOwnProperty(property)) {
+    listChestArmors.push(new chestArmor(listChestArmorsJSON[property]));
+  }
+}

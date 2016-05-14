@@ -531,7 +531,7 @@ function zone(name, listMonsters, monstersRate, listResources, resourcesRate) {
 
 var listZones = [new zone("Wheatcity",[],[],[searchByName(listCraftItems,"Iron")],[50]),
 new zone("Knajo fields",[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")],[60,95,100],[searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper")],[75,75])];
-
+console.log(searchByName(listMonsters,"Rabbit"));
 
 function updateJob(job) {
   var elTailoring = document.getElementById('tailoring_craft_boxes');
