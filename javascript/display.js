@@ -1,4 +1,3 @@
-
 //----------------------//
 //-  Main | Tabs main  -//
 //----------------------//
@@ -6,28 +5,45 @@
 function toggleActiveTabGame() {
   document.getElementById('tabs_game').classList.add('btn_active');
   document.getElementById('tabs_char').classList.remove('btn_active');
+  document.getElementById('tabs_inventory').classList.remove('btn_active');
   document.getElementById('tabs_craft').classList.remove('btn_active');
 
   document.getElementById('tabs_content_game').classList.add('tabs_content_active');
   document.getElementById('tabs_content_char').classList.remove('tabs_content_active');
+  document.getElementById('tabs_content_inventory').classList.remove('tabs_content_active');
   document.getElementById('tabs_content_craft').classList.remove('tabs_content_active');
 }
 function toggleActiveTabChar() {
   document.getElementById('tabs_game').classList.remove('btn_active');
   document.getElementById('tabs_char').classList.add('btn_active');
+  document.getElementById('tabs_inventory').classList.remove('btn_active');
   document.getElementById('tabs_craft').classList.remove('btn_active');
 
   document.getElementById('tabs_content_game').classList.remove('tabs_content_active');
   document.getElementById('tabs_content_char').classList.add('tabs_content_active');
+  document.getElementById('tabs_content_inventory').classList.remove('tabs_content_active');
+  document.getElementById('tabs_content_craft').classList.remove('tabs_content_active');
+}
+function toggleActiveTabInventory() {
+  document.getElementById('tabs_game').classList.remove('btn_active');
+  document.getElementById('tabs_char').classList.remove('btn_active');
+  document.getElementById('tabs_inventory').classList.add('btn_active');
+  document.getElementById('tabs_craft').classList.remove('btn_active');
+
+  document.getElementById('tabs_content_game').classList.remove('tabs_content_active');
+  document.getElementById('tabs_content_char').classList.remove('tabs_content_active');
+  document.getElementById('tabs_content_inventory').classList.add('tabs_content_active');
   document.getElementById('tabs_content_craft').classList.remove('tabs_content_active');
 }
 function toggleActiveTabCraft() {
   document.getElementById('tabs_game').classList.remove('btn_active');
   document.getElementById('tabs_char').classList.remove('btn_active');
+  document.getElementById('tabs_inventory').classList.remove('btn_active');
   document.getElementById('tabs_craft').classList.add('btn_active');
 
   document.getElementById('tabs_content_game').classList.remove('tabs_content_active');
   document.getElementById('tabs_content_char').classList.remove('tabs_content_active');
+  document.getElementById('tabs_content_inventory').classList.remove('tabs_content_active');
   document.getElementById('tabs_content_craft').classList.add('tabs_content_active');
 }
 
@@ -35,21 +51,10 @@ function toggleActiveTabCraft() {
 //-  Game | Menu items  -//
 //-----------------------//
 
-function displayMenuInventory() {
-  elmcinventory = document.getElementById('main_char_inventory_window');
-  if (elmcinventory.style.display == "inline") elmcinventory.style.display = "none";
-  else {
-    elmcinventory.style.display = "inline";
-    document.getElementById('worldmap_window').style.display = "none";
-    document.getElementById('shop_window').style.display = "none";
-  }
-}
-
 function displayMenuMap() {
   elworldmap = document.getElementById('worldmap_window');
   if (elworldmap.style.display == "inline") elworldmap.style.display = "none";
   else {
-    document.getElementById('main_char_inventory_window').style.display = "none";
     document.getElementById('shop_window').style.display = "none";
     elworldmap.style.display = "inline";
   }
@@ -59,7 +64,6 @@ function displayMenuTailoring() {
   elTail = document.getElementById('main_char_tailoring_window');
   if (elTail.style.display == "inline") elTail.style.display = "none";
   else {
-    document.getElementById('main_char_inventory_window').style.display = "none";
     document.getElementById('worldmap_window').style.display = "none";
     document.getElementById('shop_window').style.display = "none";
     elTail.style.display = "inline";
@@ -71,7 +75,6 @@ function displayMenuShop() {
   elShop = document.getElementById('shop_window');
   if (elShop.style.display == "inline") elShop.style.display = "none";
   else {
-    document.getElementById('main_char_inventory_window').style.display = "none";
     document.getElementById('worldmap_window').style.display = "none";
     displayShopSell();
     elShop.style.display = "inline";
@@ -82,7 +85,6 @@ function displayMenuGathering() {
   elGath = document.getElementById('gathering_window');
   if (elGath.style.display == "inline") elGath.style.display = "none";
   else {
-    document.getElementById('main_char_inventory_window').style.display = "none";
     document.getElementById('worldmap_window').style.display = "none";
     document.getElementById('shop_window').style.display = "none";
     displayGathering();
@@ -95,6 +97,7 @@ function displayMenuGathering() {
 //-------------------------//
 
 function displayNewMonster(i, monster) {
+  document.getElementById('monster_frame'+i).style.visibility = "";
   document.getElementById('monster_name' + i).innerHTML = monster.name;
   document.getElementById('monster_curHPbar' + i).style.width = "50px";
   document.getElementById('monster_avatar' + i).src = monster.img;
