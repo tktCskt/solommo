@@ -11,7 +11,12 @@ function searchByName(list, name) {
   }
 }
 
+var curLog = 0;
+var maxLog = 40;
+
 function log(txt, canal) {
+  curLog++;
+
   if (canal == "INFO") fontcolor = "#8080ff";
   else if (canal == "ERROR") fontcolor = "#ff0000";
   else if (canal == "GENERAL") fontcolor = "#c08080";
@@ -23,17 +28,21 @@ function log(txt, canal) {
 
   txt = "<font color='" + fontcolor + "'>" + txt + "</font>";
 
-  document.getElementById('log5').innerHTML = document.getElementById('log4').innerHTML;
-  document.getElementById('log4').innerHTML = document.getElementById('log3').innerHTML;
-  document.getElementById('log3').innerHTML = document.getElementById('log2').innerHTML;
-  document.getElementById('log2').innerHTML = document.getElementById('log1').innerHTML;
-  document.getElementById('log1').innerHTML = txt;
+  var logHistory = document.getElementById('loghistory');
+  var newLog = document.createElement('div');
+  newLog.innerHTML = txt;
+  logHistory.appendChild(newLog);
+
+  while (curLog > maxLog) {
+    logHistory.firstChild.remove();
+    curLog--;
+  }
 }
 
 function clearChatLog() {
-  document.getElementById('log5').innerHTML = "";
-  document.getElementById('log4').innerHTML = "";
-  document.getElementById('log3').innerHTML = "";
-  document.getElementById('log2').innerHTML = "";
-  document.getElementById('log1').innerHTML = "";
+  var el = document.getElementById('loghistory');
+  while (el.firstChild) {
+    el.firstChild.remove();
+  }
+  curLog = 0;
 }

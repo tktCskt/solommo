@@ -252,6 +252,10 @@ function goto(newZone) {
   displayQuests();
 }
 
+function gotokingdomcity() {
+  goto("Wheatcity");
+}
+
 function displayHuntingzone(newZone) {
   document.getElementById('hunting_zone').style.display = "block";
   document.getElementById('city_zone').style.display = "none";
@@ -276,7 +280,7 @@ function displayCityQuest() {
     if (listAcceptedQuests[i].finished == true && listAcceptedQuests[i].areaend == player.curArea.name) {
       elQuest = document.createElement('span');
       elQuest.id = 'char_avacquest' + i;
-      elQuest.className = 'city_available_quest';
+      elQuest.className = 'clickable city_available_quest';
       elQuest.setAttribute('iquest', i);
       elQuest.onclick = function () {
         clickFinishedQuest(this.getAttribute('iquest'));
@@ -291,7 +295,7 @@ function displayCityQuest() {
     if (listAvailableQuests[i].available == 1 && listAvailableQuests[i].areabegin == player.curArea.name) {
       elQuest = document.createElement('span');
       elQuest.id = 'char_city_available_quest' + i;
-      elQuest.className = 'city_available_quest';
+      elQuest.className = 'clickable city_available_quest';
       elQuest.setAttribute('iquest', i);
       elQuest.onclick = function () {
         clickQuest(this.getAttribute('iquest'));
@@ -729,58 +733,61 @@ function displayGold() {
 }
 
 function displayInventory() {
-  //TODO revoir ce bordel
-  var elInventory = document.getElementById('main_char_inventory_window');
+  var elInventory = document.getElementById('tabs_content_inventory');
 
-  elInventory.innerHTML = "";
-  var inventoryTitle  = document.createElement('div');
-  inventoryTitle.setAttribute("class","menu_window_frame_title");
-  inventoryTitle.innerHTML = "Inventory";
   var inventoryGold = document.createElement('div');
   inventoryGold.setAttribute("class","menu_inventory_gold");
-
-
   var inventoryGoldAmount = document.createElement('span');
   inventoryGoldAmount.setAttribute("id","char_gold");
 
   inventoryGold.appendChild(inventoryGoldAmount);
-  elInventory.appendChild(inventoryTitle);
   elInventory.appendChild(inventoryGold);
+
+  var elInventoryResources = document.getElementById('menu_inventory_resources');
+  elInventoryResources.innerHTML = "";
+
+  var elInventoryEquipments = document.getElementById('menu_inventory_equipments');
+  elInventoryEquipments.innerHTML = "";
 
   var elItem;
   var i;
 
-  //Craft items
+  //Resources
   for (i = 0; i < nbCraftItem; i++) {
     elItem = document.getElementById('char_cInventory' + i);
     if (nbCraftItems[i] > 0) {
       if (elItem != null) {
-        elItem.innerHTML = nbCraftItems[i] + " " + listCraftItems[i].name + "<br/>";
+        elItem.innerHTML = nbCraftItems[i] + " " + listCraftItems[i].name;
       } else {
-        elItem = document.createElement('span');
+        elItem = document.createElement('div');
         elItem.id = 'char_cInventory' + i;
-        elItem.innerHTML = nbCraftItems[i] + " " + listCraftItems[i].name + "<br/>";
-        elInventory.appendChild(elItem);
+        elItem.innerHTML = nbCraftItems[i] + " " + listCraftItems[i].name;
+        elInventoryResources.appendChild(elItem);
       }
     } else {
       if (elItem != null) {
-        elInventory.removeChild(elItem);
+        elInventoryResources.removeChild(elItem);
       }
     }
   }
 
-   //gear
+  //Items
 
+  //Equipments
   for (i = 0; i < gearItems.length; i++) {
     elItem = document.getElementById('char_gInventory' + i)
 
     if (elItem != null) {
       elItem.innerHTML = gearItems[i].name + "<br/>";
     } else {
-      elItem = document.createElement('span');
+      elItem = document.createElement('div');
       elItem.id = 'char_gInventory' + i;
-      elItem.innerHTML = gearItems[i].name + "<br/>";
-      elInventory.appendChild(elItem);
+      elItem.innerHTML = gearItems[i].name;
+      if (gearItems[i].def != null)
+        elItem.title += "Defense " + gearItems[i].def;
+      if (gearItems[i].damage != null)
+        elItem.title += "Damage " + gearItems[i].damage;
+      elInventoryEquipments.appendChild(elItem);
     }
     elItem.setAttribute('iItem', i);
     elItem.onclick = function () {
@@ -798,7 +805,7 @@ function displayInventory() {
 function monsterDeath(md_monster, k) {
   log("You defeated the <b>" + monsters[k].name + "</b> and earned " + monsters[k].XP + "xp.", "INFO");
 
-  // Earn XP
+  // Process XP and loot
   changecXP(md_monster.XP);
   var i;
   for (i = 0; i < md_monster.loots.length; i++) {
@@ -807,13 +814,9 @@ function monsterDeath(md_monster, k) {
     }
   }
 
-  // Display update
+  // Hide this monster frame
   monsters[k].exist = false;
-  document.getElementById('monster_name' + k).innerHTML = "";
-  document.getElementById('monster_curHPbar' + k).style.width = "0px";
-  document.getElementById('monster_avatar' + k).src = "";
-  document.getElementById('monster_curHP' + k).innerHTML = "";
-  document.getElementById('monster_maxHP' + k).innerHTML = "";
+  document.getElementById('monster_frame'+k).style.visibility = "hidden";
 
   // Update Quests
   for (i = 0; i < listAcceptedQuests.length; i++) {
@@ -989,8 +992,6 @@ function initDisplay() {
 }
 
 function initMonster() {
-//  area.availableMonsters = [searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")];
-
   monsters = [];
   for (var i=0; i<3; i++) {
     var thisarea = searchByName(listZones, "Knajo fields");
@@ -1004,12 +1005,6 @@ function initMonster() {
     }
     displayNewMonster(i, monsters[i])
   }
-  //if (Math.random() * 100 < 10) {
-  //monsters=[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")];
-  //for (var i = 0; i < 3; i++) {
-    //document.getElementById('monster_name' + i).innerHTML = monsters[i].name;
-    //changemHP(i, 0);
-
 }
 
 function newgame() {
@@ -1027,8 +1022,10 @@ function newgame() {
 
   gearItems = [];
 
-  listQuests = [new quest("kill", "Rabbit", 20, "There's more of them?", 100, "Wheatcity", "Wheatcity", 0, "none", "Hello again, adventurer! We've got even more rabbits than before here. It almost looks like a sabotage...-- Haha, that's silly, everybody likes us here! Could you take care of that again for me, please?", "Oh, thank you my friend but... I have bad news. Do you remember when I spoke to you about sabotage?", 0, "none"), new quest("kill", "Chicken", 5, "A feast for a mayor", 100, "Wheatcity", "Wheatcity", 0, "none", "Hi, I'm Granny Knajo. Would you mind catching some chickens for me with that sword of yours? I got an order from the mayor for tonight; I don't have time for this. Take care, they're the strongest chickens around!", "Oh, thank you for your help dear. You can keep your loot then, I'll just take the meat. Here, have a chicken.", 0, "none"), new quest("collect", "Rabbit hide", 3, "Sewing socks for winter", 100, "Wheatcity", "Wheatcity", 0, "Tailoring", "They announced a strong winter this year. With all these rabbits, we could make some socks and such. Go bring me some rabbit hides. ... What? Yeah, that's the first time seeing you too and so what? My nephew talked about you but he never mentioned you were this chatty. Less talk, more hides, and I'll teach you how to make an armor.", "Hah, once you don't talk, you're effective! Good. There, I'll show you.", 50, "none")];
+  listQuests = [new quest("kill", "Rabbit", 20, "There's more of them?", 100, "Wheatcity", "Wheatcity", 0, "none", "Hello again, adventurer!<br/><br/>We've got even more rabbits than before here. It almost looks like a sabotage...--<br/><br/>Haha, that's silly, everybody likes us here! Could you take care of that again for me, please?", "Oh, thank you my friend but... I have bad news. Do you remember when I spoke to you about sabotage?", 0, "none"),
+                new quest("kill", "Chicken", 5, "A feast for a mayor", 100, "Wheatcity", "Wheatcity", 0, "none", "Hi, I'm Granny Knajo.<br/><br/>Would you mind catching some chickens for me with that sword of yours? I got an order from the mayor for tonight; I don't have time for this.<br/><br/>Take care, they're the strongest chickens around!", "Oh, thank you for your help dear. You can keep your loot then, I'll just take the meat. Here, have a chicken.", 0, "none"),
+                new quest("collect", "Rabbit hide", 3, "Sewing socks for winter", 100, "Wheatcity", "Wheatcity", 0, "Tailoring", "They announced a strong winter this year. With all these rabbits, we could make some socks and such.<br/><br/>Go bring me some rabbit hides.<br/><br/>...<br/><br/>What? Yeah, that's the first time seeing you too and so what? My nephew talked about you but he never mentioned you were this chatty.<br/><br/>Less talk, more hides, and I'll teach you how to make an armor.", "Hah, once you don't talk, you're effective! Good. There, I'll show you.", 50, "none")];
   listAcceptedQuests = [];
   listAvailableQuests = [];
-  listAvailableQuests.push(new quest("kill", "Rabbit", 2, "The cereal killers", 100, "Wheatcity", "Wheatcity", 1, "none", "Hello there! Are you new here? I am John Knajo. You are searching for a job? There's actually some rabbits annoying us in the corn fields. They're eating our crops and that's bad for business. Kill some of them for me and I will gladly pay you for your help.", "I knew I could count on you; there, take these few coppers and stay around. My family might find some jobs for you too.", 50, [searchByName(listQuests, "There's more of them?"), searchByName(listQuests, "A feast for a mayor"), searchByName(listQuests, "Sewing socks for winter")]));
+  listAvailableQuests.push(new quest("kill", "Rabbit", 2, "The cereal killers", 100, "Wheatcity", "Wheatcity", 1, "none", "Hello there! Are you new here? I am John Knajo.<br/><br/>You are searching for a job? There's actually some rabbits annoying us in the corn fields. They're eating our crops and that's bad for business.<br/><br/>Kill some of them for me and I will gladly pay you for your help.", "I knew I could count on you; there, take these few coppers and stay around. My family might find some jobs for you too.", 50, [searchByName(listQuests, "There's more of them?"), searchByName(listQuests, "A feast for a mayor"), searchByName(listQuests, "Sewing socks for winter")]));
 }

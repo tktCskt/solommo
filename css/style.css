@@ -50,7 +50,7 @@ footer {
 .tabs_content_main {
   position:relative;
   flex: 2;
-  min-height:600px;
+  height:600px;
   background-color:#F5F2EB;
   border:1px solid #000;
   padding:5px;
@@ -64,17 +64,27 @@ footer {
 
 .tabs_chat_main {
   position: relative;
-  flex: 1;
-  flex-basis:200px;
+  flex-basis:300px;
   margin-left:5px;
   background-color:#F5F2EB;
   border:1px solid #000;
   padding:5px;
+  overflow:hidden;
 }
 
 /*******************/
 /*  Miscellaneous  */
 /*******************/
+
+.clickable {
+  cursor:pointer;
+  cursor:hand;
+  -webkit-user-select:none;
+  -khtml-user-select:none;
+  -moz-user-select:-moz-none;
+  -o-user-select:none;
+  user-select:none;
+}
 
 .btn {
   width:70px;
@@ -85,13 +95,6 @@ footer {
   padding:5px;
   overflow:hidden;
   text-align:center;
-  cursor:pointer;
-  cursor:hand;
-  -webkit-user-select:none;
-  -khtml-user-select:none;
-  -moz-user-select:-moz-none;
-  -o-user-select:none;
-  user-select:none;
 }
 .btn:hover {
   background-color:#85BA92;
@@ -191,15 +194,31 @@ footer {
 /************************/
 
 .HUD_minimap {
+  position:relative;
   float: right;
+  width: 130px;
+}
+.HUD_minimap_btn {
+  padding:2px;
+  float:left;
+  width:22px;
+  vertical-align:middle;
+}
+.HUD_minimap_content {
+  float:right;
   width: 100px;
-  height: 56px;
   background-color: #DCD1B8;
   border:1px solid #CBBB96;
   border-radius: 5px;
   color: #000;
   text-align: center;
   font-size:14px;
+}
+.minimap_btn {
+  width:20px;
+  height:20px;
+  background-color: #ffffff;
+  border:1px solid #000000;
 }
 #HUD_zone_location {
   font-style: italic;
@@ -253,59 +272,259 @@ footer {
   margin-bottom:10px;
 }
 
-/***************************/
-/*  Game - Inventory Menu  */
-/***************************/
-
-.menu_inventory_gold {
-  position: absolute;
-  width: 130px;
-  bottom: 5px;
-  right: 5px;
-  border-radius: 5px 5px 5px 5px;
-  background-color: #FFA500;
-  color:#fff;
-  text-shadow: 1px 1px 1px #000;
-  text-align:center;
-}
-
 /********************************/
 /*  Character - Character Menu  */
 /********************************/
 
-.menu_character_stat {
-  position: absolute;
-  left: 141px;
-  width: 130px;
-}
-.menu_character_stat_title {
-  width: 130px;
-  border-radius: 5px 5px 5px 5px;
-  background-color: #FFA500;
-  color:#fff;
-  text-shadow: 1px 1px 1px #000;
-  text-align:center;
-}
 .menu_character_avatar {
-  float: left;
-  vertical-align: middle;
+  vertical-align:top;
+  display:inline-block;
   width: 100px;
   height: 150px;
   border-radius: 15px 15px 15px 15px;
-  border: solid;
-  border-width: 1px;
+  border: 1px solid #000;
   background-color: #fff;
   line-height:150px;
   text-align: center;
   padding: 10px 10px;
 }
+
+.menu_character_stat {
+  vertical-align:top;
+  display:inline-block;
+  border-left:1px solid #000;
+  padding-left:5px;
+}
+.menu_character_stat_title {
+  border-radius: 5px 5px 5px 5px;
+  background-color: #FFA500;
+  color:#fff;
+  text-shadow: 1px 1px 1px #000;
+  text-align:center;
+}
+.menu_character_stat_content {
+  position:absolute;
+}
+.menu_character_stat_labels {
+  display:inline-block;
+  text-align:right;
+  font-weight:bold;
+}
+.menu_character_stat_values {
+  display:inline-block;
+  margin-left:10px;
+  margin-right:10px;
+  text-align:right;
+}
+.menu_character_stat_functions {
+  display:inline-block;
+}
+
 .menu_character_equipment {
-  position: absolute;
-  left: 280px;
-  width: 190px;
+  vertical-align:top;
+  display:inline-block;
+  border-left: 1px solid #000;
+  padding-left:5px;
 }
 .menu_character_equipment_title {
-  width: 190px;
+  border-radius: 5px 5px 5px 5px;
+  background-color: #FFA500;
+  color:#fff;
+  text-shadow: 1px 1px 1px #000;
+  text-align:center;
+}
+
+/************************/
+/*  Craft - Craft Menu  */
+/************************/
+
+.menu_craft_selectjob {
+  float:left;
+  width: 85px;
+  height: 100%;
+  border-right: 1px solid #000;
+}
+.menu_craft_job_btn {
+  margin-bottom: 5px;
+}
+
+.menu_craft_jobcontent {
+  margin-left:90px;
+  text-align: center;
+}
+.menu_craft_job_title {
+  background-color: #FF2500;
+  color: #fff;
+  text-shadow: 1px 1px 1px #000;
+  text-align: center;
+  margin-bottom: 10px;
+}
+.job_XP {
+  position:relative;
+}
+.job_bar_XP {
+  position: absolute;
+  width:300px;
+  left:90px;
+  margin-left: 2px;
+  border: 1px solid #000;
+  line-height: 10px;
+  font-size: 11px;
+  color:#000;
+  text-align:center;
+  z-index:1;
+}
+.job_barcur_XP {
+  position: absolute;
+  left:90px;
+  max-width:300px;
+  max-height:10px;
+  margin-top: 1px;
+  margin-left: 2px;
+  background-color: #9D7CBC;
+}
+.job_level {
+  position: absolute;
+  right: 50px;
+  top:35px;
+}
+.craft_block_box {
+  position: relative;
+  margin-top:30px;
+}
+.craft_box {
+  display: inline-block;
+  vertical-align: top;
+  width: 218px;
+  padding-bottom: 17px;
+  border: 1px solid #000;
+  background-color: #E7E0CF;
+  margin: 5px;
+  text-align: center;
+}
+.craft_box_title {
+  text-align: center;
+  font-weight: bold;
+}
+.craft_box_ingredient {
+  display: inline-block;
+  vertical-align: top;
+  border: 1px solid #000;
+  margin-left: 2px;
+  margin-right: 2px;
+  padding-left:5px;
+  padding-right:5px;
+  background-color: #EDE8DB;
+  text-align: center;
+}
+.craft_box_ingredient_name {
+  text-align: center;
+}
+.craft_box_ingredient_number {
+}
+.craft_box_XP {
+  position: relative;
+}
+.craft_box_bar_XP {
+  position: absolute;
+  left:59px;
+  width:100px;
+  line-height: 10px;
+  border:solid;
+  border-width:1px;
+  font-size: 11px;
+  text-align:center;
+  z-index:1;
+  margin-top: 2px;
+  border-color: #000;
+  background-color: #EDE8DB;
+}
+.craft_box_barcur_XP {
+  position: absolute;
+  left:60px;
+  max-width:100px;
+  height:10px;
+  z-index:2;
+  margin-top: 3px;
+  background-color: #CAADD6;
+}
+
+/**********************/
+/*  Game - Gathering  */
+/**********************/
+
+.gathering {
+  position: absolute;
+  width: 175px;
+  margin-top: 50px;
+  bottom: 500px;
+  left: 25px;
+  text-shadow: 1px 1px 1px #ccc;
+}
+.gathering_item {
+  color: #fff;
+  border:solid;
+  border-width:1px;
+  background-color: #FFA500;
+  border-color:#CC8400;
+  padding: 2px 2px;
+  box-shadow: 1px 1px 0px 0px #ccc;
+}
+
+/********************************/
+/*  Inventory - Inventory Menu  */
+/********************************/
+
+.menu_inventory_title {
+  border-radius: 5px 5px 5px 5px;
+  background-color: #FFA500;
+  color:#fff;
+  text-shadow: 1px 1px 1px #000;
+  text-align:center;
+}
+.menu_inventory_resources_content {
+  display: inline-block;
+  vertical-align: top;
+  height:100%;
+  width:32%;
+  border-right: 1px solid #000;
+  padding-right: 5px;
+}
+#menu_inventory_content {
+  overflow:auto;
+  height:100%;
+}
+#menu_inventory_resources {
+  overflow:auto;
+  height:100%;
+}
+.menu_inventory_items_content {
+  display: inline-block;
+  vertical-align: top;
+  height:100%;
+  width:32%;
+  border-right: 1px solid #000;
+  padding-right: 5px;
+}
+#menu_inventory_items {
+  overflow:auto;
+  height:100%;
+}
+.menu_inventory_equipments_content {
+  display:inline-block;
+  vertical-align: top;
+  height:100%;
+  width:32%;
+}
+#menu_inventory_equipments {
+  overflow:auto;
+  height:100%;
+}
+.menu_inventory_gold {
+  position: absolute;
+  width: 130px;
+  bottom: 5px;
+  right: 5px;
   border-radius: 5px 5px 5px 5px;
   background-color: #FFA500;
   color:#fff;
@@ -328,7 +547,7 @@ footer {
 .zone_frame {
   display: none;
   position: relative;
-  height: 250px;
+  height: 400px;
   margin-top: 66px;
   margin-right: 200px;
   margin-left: 200px;
@@ -337,7 +556,7 @@ footer {
   padding: 10px;
 }
 .zone_frame_title {
-  width: 380px;
+  width: 100%;
   background-color: #FF2500;
   color:#fff;
   text-shadow: 1px 1px 1px #000;
@@ -366,27 +585,32 @@ footer {
 .city_zone_left {
   width: 180px;
   float: left;
+  border-right: 1px solid #000;
+  padding-right:5px;
+  overflow:auto;
 }
 .city_zone_right {
-  height: 220px;
+  height: 100%;
+  padding-left:5px;
   overflow: auto;
-  width: 180px;
-  float: right;
   font-size: 14px;
   text-align: justify;
 }
-.city_facilities {
-  position: absolute;
-  bottom: 10px;
+.city_zone_facilities {
+  text-align: center;
+  text-align: -moz-center;
 }
 .city_facilities_btn {
+  width:100px;
   color: #fff;
+  margin:5px;
   border:solid;
   border-width:1px;
   background-color: #FFA500;
   border-color:#CC8400;
   padding: 2px 2px;
   box-shadow: 1px 1px 0px 0px #ccc;
+  text-align:center;
 }
 .city_facilities_btn.disabled {
   color: #999;
@@ -468,51 +692,33 @@ footer {
 /*  Game - Monster zone  */
 /*************************/
 
+#hunting_zone {
+  text-align: center;
+}
 .monster_frame {
-  position: absolute;
-  margin-left:10px;
-  text-align:center;
+  position:relative;
+  display:inline-block;
   width:56px;
-  height:86px;
+  min-height:66px;
+  margin-left:5px;
+  margin-right:5px;
+  vertical-align: top;
   border-radius: 15px 15px 5px 5px;
   background-color: #E7E0CF;
-}
-.monster {
-  position: absolute;
-  margin-left:10px;
   text-align:center;
-  width:50px;
-  height:50px;
-  line-height:50px;
-  border-radius: 3px 3px 3px 3px;
-  background-color: #E7E0CF;
-}
-#monster_frame0 {
-  top: 100px;
-  left: 60px;
-}
-#monster_frame1 {
-  top: 100px;
-  left: 160px;
-}
-#monster_frame2 {
-  top: 100px;
-  left: 260px;
 }
 .monster_avatar {
-  float: left;
-  margin-right: 5px;
-  margin-top: 3px;
-  margin-left: 3px;
   width: 50px;
   height: 50px;
+  margin-top: 3px;
   border-radius: 15px 15px 15px 15px;
   background-color: #fff;
+  overflow:hidden;
   line-height:50px;
-  text-align: center;
 }
 .monster_bar_HP {
   position: absolute;
+  top:56px;
   width:50px;
   line-height: 10px;
   border:solid;
@@ -525,10 +731,16 @@ footer {
 }
 .monster_barcur_HP {
   position: absolute;
+  top:56px;
   max-width:50px;
   max-height:10px;
   margin-top: 1px;
-  margin-left: 2px;
+  margin-left: 3px;
+}
+.monster_name {
+  margin-top:10px;
+  text-align: center;
+  text-align: -moz-center;
 }
 
 /*********************/
@@ -604,136 +816,12 @@ footer {
   background-color: #ccc;
 }
 
-/*******************/
-/*  Job interface  */
-/*******************/
-
-.craft_alljobs {
-  float:left;
-  width:85px;
-  height:100%;
-  border-right: 1px solid #000;
-}
-.craft_job_btn {
-  margin-bottom: 5px;
-}
-
-.craft_jobcontent {
-  position:relative;
-  float:right;
-  width:460px;
-}
-
-.job_bar_XP {
-  position: absolute;
-  width:300px;
-  left:90px;
-  line-height: 10px;
-  border:solid;
-  border-width:1px;
-  font-size: 11px;
-  text-align:center;
-  color:#000;
-  z-index:1;
-  margin-left: 2px;
-}
-.job_barcur_XP {
-  position: absolute;
-  left:90px;
-  max-width:300px;
-  max-height:10px;
-  margin-top: 1px;
-  margin-left: 2px;
-  background-color: #9D7CBC;
-}
-.job_level {
-  position: absolute;
-  right: 50px;
-  top:35px;
-}
-.craft_block_box {
-  position: relative;
-  margin-top:30px;
-}
-.craft_box {
-  display: inline-block;
-  text-align: center;
-  width: 218px;
-  height: 75px;
-  border:solid;
-  border-width:1px;
-  margin: 5px;
-  background-color: #E7E0CF;
-}
-.craft_box_title {
-  text-align: center;
-  font-weight: bold;
-}
-.craft_box_ingredient {
-  display: inline-block;
-  text-align: center;
-  border:solid;
-  border-width:1px;
-  margin-left: 2px;
-  margin-right: 2px;
-  min-width: 28%;
-  padding: 1px;
-  background-color: #EDE8DB;
-}
-.craft_box_ingredient_name {
-  text-align: center;
-}
-.craft_box_ingredient_number {
-}
-.craft_box_XP {
-  position: relative;
-}
-.craft_box_bar_XP {
-  position: absolute;
-  left:59px;
-  width:100px;
-  line-height: 10px;
-  border:solid;
-  border-width:1px;
-  font-size: 11px;
-  text-align:center;
-  z-index:1;
-  margin-top: 2px;
-  border-color: #000;
-  background-color: #EDE8DB;
-}
-.craft_box_barcur_XP {
-  position: absolute;
-  left:60px;
-  max-width:100px;
-  height:10px;
-  z-index:2;
-  margin-top: 3px;
-  background-color: #CAADD6;
-}
-.gathering {
-  position: absolute;
-  width: 175px;
-  margin-top: 50px;
-  bottom: 500px;
-  left: 25px;
-  text-shadow: 1px 1px 1px #ccc;
-}
-.gathering_item {
-  color: #fff;
-  border:solid;
-  border-width:1px;
-  background-color: #FFA500;
-  border-color:#CC8400;
-  padding: 2px 2px;
-  box-shadow: 1px 1px 0px 0px #ccc;
-}
-
 /****************/
 /*  Chat - log  */
 /****************/
 
 .log {
+  overflow:hidden;
   position: absolute;
   width: 95%;
   bottom: 5px;
