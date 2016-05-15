@@ -584,6 +584,7 @@ footer {
 }
 .city_zone_left {
   width: 180px;
+  height: 370px;
   float: left;
   border-right: 1px solid #000;
   padding-right:5px;
