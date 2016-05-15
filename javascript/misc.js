@@ -418,25 +418,26 @@ function updateDisplayTalentSheet() {
 
 
 function updateJob(job) {
-  var elTailoring = document.getElementById('tailoring_craft_boxes');
-  document.getElementById('tailoring_barcur_XP').style.width = searchByName(listJobs, "Tailoring").xp / 100 * 300 + 'px';
-  document.getElementById('tailoring_cur_XP').innerHTML = searchByName(listJobs, "Tailoring").xp;
-  document.getElementById('tailoring_max_XP').innerHTML = 100;
-  document.getElementById('tailoring_level').innerHTML = searchByName(listJobs, "Tailoring").progress;
+  var elJob = document.getElementById('job_craft_boxes');
+  elJob.innerHTML = "";
+  document.getElementById('job_barcur_XP').style.width = job.xp / ((job.progress+1)*50) * 300 + 'px';
+  document.getElementById('job_cur_XP').innerHTML = job.xp;
+  document.getElementById('job_max_XP').innerHTML = (job.progress+1)*50;
+  document.getElementById('job_level').innerHTML = job.progress;
   
   for (var i = 0; i < job.recipes.length; i++) {
     var recipe = job.recipes[i];
     if (job.progress >= recipe.level) {
-      var elRecipe = document.getElementById('char_tailoring' + i);
+      var elRecipe = document.getElementById('char_job' + i);
       var isNew = false;
       
       if (elRecipe == null) {
         isNew = true;
         elRecipe = document.createElement('div');
         elRecipe.setAttribute('class', 'craft_box');
-        elRecipe.id = 'char_tailoring' + i;
+        elRecipe.id = 'char_job' + i;
         
-        elTailoring.appendChild(elRecipe);
+        elJob.appendChild(elRecipe);
       }
       
       if (isNew) {
@@ -453,7 +454,7 @@ function updateJob(job) {
         
         if (isNew) {
           var elRecipeIngredient = document.createElement('div');
-          elRecipeIngredient.id = 'char_tailoring_ing_' + i + '_' + j;
+          elRecipeIngredient.id = 'char_job_ing_' + i + '_' + j;
           elRecipeIngredient.setAttribute('class', 'craft_box_ingredient');
           
           var elRecipeIngredientTitle = document.createElement('div');
@@ -462,7 +463,7 @@ function updateJob(job) {
           
           var elRecipeIngredientNumber = document.createElement('div');
           elRecipeIngredientNumber.setAttribute('class', 'craft_box_ingredient_number');
-          elRecipeIngredientNumber.id = 'char_tailoring_ingN_' + i + '_' + j;
+          elRecipeIngredientNumber.id = 'char_job_ingN_' + i + '_' + j;
           elRecipeIngredientNumber.innerHTML = nbCraftItems[ing_id] + "/" + recipe.numbers[j];
           
           elRecipeIngredient.appendChild(elRecipeIngredientTitle);
@@ -470,15 +471,15 @@ function updateJob(job) {
           elRecipe.appendChild(elRecipeIngredient);
         }
         else {
-          document.getElementById('char_tailoring_ingN_' + i + '_' + j).innerHTML = nbCraftItems[ing_id] + "/" + recipe.numbers[j];
+          document.getElementById('char_job_ingN_' + i + '_' + j).innerHTML = nbCraftItems[ing_id] + "/" + recipe.numbers[j];
         }
         
         if (nbCraftItems[ing_id] < recipe.numbers[j]) {
-          document.getElementById('char_tailoring_ing_' + i + '_' + j).style.backgroundColor = "#EDE8DB";
+          document.getElementById('char_job_ing_' + i + '_' + j).style.backgroundColor = "#EDE8DB";
           canbecrafted = false;
         }
         else {
-          document.getElementById('char_tailoring_ing_' + i + '_' + j).style.backgroundColor = "#D4DCB9";
+          document.getElementById('char_job_ing_' + i + '_' + j).style.backgroundColor = "#D4DCB9";
         }
       }
       if (canbecrafted) elRecipe.style.backgroundColor = "#B9D6AD";
@@ -489,7 +490,7 @@ function updateJob(job) {
         elRecipeXP.setAttribute('class', 'craft_box_XP');
         
         var elRecipeTextXP = document.createElement('span');
-        elRecipeTextXP.id = 'tailoring_recipe_XP' + i;
+        elRecipeTextXP.id = 'job_recipe_XP' + i;
         
         var elRecipeBarXP = document.createElement('div');
         elRecipeBarXP.setAttribute('class', 'craft_box_bar_XP');
@@ -497,7 +498,7 @@ function updateJob(job) {
         
         var elRecipeBarcurXP = document.createElement('div');
         elRecipeBarcurXP.setAttribute('class', 'craft_box_barcur_XP');
-        elRecipeBarcurXP.id = 'tailoring_recipe_XPcur' + i;
+        elRecipeBarcurXP.id = 'job_recipe_XPcur' + i;
         elRecipeBarcurXP.style.width = recipe.progress / 5 * 100 + 'px';
         
         elRecipeXP.appendChild(elRecipeBarXP);
@@ -506,13 +507,13 @@ function updateJob(job) {
         elRecipe.appendChild(elRecipeXP);
       }
       else {
-        document.getElementById('tailoring_recipe_XP' + i).innerHTML = recipe.progress;
-        document.getElementById('tailoring_recipe_XPcur' + i).style.width = recipe.progress / 5 * 100 + 'px';
+        document.getElementById('job_recipe_XP' + i).innerHTML = recipe.progress;
+        document.getElementById('job_recipe_XPcur' + i).style.width = recipe.progress / 5 * 100 + 'px';
       }
       
       elRecipe.setAttribute('iRecipe', i);
       elRecipe.onclick = function () {
-        craft(searchByName(listJobs, "Tailoring"), this.getAttribute('iRecipe'));
+        craft(job, this.getAttribute('iRecipe'));
       };
     }
   }
@@ -579,9 +580,14 @@ function equipment(item, enchants, quality) {
   }
   this.name += item.name; //TODO partie enchant du nom
   this.type = item.type;
-  if (item.type = "Armor") {
+  if (item.type == "Armor") {
     this.part = item.part;
     this.def = Math.round(item.def * this.modif);
+    } else if (item.type == "Weapon") {
+    this.damage = Math.round(item.damage * this.modif);
+    } else {
+    console.debug("equipment - error : unknown type " + item.type);
+    console.debug("error on item : " + item);
   }
   this.price = Math.round(item.price * this.modif); //TODO ajuster selon qualité/Enchant
 }
@@ -591,12 +597,26 @@ function equipGearItems(i) {
   if (item.type == "Armor") {
     gearItems.splice(i, 1);
     changeArmor(item);
+    } else if (item.type == "Weapon") {
+    gearItems.splice(i, 1);
+    changeWeapon(item);
+    } else {
+    console.debug("equipGearItems - error : unknown type " + item.type);
+    console.debug("error on item : " + item);
   }
 }
 
 function changeWeapon(newWeapon) {
+  var oldWeapon = player.weapon;
   player.weapon = newWeapon;
-  player.atk = player.weapon.damage;
+  
+  if (oldWeapon != "" && oldWeapon.name != "Fists") {
+    addgItem(oldWeapon);
+    player.atk -= oldWeapon.damage;
+    } else {
+    updateInventory();
+  }
+  player.atk += newWeapon.damage;
   document.getElementById('main_char_weapon').innerHTML = player.weapon.name;
   document.getElementById('main_char_weaponatk').innerHTML = player.weapon.damage;
 }
@@ -629,7 +649,7 @@ function changeArmor(newArmor) {
     player.shouldersArmor = newArmor;
     break;
     default:
-    console.log("changeArmor - error : unknown part for the following object : " + newArmor);
+    console.debug("changeArmor - error : unknown part for the following object : " + newArmor);
   }
   
   if (oldArmor != "" && oldArmor.name != "Nothing") {
@@ -670,7 +690,6 @@ function addcItem(item, number) {
   nbCraftItems[item.id] += number;
   
   updateInventory();
-  updateJob(Tailoring);
   
   for (i = 0; i < listAcceptedQuests.length; i++) {
     if (item.name == listAcceptedQuests[i].details && listAcceptedQuests[i].type == "collect") {
@@ -905,12 +924,10 @@ function init() {
     listQuests = gameData.listQuests;
     nbCraftItems = gameData.nbCraftItems;
     gearItems = gameData.gearItems;
+    listJobs = gameData.listJobs;
     
     player.curArea = "Wheatcity";
   }
-  
-  // TESTING JOB
-  updateJob(searchByName(listJobs,"Tailoring"));
   
   // display
   initDisplay();
@@ -928,6 +945,7 @@ function initLocalStorage() {
   gameData.listAcceptedQuests = listAcceptedQuests;
   gameData.listAvailableQuests = listAvailableQuests;
   gameData.listQuests = listQuests;
+  gameData.listJobs = listJobs;
   gameData.nbCraftItems = nbCraftItems;
   gameData.gearItems = gearItems;
 }
@@ -989,4 +1007,5 @@ function newgame() {
   
   gearItems = [];
   initQuests();
+  initJobs();
 }

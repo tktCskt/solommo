@@ -71,7 +71,7 @@ function ShouldersArmor(options)
 var listChestArmorsJSON = {
   "Nothing" : {"name" : "Nothing", "def" : 0, "price" : 0},
   "Rags" : {"name" : "Rags", "def" : 1, "price" : 5},
-  "Cloth armor" : {"name" : "Cloth armor", "def" : 5, "price" : 50},
+  "Cloth armor" : {"name" : "Carrot armor", "def" : 5, "price" : 50},
   "Leather armor" : {"name" : "Leather armor", "def" : 10, "price" : 85},
 };
 

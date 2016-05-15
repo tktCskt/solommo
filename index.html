@@ -233,22 +233,22 @@
 
         <div class="tabs_content" id="tabs_content_craft">
           <div class="menu_craft_selectjob">
-            <div class="clickable btn btn_active menu_craft_job_btn">Tailoring</div>
-            <div class="clickable btn btn_disabled menu_craft_job_btn">None</div>
+            <div class="clickable btn btn_active menu_craft_job_btn" onclick="updateJob(searchByName(listJobs,'Tailoring'));">Tailoring</div>
+            <div class="clickable btn btn_active menu_craft_job_btn" onclick="updateJob(searchByName(listJobs,'Smithing'));">Smithing</div>
             <div class="clickable btn btn_disabled menu_craft_job_btn">None</div>
             <div class="clickable btn btn_disabled menu_craft_job_btn">None</div>
             <div class="clickable btn btn_disabled menu_craft_job_btn">None</div>
           </div>
           <div class="menu_craft_jobcontent">
-            <div class="menu_craft_job_title">Tailoring</div>
+            <div class="menu_craft_job_title" id="menu_craft_job_title">Tailoring</div>
             <div class="job_XP">
-              <div class="job_barcur_XP" id="tailoring_barcur_XP">&nbsp;</div>
+              <div class="job_barcur_XP" id="job_barcur_XP">&nbsp;</div>
               <div class="job_bar_XP">
-                <span id="tailoring_cur_XP"></span> / <span id="tailoring_max_XP"></span>
+                <span id="job_cur_XP"></span> / <span id="job_max_XP"></span>
               </div>
-              <div class="job_level">lvl <span id="tailoring_level"></span></div>
+              <div class="job_level">lvl <span id="job_level"></span></div>
             </div>
-            <div class="craft_block_box" id="tailoring_craft_boxes"></div>
+            <div class="craft_block_box" id="job_craft_boxes"></div>
           </div>
         </div>
       </div>

@@ -36,6 +36,7 @@ function toggleActiveTabInventory() {
   document.getElementById('tabs_content_craft').classList.remove('tabs_content_active');
 }
 function toggleActiveTabCraft() {
+  updateJob(searchByName(listJobs,"Tailoring"));
   document.getElementById('tabs_game').classList.remove('btn_active');
   document.getElementById('tabs_char').classList.remove('btn_active');
   document.getElementById('tabs_inventory').classList.remove('btn_active');
@@ -58,17 +59,6 @@ function displayMenuMap() {
     document.getElementById('shop_window').style.display = "none";
     elworldmap.style.display = "inline";
   }
-}
-
-function displayMenuTailoring() {
-  elTail = document.getElementById('main_char_tailoring_window');
-  if (elTail.style.display == "inline") elTail.style.display = "none";
-  else {
-    document.getElementById('worldmap_window').style.display = "none";
-    document.getElementById('shop_window').style.display = "none";
-    elTail.style.display = "inline";
-  }
-  updateJob(Tailoring);
 }
 
 function displayMenuShop() {
