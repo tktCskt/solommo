@@ -17,7 +17,7 @@ function changecHP(dmg) {
   if (player.dead && player.curHP == player.maxHP) {
     log("You feel well again!", "INFO");
     player.dead = false;
-  } else if (player.curHP == 0) {
+    } else if (player.curHP == 0) {
     log("You died.", "INFO");
     player.dead = true;
   }
@@ -73,13 +73,13 @@ function displayHPbar() {
 
   if (player.dead) {
     elbarHP.style.backgroundColor = "#ff0000";
-  } else if (player.curHP / player.maxHP < 0.25) {
+    } else if (player.curHP / player.maxHP < 0.25) {
     elbarHP.style.backgroundColor = "#E96D37";
-  } else if (player.curHP / player.maxHP < 0.5) {
+    } else if (player.curHP / player.maxHP < 0.5) {
     elbarHP.style.backgroundColor = "#DBA744";
-  } else if (player.curHP / player.maxHP < 1) {
+    } else if (player.curHP / player.maxHP < 1) {
     elbarHP.style.backgroundColor = "#7ABA2F";
-  } else if (player.curHP == player.maxHP) {
+    } else if (player.curHP == player.maxHP) {
     elbarHP.style.backgroundColor = "#5CAB00";
   }
 }
@@ -102,14 +102,17 @@ function displayXPbar() {
 //------------------//
 
 function goto(newZone) {
-  player.curArea = searchByName(listZones,newZone);
+  newZone = searchByName(listZones, newZone);
+  initMonster();
+  player.curArea = newZone;
   if (document.getElementById('worldmap_window').style.display != "none") document.getElementById('worldmap_window').style.display = "none";
-  document.getElementById('HUD_zone_location').innerHTML = newZone;
-  if (newZone == "Knajo fields") {
-    displayHuntingzone("Knajo fields");
-  } else if (newZone == "Wheatcity") {
-    displayCityzone("Wheatcity");
+  document.getElementById('HUD_zone_location').innerHTML = newZone.name;
+  if(newZone.isHuntingZone) {
+    displayHuntingzone(newZone.name);
+    } else {
+    displayCityzone(newZone.name);
   }
+
   displayQuests();
 }
 
@@ -162,7 +165,7 @@ function displayShopSell() {
     if (nbCraftItems[i] > 0) {
       if (elItem != null) {
         elItem.innerHTML = nbCraftItems[i] + " " + listCraftItems[i].name + "- " + calculateSellPrice(listCraftItems[i]) + " g/u" + "<br/>";
-      } else {
+        } else {
         elItem = document.createElement('span');
         elItem.id = 'shopSC' + i;
         elItem.innerHTML = nbCraftItems[i] + " " + listCraftItems[i].name + "- " + calculateSellPrice(listCraftItems[i]) + " g/u" + "<br/>";
@@ -172,7 +175,7 @@ function displayShopSell() {
           sellCraftItem(this.getAttribute('iItem'))
         }
       }
-    } else {
+      } else {
       if (elItem != null) {
         elShopSell.removeChild(elItem);
       }
@@ -185,7 +188,7 @@ function displayShopSell() {
 
     if (elItem != null) {
       elItem.innerHTML = gearItems[i].name + "- " + calculateSellPrice(gearItems[i]) + " g" + "<br/>";
-    } else {
+      } else {
       elItem = document.createElement('span');
       elItem.id = 'shopSG' + i;
       elItem.innerHTML = gearItems[i].name + "- " + calculateSellPrice(gearItems[i]) + " g" + "<br/>";
@@ -206,85 +209,28 @@ function updateDisplayTalentSheet() {
 }
 
 
-//------------------//
-//-   Equipment    -//
-//------------------//
-
-function equipment(item, enchants, quality) {
-  this.name = "";
-  this.s_quality = "";
-  this.modif = 1;
-
-  if (quality >= 6) {
-    this.s_quality += "Legendary";
-    this.modif = 2;
-  } else if (quality >= 5) {
-    this.s_quality += "Perfect";
-    this.modif = 1.5;
-  } else if (quality >= 4) {
-    this.s_quality += "Great";
-    this.modif = 1.2;
-  } else if (quality >= 3) {
-    this.s_quality += "";
-    this.modif = 1;
-  } else if (quality >= 2) {
-    this.s_quality += "Passable";
-    this.modif = 0.8;
-  } else if (quality >= 1) {
-    this.s_quality += "Rubbish";
-    this.modif = 0.5;
-  } else {
-    this.s_quality += "Crappy";
-    this.modif = 0.0;
-  }
-
-
-  this.name += this.s_quality + " ";
-  this.name += item.name; //TODO partie enchant du nom
-  this.type = item.type;
-  if (item.type = "Armor") this.def = Math.round(item.def * this.modif);
-  this.price = Math.round(item.price * this.modif); //TODO ajuster selon qualité/Enchant
-}
-
-
-//------------------//
-//-  Hunting zone  -//
-//------------------//
-
-var nbZones = 0;
-
-function zone(name, listMonsters, monstersRate, listResources, resourcesRate) {
-  this.name = name;
-  this.listMonsters = listMonsters;
-  this.monstersRate = monstersRate;
-  this.listResources = listResources;
-  this.resourcesRate = resourcesRate;
-  nbZones++;
-}
-
-var listZones = [new zone("Wheatcity",[],[],[searchByName(listCraftItems,"Iron")],[50]),
-new zone("Knajo fields",[searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")],[60,95,100],[searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper")],[75,75])];
 
 function updateJob(job) {
-  var elTailoring = document.getElementById('tailoring_craft_boxes');
-  document.getElementById('tailoring_barcur_XP').style.width = searchByName(listJobs, "Tailoring").xp / 100 * 300 + 'px';
-  document.getElementById('tailoring_cur_XP').innerHTML = searchByName(listJobs, "Tailoring").xp;
-  document.getElementById('tailoring_max_XP').innerHTML = 100;
-  document.getElementById('tailoring_level').innerHTML = searchByName(listJobs, "Tailoring").progress;
+  var elJob = document.getElementById('job_craft_boxes');
+  elJob.innerHTML = "";
+  document.getElementById('job_barcur_XP').style.width = job.xp / ((job.progress+1)*50) * 300 + 'px';
+  document.getElementById('job_cur_XP').innerHTML = job.xp;
+  document.getElementById('job_max_XP').innerHTML = (job.progress+1)*50;
+  document.getElementById('job_level').innerHTML = job.progress;
 
   for (var i = 0; i < job.recipes.length; i++) {
     var recipe = job.recipes[i];
     if (job.progress >= recipe.level) {
-      var elRecipe = document.getElementById('char_tailoring' + i);
+      var elRecipe = document.getElementById('char_job' + i);
       var isNew = false;
 
       if (elRecipe == null) {
         isNew = true;
         elRecipe = document.createElement('div');
         elRecipe.setAttribute('class', 'craft_box');
-        elRecipe.id = 'char_tailoring' + i;
+        elRecipe.id = 'char_job' + i;
 
-        elTailoring.appendChild(elRecipe);
+        elJob.appendChild(elRecipe);
       }
 
       if (isNew) {
@@ -301,7 +247,7 @@ function updateJob(job) {
 
         if (isNew) {
           var elRecipeIngredient = document.createElement('div');
-          elRecipeIngredient.id = 'char_tailoring_ing_' + i + '_' + j;
+          elRecipeIngredient.id = 'char_job_ing_' + i + '_' + j;
           elRecipeIngredient.setAttribute('class', 'craft_box_ingredient');
 
           var elRecipeIngredientTitle = document.createElement('div');
@@ -310,7 +256,7 @@ function updateJob(job) {
 
           var elRecipeIngredientNumber = document.createElement('div');
           elRecipeIngredientNumber.setAttribute('class', 'craft_box_ingredient_number');
-          elRecipeIngredientNumber.id = 'char_tailoring_ingN_' + i + '_' + j;
+          elRecipeIngredientNumber.id = 'char_job_ingN_' + i + '_' + j;
           elRecipeIngredientNumber.innerHTML = nbCraftItems[ing_id] + "/" + recipe.numbers[j];
 
           elRecipeIngredient.appendChild(elRecipeIngredientTitle);
@@ -318,15 +264,15 @@ function updateJob(job) {
           elRecipe.appendChild(elRecipeIngredient);
         }
         else {
-          document.getElementById('char_tailoring_ingN_' + i + '_' + j).innerHTML = nbCraftItems[ing_id] + "/" + recipe.numbers[j];
+          document.getElementById('char_job_ingN_' + i + '_' + j).innerHTML = nbCraftItems[ing_id] + "/" + recipe.numbers[j];
         }
 
         if (nbCraftItems[ing_id] < recipe.numbers[j]) {
-          document.getElementById('char_tailoring_ing_' + i + '_' + j).style.backgroundColor = "#EDE8DB";
+          document.getElementById('char_job_ing_' + i + '_' + j).style.backgroundColor = "#EDE8DB";
           canbecrafted = false;
         }
         else {
-          document.getElementById('char_tailoring_ing_' + i + '_' + j).style.backgroundColor = "#D4DCB9";
+          document.getElementById('char_job_ing_' + i + '_' + j).style.backgroundColor = "#D4DCB9";
         }
       }
       if (canbecrafted) elRecipe.style.backgroundColor = "#B9D6AD";
@@ -337,7 +283,7 @@ function updateJob(job) {
         elRecipeXP.setAttribute('class', 'craft_box_XP');
 
         var elRecipeTextXP = document.createElement('span');
-        elRecipeTextXP.id = 'tailoring_recipe_XP' + i;
+        elRecipeTextXP.id = 'job_recipe_XP' + i;
 
         var elRecipeBarXP = document.createElement('div');
         elRecipeBarXP.setAttribute('class', 'craft_box_bar_XP');
@@ -345,7 +291,7 @@ function updateJob(job) {
 
         var elRecipeBarcurXP = document.createElement('div');
         elRecipeBarcurXP.setAttribute('class', 'craft_box_barcur_XP');
-        elRecipeBarcurXP.id = 'tailoring_recipe_XPcur' + i;
+        elRecipeBarcurXP.id = 'job_recipe_XPcur' + i;
         elRecipeBarcurXP.style.width = recipe.progress / 5 * 100 + 'px';
 
         elRecipeXP.appendChild(elRecipeBarXP);
@@ -354,13 +300,13 @@ function updateJob(job) {
         elRecipe.appendChild(elRecipeXP);
       }
       else {
-        document.getElementById('tailoring_recipe_XP' + i).innerHTML = recipe.progress;
-        document.getElementById('tailoring_recipe_XPcur' + i).style.width = recipe.progress / 5 * 100 + 'px';
+        document.getElementById('job_recipe_XP' + i).innerHTML = recipe.progress;
+        document.getElementById('job_recipe_XPcur' + i).style.width = recipe.progress / 5 * 100 + 'px';
       }
 
       elRecipe.setAttribute('iRecipe', i);
       elRecipe.onclick = function () {
-        craft(searchByName(listJobs, "Tailoring"), this.getAttribute('iRecipe'));
+        craft(job, this.getAttribute('iRecipe'));
       };
     }
   }
@@ -394,31 +340,122 @@ function displayGathering() {
 //-   Equipment    -//
 //------------------//
 
+function equipment(item, enchants, quality) {
+  this.name = "";
+  this.s_quality = "";
+  this.modif = 1;
+
+  if (quality >= 6) {
+    this.s_quality += "Legendary";
+    this.modif = 2;
+    } else if (quality >= 5) {
+    this.s_quality += "Perfect";
+    this.modif = 1.5;
+    } else if (quality >= 4) {
+    this.s_quality += "Great";
+    this.modif = 1.2;
+    } else if (quality >= 3) {
+    this.s_quality += "";
+    this.modif = 1;
+    } else if (quality >= 2) {
+    this.s_quality += "Passable";
+    this.modif = 0.8;
+    } else if (quality >= 1) {
+    this.s_quality += "Rubbish";
+    this.modif = 0.5;
+    } else {
+    this.s_quality += "Crappy";
+    this.modif = 0.0;
+  }
+
+  if(this.s_quality != "") {
+    this.name += this.s_quality + " ";
+  }
+  this.name += item.name; //TODO partie enchant du nom
+  this.type = item.type;
+  if (item.type == "Armor") {
+    this.part = item.part;
+    this.def = Math.round(item.def * this.modif);
+    } else if (item.type == "Weapon") {
+    this.damage = Math.round(item.damage * this.modif);
+    } else {
+    console.debug("equipment - error : unknown type " + item.type);
+    console.debug("error on item : " + item);
+  }
+  this.price = Math.round(item.price * this.modif); //TODO ajuster selon qualité/Enchant
+}
+
 function equipGearItems(i) {
   var item = gearItems[i];
   if (item.type == "Armor") {
     gearItems.splice(i, 1);
-    changeChestArmor(item);
+    changeArmor(item);
+    } else if (item.type == "Weapon") {
+    gearItems.splice(i, 1);
+    changeWeapon(item);
+    } else {
+    console.debug("equipGearItems - error : unknown type " + item.type);
+    console.debug("error on item : " + item);
   }
 }
 
 function changeWeapon(newWeapon) {
+  var oldWeapon = player.weapon;
   player.weapon = newWeapon;
-  player.atk = player.weapon.damage;
+
+  if (oldWeapon != "" && oldWeapon.name != "Fists") {
+    addgItem(oldWeapon);
+    player.atk -= oldWeapon.damage;
+    } else {
+    updateInventory();
+  }
+  player.atk += newWeapon.damage;
   document.getElementById('main_char_weapon').innerHTML = player.weapon.name;
   document.getElementById('main_char_weaponatk').innerHTML = player.weapon.damage;
 }
 
-function changeChestArmor(newArmor) {
-  if (player.armor != "") {
-    addgItem(player.armor);
+function changeArmor(newArmor) {
+  var oldArmor = "";
+  switch(newArmor.part) {
+    case "Chest":
+    oldArmor = player.chestArmor;
+    player.chestArmor = newArmor;
+    break;
+    case "Head":
+    oldArmor = player.headArmor;
+    player.headArmor = newArmor;
+    break;
+    case "Hands":
+    oldArmor = player.handsArmor;
+    player.handsArmor = newArmor;
+    break;
+    case "Feet":
+    oldArmor = player.feetArmor;
+    player.feetArmor = newArmor;
+    break;
+    case "Legs":
+    oldArmor = player.legsArmor;
+    player.legsArmor = newArmor;
+    break;
+    case "Shoulders":
+    oldArmor = player.shouldersArmor;
+    player.shouldersArmor = newArmor;
+    break;
+    default:
+    console.debug("changeArmor - error : unknown part for the following object : " + newArmor);
   }
-  player.armor = newArmor;
-  player.def = player.armor.def;
-  document.getElementById('main_char_armor').innerHTML = player.armor.name;
-  document.getElementById('main_char_armordef').innerHTML = player.armor.def;
-}
 
+  if (oldArmor != "" && oldArmor.name != "Nothing") {
+    addgItem(oldArmor);
+    player.def -= oldArmor.def;
+    } else {
+    updateInventory();
+  }
+  player.def += newArmor.def;
+  document.getElementById('main_char_' + newArmor.part + 'Armor').innerHTML = newArmor.name;
+  document.getElementById('main_char_' + newArmor.part + 'Armordef').innerHTML = newArmor.def;
+
+}
 //------------------//
 //-   Inventory    -//
 //------------------//
@@ -490,13 +527,13 @@ function displayInventory() {
     if (nbCraftItems[i] > 0) {
       if (elItem != null) {
         elItem.innerHTML = nbCraftItems[i] + " " + listCraftItems[i].name;
-      } else {
+        } else {
         elItem = document.createElement('div');
         elItem.id = 'char_cInventory' + i;
         elItem.innerHTML = nbCraftItems[i] + " " + listCraftItems[i].name;
         elInventoryResources.appendChild(elItem);
       }
-    } else {
+      } else {
       if (elItem != null) {
         elInventoryResources.removeChild(elItem);
       }
@@ -511,14 +548,14 @@ function displayInventory() {
 
     if (elItem != null) {
       elItem.innerHTML = gearItems[i].name + "<br/>";
-    } else {
+      } else {
       elItem = document.createElement('div');
       elItem.id = 'char_gInventory' + i;
       elItem.innerHTML = gearItems[i].name;
       if (gearItems[i].def != null)
-        elItem.title += "Defense " + gearItems[i].def;
+      elItem.title += "Defense " + gearItems[i].def;
       if (gearItems[i].damage != null)
-        elItem.title += "Damage " + gearItems[i].damage;
+      elItem.title += "Damage " + gearItems[i].damage;
       elInventoryEquipments.appendChild(elItem);
     }
     elItem.setAttribute('iItem', i);
@@ -588,11 +625,11 @@ function changemHP(i, dmg) {
 
   if (monsters[i].currHP / monsters[i].maxHP < 0.25) {
     elmbarHP.style.backgroundColor = "#E75D21";
-  } else if (monsters[i].currHP / monsters[i].maxHP < 0.5) {
+    } else if (monsters[i].currHP / monsters[i].maxHP < 0.5) {
     elmbarHP.style.backgroundColor = "#DBA744";
-  } else if (monsters[i].currHP / monsters[i].maxHP < 1) {
+    } else if (monsters[i].currHP / monsters[i].maxHP < 1) {
     elmbarHP.style.backgroundColor = "#66A366";
-  } else if (monsters[i].currHP == monsters[i].maxHP) {
+    } else if (monsters[i].currHP == monsters[i].maxHP) {
     elmbarHP.style.backgroundColor = "#006600";
   }
 }
@@ -610,23 +647,25 @@ var idle = function () {
   // skills regeneration
 
   // repop
-  for (var i = 0; i < 3; i++) {
-    if (!monsters[i].exist) {
-      if (Math.random() * 100 < 10) {
-        var thisarea = searchByName(listZones, "Knajo fields");
-        var monsterRate = Math.random() * 100;
-        for (var j = 0; j < thisarea.listMonsters.length; j++) {
-          if (monsterRate <= thisarea.monstersRate[j]) {
-            thisarea.monstersRate;
-            monsters[i] = Object.assign({}, thisarea.listMonsters[j]);
-            break;
+  var thisarea = player.curArea;
+  if(thisarea.listMonsters.length > 0) {
+    for (var i = 0; i < 3; i++) {
+      if (!monsters[i].exist) {
+        if (Math.random() * 100 < 25) {
+          var monsterRate = Math.random() * 100;
+          for (var j = 0; j < thisarea.listMonsters.length; j++) {
+            if (monsterRate <= thisarea.monstersRate[j]) {
+              thisarea.monstersRate;
+              monsters[i] = Object.assign({}, thisarea.listMonsters[j]);
+              break;
+            }
           }
+
+          monsters[i].exist = true;
+          monsters[i].currHP = monsters[i].maxHP;
+
+          displayNewMonster(i, monsters[i]);
         }
-
-        monsters[i].exist = true;
-        monsters[i].currHP = monsters[i].maxHP;
-
-        displayNewMonster(i, monsters[i]);
       }
     }
   }
@@ -646,6 +685,6 @@ var idle = function () {
   setTimeout(idle, 1000);
 }
 
-var dialogGeneral = ["[1] <b>Chin chong</b>: Sell 3 000 000 000 gold for 1 000$! Check it out in mmomaster-farmgold.com !", "[1] <b>Sayorg the ugly</b>: Someone to play LoL or HotS here?"];
+var dialogGeneral = ["[1] <b>Chin chong</b>: Sell 3 000 000 000 gold for 1 000$! Check it out in mmomaster-farmgold.com !", "[1] <b>Sayorg the ugly</b>: Someone to play LoL or HotS here?", "<b>Herta</b>: I AM NOT ANGRY OMG !!"];
 var dialogCommerce = ["[2] <b>Leroy Jenkins</b>: Buy chickens"];
 var dialogRecruitment = ["[4] <b>DarkSasuke</b>: I recruit members in my new guild Revenge of Akatsuki. Leader lvl 57. No noob pls!"];

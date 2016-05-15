@@ -55,7 +55,12 @@ function createChar() {
 
     dead:false,
 
-    armor:"",
+    chestArmor:"",
+    headArmor:"",
+    handsArmor:"",
+    feetArmor:"",
+    legsArmor:"",
+    shouldersArmor:"",
     def:0
   }
   updateStat();

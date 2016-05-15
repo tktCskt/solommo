@@ -31,6 +31,8 @@ var listMonstersJSON = {
   "Rabbit" : {"name":"Rabbit", "maxHP":16, "atk":5, "loot":[0,100,1,100], "XP":10, "img":"images/rabbit.png"},
   "Chicken" : {"name":"Chicken", "maxHP":30, "atk":10, "loot":[2,100,3,50], "XP":25,"img":"images/chicken.png"},
   "Blood rabbit" : {"name":"Blood Rabbit", "maxHP":85, "atk":35, "loot":[], "XP":70, "img":"images/bloodrabbit.png"},
+  "Wheatcity's mafia sbire" : {"name" : "Wheatcity's mafia sbire", "maxHP" : 60, "atk":45, "loot":[], "XP":55, "img":"images/rabbit.png"},
+  "Wheatcity's mafia leader" : {"name" : "Wheatcity's mafia leader", "maxHP" : 120, "atk":70, "loot":[], "XP":105, "img":"images/bloodrabbit.png"},
 };
 
 /*xp*/

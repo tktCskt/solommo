@@ -1,5 +1,5 @@
 [{
-  "id":1,
+  "id": 1,
 	"name": "The cereal killers",
 	"type": "kill",
 	"details": "Rabbit",
@@ -15,7 +15,7 @@
 	"rewardMoney": 50,
 	"unlockedQ": [2,3,4]
 }, {
-  "id":2,
+  "id": 2,
 	"name": "There's more of them?",
 	"type": "kill",
 	"details": "Rabbit",
@@ -31,7 +31,7 @@
 	"rewardMoney": 0,
 	"unlockedQ": []
 }, {
-  "id":3,
+  "id": 3,
 	"name": "A feast for a mayor",
 	"type": "kill",
 	"details": "Chicken",
@@ -47,7 +47,7 @@
 	"rewardMoney": 0,
 	"unlockedQ": []
 }, {
-  "id":4,
+  "id": 4,
 	"name": "Sewing socks for winter",
 	"type": "collect",
 	"details": "Rabbit hide",
@@ -61,5 +61,37 @@
 	"textbegin": "They announced a strong winter this year. With all these rabbits, we could make some socks and such.<br/><br/>Go bring me some rabbit hides.<br/><br/>...<br/><br/>What? Yeah, that's the first time seeing you too and so what? My nephew talked about you but he never mentioned you were this chatty.<br/><br/>Less talk, more hides, and I'll teach you how to make an armor.",
 	"textend": "Hah, once you don't talk, you're effective! Good. There, I'll show you.",
 	"rewardMoney": 50,
-	"unlockedQ": []
+	"unlockedQ": [5]
+}, {
+  "id": 5,
+  "name" : "Troubles in Wheatcity",
+  "type" : "kill",
+  "details" : "Wheatcity's mafia sbire",
+  "number" : 10,
+	"progress": 0,
+  "rewardXP" : 500,
+  "areabegin" : "Wheatcity",
+  "areaend" : "Wheatcity",
+  "available" : 0,
+  "unlockedP" : "none",
+  "textbegin" : "Now you know how to make armors so you can at least be useful ! There are bad guys in the tavern and i'd like to drink something.. could you kill them for me please ?",
+  "textend" : "Well played !",
+  "rewardMoney" : 100,
+  "unlockedQ" : [6]
+}, {
+  "id": 6,
+  "name" : "Troubles in Wheatcity vol. II",
+  "type" : "kill",
+  "details" : "Wheatcity's mafia leader",
+  "number" : 1,
+	"progress": 0,
+  "rewardXP" : 1000,
+  "areabegin" : "Wheatcity",
+  "areaend" : "Wheatcity",
+  "available" : 0,
+  "unlockedP" : "none",
+  "textbegin" : "Wait.. are you dumb ? You forgot their chief ! Kill him !",
+  "textend" : "Well, during your fight I have remarked that your sword is really bad, let me show you how to craft a new one.",
+  "rewardMoney" : 100,
+  "unlockedQ" : []
 }]

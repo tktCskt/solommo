@@ -1,4 +1,5 @@
 var nbJobs = 0;
+var listJobs = [];
 
 /* Constructors */
 function recipe(options) {
@@ -13,7 +14,7 @@ function recipe(options) {
 function job(options) {
   this.name = options.name;
   this.max = 100;
-  this.progress = 1;
+  this.progress = 0;
   this.xp = 0;
   this.details = options.details;
   this.recipes = [];
@@ -31,9 +32,13 @@ var listJobsJSON = {
 };
 
 var listTailoringRecipesJSON = {
-  "Cloth armor" : {"item" : searchByName(listChestArmors,"Cloth armor"), "ingredients" : [searchByName(listCraftItems,"Rabbit hide"),searchByName(listCraftItems,"Carrot")], "numbers":[2,1], "level":0},
-  "Leather armor" : {"item" : searchByName(listChestArmors,"Leather armor"), "ingredients" : [searchByName(listCraftItems,"Chicken egg"),searchByName(listCraftItems,"Carrot"),searchByName(listCraftItems,"Chicken feather")], "numbers":[1,1,1], "level":0},
-  "Armure test" : {"item":searchByName(listChestArmors,"Leather armor"), "ingredients":[], "level":0}
+  "Carrot armor" : {"item" : searchByName(listChestArmors,"Carrot armor"), "ingredients" : [searchByName(listCraftItems,"Rabbit hide"),searchByName(listCraftItems,"Carrot")], "numbers":[1,5], "level":0},
+  "Leather armor" : {"item" : searchByName(listChestArmors,"Leather armor"), "ingredients" : [searchByName(listCraftItems,"Chicken egg"),searchByName(listCraftItems,"Carrot"),searchByName(listCraftItems,"Chicken feather")], "numbers":[1,1,1], "level":5},
+  "Leather gloves" : {"item" : searchByName(listHandsArmors,"Leather gloves"), "ingredients" : [searchByName(listCraftItems,"Rabbit hide"), searchByName(listCraftItems,"Chicken feather")], "numbers":[2,2], "level":1},
+  "Leather boots" : {"item" : searchByName(listFeetArmors,"Leather boots"), "ingredients" : [searchByName(listCraftItems,"Rabbit hide"), searchByName(listCraftItems,"Chicken feather")], "numbers":[3,1], "level":1},
+  "Leather legguards" : {"item" : searchByName(listLegsArmors,"Leather legguards"), "ingredients" : [searchByName(listCraftItems,"Rabbit hide"), searchByName(listCraftItems,"Chicken feather")], "numbers":[2,2], "level":2},
+  "Leather shoulders" : {"item" : searchByName(listShouldersArmors,"Leather shoulders"), "ingredients" : [searchByName(listCraftItems,"Rabbit hide"), searchByName(listCraftItems,"Chicken feather")], "numbers":[3,1], "level":3},
+  "Leather helmet" : {"item" : searchByName(listHeadArmors,"Leather helmet"), "ingredients" : [searchByName(listCraftItems,"Rabbit hide"), searchByName(listCraftItems,"Chicken feather")], "numbers":[3,1], "level":4},
 }
 
 var listSmithingRecipesJSON = {
@@ -42,42 +47,14 @@ var listSmithingRecipesJSON = {
   "Sword3" : {"item":searchByName(listWeapons,"Sword3"), "ingredients":[searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper"), searchByName(listCraftItems,"Gold")], "numbers":[30,20,10], "level":5}
 }
 
-/*Jobs*/
-var listJobs = [];
 
-for (var property in listJobsJSON) {
-  if (listJobsJSON.hasOwnProperty(property)) {
-    listJobs.push(new job(listJobsJSON[property]));
-  }
-}
-
-//TODO Initialiser ça dans init() => function pour retirer variables globales
-/*Tailoring recipes*/
-
-var Tailoring = searchByName(listJobs,"Tailoring");
-
-for (var property in listTailoringRecipesJSON) {
-  if (listTailoringRecipesJSON.hasOwnProperty(property)) {
-    Tailoring.recipes.push(new recipe(listTailoringRecipesJSON[property]));
-  }
-}
-
-/*Smithing recipes*/
-
-var Smithing = searchByName(listJobs,"Smithing");
-
-for (var property in listSmithingRecipesJSON) {
-  if (listSmithingRecipesJSON.hasOwnProperty(property)) {
-    Smithing.recipes.push(new recipe(listSmithingRecipesJSON[property]));
-  }
-}
 
 /*Fonctions pour tous les métiers*/
 
 function craft(job, iRecipe) {
   var recipe = job.recipes[iRecipe];
   var i;
-
+  
   var N = job.progress - recipe.level;
   var crappy = Math.max(0, 25 - N);
   var rubbish = Math.max(0, 25 - (N / 2));
@@ -86,7 +63,7 @@ function craft(job, iRecipe) {
   var legendary = Math.trunc(N / 50);
   var perfect = N / 2 - legendary;
   var normal = 100 - (crappy + rubbish + passable + great + legendary + perfect);
-
+  
   crappy = crappy;
   rubbish = crappy + rubbish;
   passable = rubbish + passable;
@@ -94,7 +71,7 @@ function craft(job, iRecipe) {
   great = normal + great;
   perfect = great + perfect;
   legendary = perfect + legendary;
-
+  
   for (i = 0; i < recipe.ingredients.length; i++) {
     ing_id = recipe.ingredients[i].id;
     if (nbCraftItems[ing_id] < recipe.numbers[i]) {
@@ -102,10 +79,10 @@ function craft(job, iRecipe) {
       return;
     }
   }
-
+  
   // TODO Create a formula
   var recipexpearned = 10;
-
+  
   job.xp += recipexpearned;
   while (job.xp >= (job.progress+1)*50) {
     job.xp -= (job.progress+1)*50;
@@ -118,13 +95,13 @@ function craft(job, iRecipe) {
       recipe.xp -= 100;
     }
   }
-
+  
   log("You crafted a " + recipe.item.name + ".", "INFO");
   log(job.name + ": You earned " + recipexpearned + "xp.", "INFO");
-
+  
   for (i = 0; i < recipe.ingredients.length; i++)
   addcItem(recipe.ingredients[i], -recipe.numbers[i]);
-
+  
   var quality;
   var rand = Math.random() * 100;
   if (rand <= crappy) quality = 0;
@@ -134,7 +111,7 @@ function craft(job, iRecipe) {
   else if (rand <= great) quality = 4;
   else if (rand <= perfect) quality = 5;
   else quality = 6;
-
+  
   addgItem(new equipment(recipe.item, [], quality));
   updateJob(job);
 }
@@ -173,3 +150,34 @@ function gather(zone,job)
   }
 }
 
+function initJobs() {
+  console.log("Initialisation des métiers..");
+  
+  listJobs = [];
+  for (var property in listJobsJSON) {
+    if (listJobsJSON.hasOwnProperty(property)) {
+      listJobs.push(new job(listJobsJSON[property]));
+    }
+  }
+  
+  /*Tailoring recipes*/
+  
+  var Tailoring = searchByName(listJobs,"Tailoring");
+  
+  for (var property in listTailoringRecipesJSON) {
+    if (listTailoringRecipesJSON.hasOwnProperty(property)) {
+      Tailoring.recipes.push(new recipe(listTailoringRecipesJSON[property]));
+    }
+  }
+  
+  /*Smithing recipes*/
+  
+  var Smithing = searchByName(listJobs,"Smithing");
+  
+  for (var property in listSmithingRecipesJSON) {
+    if (listSmithingRecipesJSON.hasOwnProperty(property)) {
+      Smithing.recipes.push(new recipe(listSmithingRecipesJSON[property]));
+    }
+  }
+  
+}

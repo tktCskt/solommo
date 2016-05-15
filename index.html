@@ -11,13 +11,14 @@
   <script src="javascript/jobs.js"></script>
   <script src="javascript/mainCharacter.js"></script>
   <script src="javascript/monsters.js"></script>
+  <script src="javascript/zones.js"></script>
+  <script src="javascript/quests.js"></script>
   <script src="javascript/display.js"></script>
   <script src="javascript/misc.js"></script>
-  <script src="javascript/quests.js"></script>
   <script src="javascript/init.js"></script>
 
   <link rel="stylesheet" href="css/style.css">
-  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Lato:400,300italic,700' type='text/css'>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,300italic,700" type="text/css">
 </head>
 
 <body>
@@ -84,6 +85,7 @@
             <div class="menu_window_frame_title">Map</div><span>Appomy</span>
             <br/>- <span class="clickable menu_worldmap_zone" onclick="goto('Wheatcity')">Wheatcity</span>
             <br/>- <span class="clickable menu_worldmap_zone" onclick="goto('Knajo fields')">Knajo fields</span>
+            <br/>- <span class="clickable menu_worldmap_zone" onclick="goto('Wheatcity - Tavern')">Wheatcity - Tavern</span>
             <br/>
           </div>
           <div class="zone_frame" id="hunting_zone">
@@ -199,8 +201,18 @@
             <div class="menu_character_equipment_title">Equipment</div>
             Weapon: <span class="equipment" id="main_char_weapon"></span>
             (Atk: <span id="main_char_weaponatk"></span>)<br/>
-            Body: <span class="equipment" id="main_char_armor"></span>
-            (Def: <span id="main_char_armordef"></span>)
+            Body: <span class="equipment" id="main_char_ChestArmor"></span>
+            (Def: <span id="main_char_ChestArmordef"></span>)<br/>
+            Head: <span class="equipment" id="main_char_HeadArmor"></span>
+            (Def: <span id="main_char_HeadArmordef"></span>)<br/>
+            Hands: <span class="equipment" id="main_char_HandsArmor"></span>
+            (Def: <span id="main_char_HandsArmordef"></span>)<br/>
+            Feet: <span class="equipment" id="main_char_FeetArmor"></span>
+            (Def: <span id="main_char_FeetArmordef"></span>)<br/>
+            Legs: <span class="equipment" id="main_char_LegsArmor"></span>
+            (Def: <span id="main_char_LegsArmordef"></span>)<br/>
+            Shoulders: <span class="equipment" id="main_char_ShouldersArmor"></span>
+            (Def: <span id="main_char_ShouldersArmordef"></span>)
           </div>
         </div>
 
@@ -222,22 +234,22 @@
 
         <div class="tabs_content" id="tabs_content_craft">
           <div class="menu_craft_selectjob">
-            <div class="clickable btn btn_active menu_craft_job_btn">Tailoring</div>
-            <div class="clickable btn btn_disabled menu_craft_job_btn">None</div>
+            <div class="clickable btn btn_active menu_craft_job_btn" onclick="updateJob(searchByName(listJobs,'Tailoring'));">Tailoring</div>
+            <div class="clickable btn btn_active menu_craft_job_btn" onclick="updateJob(searchByName(listJobs,'Smithing'));">Smithing</div>
             <div class="clickable btn btn_disabled menu_craft_job_btn">None</div>
             <div class="clickable btn btn_disabled menu_craft_job_btn">None</div>
             <div class="clickable btn btn_disabled menu_craft_job_btn">None</div>
           </div>
           <div class="menu_craft_jobcontent">
-            <div class="menu_craft_job_title">Tailoring</div>
+            <div class="menu_craft_job_title" id="menu_craft_job_title">Tailoring</div>
             <div class="job_XP">
-              <div class="job_barcur_XP" id="tailoring_barcur_XP">&nbsp;</div>
+              <div class="job_barcur_XP" id="job_barcur_XP">&nbsp;</div>
               <div class="job_bar_XP">
-                <span id="tailoring_cur_XP"></span> / <span id="tailoring_max_XP"></span>
+                <span id="job_cur_XP"></span> / <span id="job_max_XP"></span>
               </div>
-              <div class="job_level">lvl <span id="tailoring_level"></span></div>
+              <div class="job_level">lvl <span id="job_level"></span></div>
             </div>
-            <div class="craft_block_box" id="tailoring_craft_boxes"></div>
+            <div class="craft_block_box" id="job_craft_boxes"></div>
           </div>
         </div>
       </div>

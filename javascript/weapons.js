@@ -3,6 +3,7 @@ nbWeapons = 0;
 function weapon (options)
 {
 	this.name = options.name;
+  this.type = "Weapon";
 	this.price = options.price;
 	this.damage = options.damage;
 	this.id = nbWeapons++;
