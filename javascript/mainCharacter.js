@@ -1,6 +1,6 @@
 var player = {};
 
-function initChar() {
+function createChar() {
   player = {
     curArea:"Wheatcity",
     name:"Alexstrasza",
@@ -70,7 +70,7 @@ function initChar() {
 
   gameData.player = player;
 }
-  
+
   function addcPoint(value) {
   if (player.avPoint > 0) {
     switch (value) {

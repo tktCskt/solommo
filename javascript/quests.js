@@ -1,66 +1,220 @@
 /* Global variables */
-
-var c_nbQuests = 0;
-var maxQuests = 3;
-var nbQuests = 0;
 var listAcceptedQuests = [];
 var listAvailableQuests = [];
 var listQuests = [];
+var c_nbQuests = 0;
+var maxQuests = 3;
+var nbQuests = 0;
+var avDisplayedQuests = 0;
+var curDisplayedQuests = 0;
 
-/* Constructors */
-
-function Quest(options) {
-  this.id = nbQuests;
-  nbQuests++;
-  this.type = options.type;
-  this.details = options.details;
-  this.number = options.number;
-  this.name = options.name;
-  this.available = options.available;
-  this.active = 0;
-  this.progress = 0;
-  this.finished = false;
-  this.rewardXP = options.XP;
-  this.rewardMoney = options.money;
-  this.areabegin = options.areabegin;
-  this.areaend = options.areaend;
-  this.unlockedP = options.unlockedP;
-  this.textbegin = options.textbegin;
-  this.textend = options.textend;
-  this.unlockedQ = [];
-  for(var i = 0; i < options.unlockedQ.length; i++) {
-    this.unlockedQ.push(searchByName(listQuests,options.unlockedQ[i]));
-  }
-  options.unlockedQ;
-}
-
-/* JSON */
-
-var listQuestsJSON ={
-  "There's more of them?" : {"type" : "kill", "details" : "Rabbit", "number" : 20, "name" : "There's more of them?", "XP" : 100, "areabegin" : "Wheatcity", "areaend" : "Wheatcity", "available" : 0, "unlockedP" : "none", "textbegin" : "Hello again, adventurer!<br/><br/>We've got even more rabbits than before here. It almost looks like a sabotage...--<br/><br/>Haha, that's silly, everybody likes us here! Could you take care of that again for me, please?", "textend" : "Oh, thank you my friend but... I have bad news. Do you remember when I spoke to you about sabotage?", "money" : 0, "unlockedQ" : []},
-  "A feast for a mayor" : {"type" : "kill", "details" : "Chicken", "number" : 5, "name" : "A feast for a mayor", "XP" : 100, "areabegin" : "Wheatcity", "areaend" : "Wheatcity", "available" : 0, "unlockedP" : "none", "textbegin" : "Hi, I'm Granny Knajo.<br/><br/>Would you mind catching some chickens for me with that sword of yours? I got an order from the mayor for tonight; I don't have time for this.<br/><br/>Take care, they're the strongest chickens around!", "textend" : "Oh, thank you for your help dear. You can keep your loot then, I'll just take the meat. Here, have a chicken.", "money" : 0, "unlockedQ" : []},
-  "Sewing socks for winter" : {"type" : "collect", "details" : "Rabbit hide", "number" : 3, "name" : "Sewing socks for winter", "XP" : 100, "areabegin" : "Wheatcity", "areaend" : "Wheatcity", "available" : 0, "unlockedP" : "Tailoring", "textbegin" : "They announced a strong winter this year. With all these rabbits, we could make some socks and such.<br/><br/>Go bring me some rabbit hides.<br/><br/>...<br/><br/>What? Yeah, that's the first time seeing you too and so what? My nephew talked about you but he never mentioned you were this chatty.<br/><br/>Less talk, more hides, and I'll teach you how to make an armor.", "textend" : "Hah, once you don't talk, you're effective! Good. There, I'll show you.", "money" : 50, "unlockedQ" : []},
-  "The cereal killers" : {"type" : "kill", "details" : "Rabbit", "number" : 2, "name" : "The cereal killers", "XP" : 100, "areabegin" : "Wheatcity", "areaend" : "Wheatcity", "available" : 1, "unlockedP" : "none", "textbegin" : "Hello there! Are you new here? I am John Knajo.<br/><br/>You are searching for a job? There's actually some rabbits annoying us in the corn fields. They're eating our crops and that's bad for business.<br/><br/>Kill some of them for me and I will gladly pay you for your help.", "textend" : "I knew I could count on you; there, take these few coppers and stay around. My family might find some jobs for you too.", "money" : 50, "unlockedQ" : ["There's more of them?", "A feast for a mayor", "Sewing socks for winter"]}
-};
-
-
-/* Init */
+/* Initialization */
 function initQuests() {
   console.log("Initialisation des quêtes..");
   listQuests = [];
   listAcceptedQuests = [];
   listAvailableQuests = [];
-  
-  for (var property in listQuestsJSON) {
-    if (listQuestsJSON.hasOwnProperty(property)) {
-      listQuests.push(new Quest(listQuestsJSON[property]));
+
+  fetchJSONFile('resources/quests.json', function(data) {
+      listQuests = data;
+      listQuests.forEach(function(quest) {
+        if (quest.available) {
+          listAvailableQuests.push(quest);
+        }
+      });
+      displayQuests();
+  });
+}
+
+/* Display functions */
+function displayQuests() {
+  displayCityQuest();
+  displayQuickCharQuest();
+}
+
+/* Display in progress quests in the quick bar in the game */
+function displayQuickCharQuest() {
+  var minusQuests = 0;
+  var j;
+
+  for (j = 0; j < listAcceptedQuests.length; j++) {
+    if (document.getElementById('char_curquest' + j).innerHTML == "") curDisplayedQuests++;
+    if (listAcceptedQuests[j].progress != listAcceptedQuests[j].number) document.getElementById('char_curquest' + j).innerHTML = "<b>" + listAcceptedQuests[j].name + "</b><br/>&#8250; " + listAcceptedQuests[j].type + " " + listAcceptedQuests[j].number + " " + listAcceptedQuests[j].details + " (" + listAcceptedQuests[j].progress + "/" + listAcceptedQuests[j].number + ")";
+    else document.getElementById('char_curquest' + j).innerHTML = "<b>" + listAcceptedQuests[j].name + "</b><br/>&#8250; return to " + listAcceptedQuests[j].areaend;
+  }
+  for (j; j < curDisplayedQuests; j++) {
+    document.getElementById('char_curquest' + j).innerHTML = "";
+    minusQuests++;
+  }
+  curDisplayedQuests -= minusQuests;
+}
+
+/* Display quests in current city */
+function displayCityQuest() {
+  var elAvQuest = document.getElementById('avcityquest');
+  var elQuest;
+  elAvQuest.innerHTML = "";
+
+  for (var i = 0; i < listAcceptedQuests.length; i++) {
+    if (listAcceptedQuests[i].finished == true && listAcceptedQuests[i].areaend == player.curArea.name) {
+      elQuest = document.createElement('span');
+      elQuest.id = 'char_avacquest' + i;
+      elQuest.className = 'clickable city_available_quest';
+      elQuest.setAttribute('iquest', i);
+      elQuest.onclick = function () {
+        clickFinishedQuest(this.getAttribute('iquest'));
+      };
+      elQuest.innerHTML = "<b>?</b> " + listAcceptedQuests[i].name + "<br/>";
+      elAvQuest.appendChild(elQuest);
     }
   }
-  for (var i = 0; i < listQuests.length; i++) {
-    var quest = listQuests[i];
-    if(quest.available == 1) {
-      listAvailableQuests.push(quest);
+
+  for (i = 0; i < listAvailableQuests.length; i++) {
+    elQuest = document.getElementById('char_city_available_quest' + i)
+    if (listAvailableQuests[i].available == 1 && listAvailableQuests[i].areabegin == player.curArea.name) {
+      elQuest = document.createElement('span');
+      elQuest.id = 'char_city_available_quest' + i;
+      elQuest.className = 'clickable city_available_quest';
+      elQuest.setAttribute('iquest', i);
+      elQuest.onclick = function () {
+        clickQuest(this.getAttribute('iquest'));
+      };
+      elQuest.innerHTML = "<b>!</b> " + listAvailableQuests[i].name + "<br/>";
+      elAvQuest.appendChild(elQuest);
     }
   }
 }
 
+var checkingQuest = -1;
+var finished = false;
+
+function clickQuest(i) {
+  checkingQuest = i;
+  finished = false;
+  document.getElementById('city_status').style.display = "none";
+  document.getElementById('quest_status').style.display = "inline";
+  document.getElementById('city_quest_description').innerHTML = listAvailableQuests[i].textbegin;
+}
+
+function clickFinishedQuest(i) {
+  checkingQuest = i;
+  finished = true;
+  document.getElementById('city_status').style.display = "none";
+  document.getElementById('quest_status').style.display = "inline";
+  document.getElementById('city_quest_description').innerHTML = listAcceptedQuests[i].textend;
+}
+
+function acceptcheckQuest() {
+  if (!finished) acceptQuest(checkingQuest);
+  else if (finished) completeQuestI(checkingQuest);
+  refusecheckQuest();
+}
+
+function refusecheckQuest() {
+  checkingQuest = -1;
+  document.getElementById('city_status').style.display = "inline";
+  document.getElementById('quest_status').style.display = "none";
+}
+
+function acceptQuest(i) {
+  if (c_nbQuests < maxQuests) {
+    log("Quest <b>[" + listAvailableQuests[i].name + "]</b> accepted.", "INFO");
+
+    q = removeAvailableQuest(listAvailableQuests[i].name);
+    listAcceptedQuests.push(q);
+    q.available = 0;
+    q.active = 1;
+    c_nbQuests++;
+    //If it's a collect quest, check inventory
+    if (q.type == "collect") {
+      var i;
+      for (i = 0; i < nbCraftItem; i++) {
+        if (listCraftItems[i].name == q.details) {
+          updateProgress(q, nbCraftItems[i]);
+        }
+      }
+    }
+
+    displayQuests();
+  } else {
+    log("You can't have more than " + maxQuests + " quests active.", "ERROR");
+  }
+}
+
+/* Process quests during the game */
+function removeAvailableQuest(name) {
+  var i;
+  for (i = 0; i < listAvailableQuests.length; i++) {
+    if (listAvailableQuests[i].name == name) {
+      quest = listAvailableQuests[i];
+      listAvailableQuests.splice(i, 1);
+    }
+  }
+  return quest;
+}
+
+function updateProgress(quest, nb) {
+  if (!quest.finished) {
+    quest.progress += nb;
+
+    log("<b>[" + quest.name + "]</b>: " + quest.progress + "/" + quest.number + " " + quest.details);
+
+    if (quest.progress >= quest.number) {
+      quest.finished = true;
+    }
+    displayQuests();
+  }
+}
+
+function completeQuestI(iquest) {
+  completeQuest(listAcceptedQuests[iquest]);
+}
+
+function completeQuest(quest) {
+  var i = 0;
+  var j = 0;
+  // earn XP and gold rewards
+  changecXP(quest.rewardXP);
+  changecMoney(quest.rewardMoney);
+  log("You completed the quest <b>[" + quest.name + "]</b>. You earned " + quest.rewardXP + "xp.", "INFO");
+  // unlock related jobs
+  if (quest.unlockedP != "none") {
+    for (i = 0; i < nbJobs; i++) {
+      if (listJobs[i].name == quest.unlockedP) {
+        updatejProgress(listJobs[i], 1);
+        log("You unlocked " + quest.unlockedP + "!", "INFO");
+      }
+    }
+  }
+  // unlock following quests
+  if (quest.unlockedQ.length > 0) {
+    // we make related quests available in the general list
+    for (i = 0; i < listQuests.length; i++) {
+      for (j = 0; j < quest.unlockedQ.length; j++) {
+        if (listQuests[i].id == quest.unlockedQ[j]) {
+          listQuests[i].available++;
+        }
+      }
+    }
+    // we put the quests marked as available in the available list
+    i = 0;
+    while (i < listQuests.length) {
+      if (listQuests[i].available >= 1) {
+        listAvailableQuests.push(listQuests[i]);
+        listQuests.splice(i, 1);
+        i = 0;
+      } else {
+        i++;
+      }
+    }
+  }
+  // remove the quest from the accepted quests
+  for (i = 0; i < listAcceptedQuests.length; i++) {
+    if (listAcceptedQuests[i].name == quest.name) {
+      listAcceptedQuests.splice(i, 1);
+      c_nbQuests--;
+    }
+  }
+  // update the UI display
+  displayQuests();
+}
