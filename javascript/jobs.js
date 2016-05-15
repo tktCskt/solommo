@@ -154,6 +154,7 @@ function initJobs() {
   console.log("Initialisation des métiers..");
   
   listJobs = [];
+  nbJobs = 0;
   for (var property in listJobsJSON) {
     if (listJobsJSON.hasOwnProperty(property)) {
       listJobs.push(new job(listJobsJSON[property]));
