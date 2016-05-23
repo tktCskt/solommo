@@ -3,49 +3,49 @@
 //----------------------//
 
 function toggleActiveTabGame() {
-  document.getElementById('tabs_game').classList.add('btn_active');
-  document.getElementById('tabs_char').classList.remove('btn_active');
-  document.getElementById('tabs_inventory').classList.remove('btn_active');
-  document.getElementById('tabs_craft').classList.remove('btn_active');
+  document.getElementById('tabs-game').classList.add('btn-active');
+  document.getElementById('tabs-char').classList.remove('btn-active');
+  document.getElementById('tabs-inventory').classList.remove('btn-active');
+  document.getElementById('tabs-craft').classList.remove('btn-active');
 
-  document.getElementById('tabs_content_game').classList.add('tabs_content_active');
-  document.getElementById('tabs_content_char').classList.remove('tabs_content_active');
-  document.getElementById('tabs_content_inventory').classList.remove('tabs_content_active');
-  document.getElementById('tabs_content_craft').classList.remove('tabs_content_active');
+  document.getElementById('tabs-content-game').classList.add('tabs-content-active');
+  document.getElementById('tabs-content-char').classList.remove('tabs-content-active');
+  document.getElementById('tabs-content-inventory').classList.remove('tabs-content-active');
+  document.getElementById('tabs-content-craft').classList.remove('tabs-content-active');
 }
 function toggleActiveTabChar() {
-  document.getElementById('tabs_game').classList.remove('btn_active');
-  document.getElementById('tabs_char').classList.add('btn_active');
-  document.getElementById('tabs_inventory').classList.remove('btn_active');
-  document.getElementById('tabs_craft').classList.remove('btn_active');
+  document.getElementById('tabs-game').classList.remove('btn-active');
+  document.getElementById('tabs-char').classList.add('btn-active');
+  document.getElementById('tabs-inventory').classList.remove('btn-active');
+  document.getElementById('tabs-craft').classList.remove('btn-active');
 
-  document.getElementById('tabs_content_game').classList.remove('tabs_content_active');
-  document.getElementById('tabs_content_char').classList.add('tabs_content_active');
-  document.getElementById('tabs_content_inventory').classList.remove('tabs_content_active');
-  document.getElementById('tabs_content_craft').classList.remove('tabs_content_active');
+  document.getElementById('tabs-content-game').classList.remove('tabs-content-active');
+  document.getElementById('tabs-content-char').classList.add('tabs-content-active');
+  document.getElementById('tabs-content-inventory').classList.remove('tabs-content-active');
+  document.getElementById('tabs-content-craft').classList.remove('tabs-content-active');
 }
 function toggleActiveTabInventory() {
-  document.getElementById('tabs_game').classList.remove('btn_active');
-  document.getElementById('tabs_char').classList.remove('btn_active');
-  document.getElementById('tabs_inventory').classList.add('btn_active');
-  document.getElementById('tabs_craft').classList.remove('btn_active');
+  document.getElementById('tabs-game').classList.remove('btn-active');
+  document.getElementById('tabs-char').classList.remove('btn-active');
+  document.getElementById('tabs-inventory').classList.add('btn-active');
+  document.getElementById('tabs-craft').classList.remove('btn-active');
 
-  document.getElementById('tabs_content_game').classList.remove('tabs_content_active');
-  document.getElementById('tabs_content_char').classList.remove('tabs_content_active');
-  document.getElementById('tabs_content_inventory').classList.add('tabs_content_active');
-  document.getElementById('tabs_content_craft').classList.remove('tabs_content_active');
+  document.getElementById('tabs-content-game').classList.remove('tabs-content-active');
+  document.getElementById('tabs-content-char').classList.remove('tabs-content-active');
+  document.getElementById('tabs-content-inventory').classList.add('tabs-content-active');
+  document.getElementById('tabs-content-craft').classList.remove('tabs-content-active');
 }
 function toggleActiveTabCraft() {
   updateJob(searchByName(listJobs,"Tailoring"));
-  document.getElementById('tabs_game').classList.remove('btn_active');
-  document.getElementById('tabs_char').classList.remove('btn_active');
-  document.getElementById('tabs_inventory').classList.remove('btn_active');
-  document.getElementById('tabs_craft').classList.add('btn_active');
+  document.getElementById('tabs-game').classList.remove('btn-active');
+  document.getElementById('tabs-char').classList.remove('btn-active');
+  document.getElementById('tabs-inventory').classList.remove('btn-active');
+  document.getElementById('tabs-craft').classList.add('btn-active');
 
-  document.getElementById('tabs_content_game').classList.remove('tabs_content_active');
-  document.getElementById('tabs_content_char').classList.remove('tabs_content_active');
-  document.getElementById('tabs_content_inventory').classList.remove('tabs_content_active');
-  document.getElementById('tabs_content_craft').classList.add('tabs_content_active');
+  document.getElementById('tabs-content-game').classList.remove('tabs-content-active');
+  document.getElementById('tabs-content-char').classList.remove('tabs-content-active');
+  document.getElementById('tabs-content-inventory').classList.remove('tabs-content-active');
+  document.getElementById('tabs-content-craft').classList.add('tabs-content-active');
 }
 
 //-----------------------//
@@ -53,30 +53,30 @@ function toggleActiveTabCraft() {
 //-----------------------//
 
 function displayMenuMap() {
-  elworldmap = document.getElementById('worldmap_window');
+  elworldmap = document.getElementById('worldmap-window');
   if (elworldmap.style.display == "inline") elworldmap.style.display = "none";
   else {
-    document.getElementById('shop_window').style.display = "none";
+    document.getElementById('shop-window').style.display = "none";
     elworldmap.style.display = "inline";
   }
 }
 
 function displayMenuShop() {
-  elShop = document.getElementById('shop_window');
+  elShop = document.getElementById('shop-window');
   if (elShop.style.display == "inline") elShop.style.display = "none";
   else {
-    document.getElementById('worldmap_window').style.display = "none";
+    document.getElementById('worldmap-window').style.display = "none";
     displayShopSell();
     elShop.style.display = "inline";
   }
 }
 
 function displayMenuGathering() {
-  elGath = document.getElementById('gathering_window');
+  elGath = document.getElementById('gathering-window');
   if (elGath.style.display == "inline") elGath.style.display = "none";
   else {
-    document.getElementById('worldmap_window').style.display = "none";
-    document.getElementById('shop_window').style.display = "none";
+    document.getElementById('worldmap-window').style.display = "none";
+    document.getElementById('shop-window').style.display = "none";
     displayGathering();
     elGath.style.display = "inline";
   }
@@ -87,13 +87,13 @@ function displayMenuGathering() {
 //-------------------------//
 
 function displayNewMonster(i, monster) {
-  document.getElementById('monster_frame'+i).style.visibility = "";
-  document.getElementById('monster_name' + i).innerHTML = monster.name;
-  document.getElementById('monster_curHPbar' + i).style.width = "50px";
-  document.getElementById('monster_avatar' + i).src = monster.img;
-  document.getElementById('monster_curHP' + i).innerHTML = monster.currHP;
-  document.getElementById('monster_maxHP' + i).innerHTML = monster.maxHP;
-  document.getElementById('monster_curHPbar' + i).style.backgroundColor = "#006600";
+  document.getElementById('monster-frame'+i).style.visibility = "";
+  document.getElementById('monster-name' + i).innerHTML = monster.name;
+  document.getElementById('monster-curHPbar' + i).style.width = "50px";
+  document.getElementById('monster-avatar' + i).src = monster.img;
+  document.getElementById('monster-curHP' + i).innerHTML = monster.currHP;
+  document.getElementById('monster-maxHP' + i).innerHTML = monster.maxHP;
+  document.getElementById('monster-curHPbar' + i).style.backgroundColor = "#006600";
 }
 
 //---------------//
@@ -101,15 +101,15 @@ function displayNewMonster(i, monster) {
 //---------------//
 
 function updateDisplayCharSheet() {
-  document.getElementById("char_HP").innerHTML = player.maxHP;
-  document.getElementById("char_MP").innerHTML = player.maxMP;
+  document.getElementById("char-HP").innerHTML = player.maxHP;
+  document.getElementById("char-MP").innerHTML = player.maxMP;
 
-  document.getElementById("char_STR").innerHTML = player.fSTR;
-  document.getElementById("char_DEX").innerHTML = player.fDEX;
-  document.getElementById("char_INT").innerHTML = player.fINT;
-  document.getElementById("char_WIS").innerHTML = player.fWIS;
-  document.getElementById("char_CON").innerHTML = player.fCON;
-  document.getElementById("char_AGI").innerHTML = player.fAGI;
+  document.getElementById("char-STR").innerHTML = player.fSTR;
+  document.getElementById("char-DEX").innerHTML = player.fDEX;
+  document.getElementById("char-INT").innerHTML = player.fINT;
+  document.getElementById("char-WIS").innerHTML = player.fWIS;
+  document.getElementById("char-CON").innerHTML = player.fCON;
+  document.getElementById("char-AGI").innerHTML = player.fAGI;
 
-  document.getElementById("char_points").innerHTML = player.avPoint;
+  document.getElementById("char-points").innerHTML = player.avPoint;
 }

@@ -65,10 +65,10 @@ function lvlup() {
 }
 
 function displayHPbar() {
-  var elbarHP = document.getElementById('HUD_character_barcur_HP');
+  var elbarHP = document.getElementById('HUD-character-barcur-HP');
 
-  document.getElementById('main_char_curHP').innerHTML = Math.floor(player.curHP);
-  document.getElementById('main_char_maxHP').innerHTML = player.maxHP;
+  document.getElementById('main-char-curHP').innerHTML = Math.floor(player.curHP);
+  document.getElementById('main-char-maxHP').innerHTML = player.maxHP;
   elbarHP.style.width = player.curHP / player.maxHP * 150 + "px";
 
   if (player.dead) {
@@ -85,16 +85,16 @@ function displayHPbar() {
 }
 
 function displayMPbar() {
-  document.getElementById('main_char_curMP').innerHTML = Math.floor(player.curMP);
-  document.getElementById('main_char_maxMP').innerHTML = player.maxMP;
-  document.getElementById('HUD_character_barcur_MP').style.width = player.curMP / player.maxMP * 150 + "px";
+  document.getElementById('main-char-curMP').innerHTML = Math.floor(player.curMP);
+  document.getElementById('main-char-maxMP').innerHTML = player.maxMP;
+  document.getElementById('HUD-character-barcur-MP').style.width = player.curMP / player.maxMP * 150 + "px";
 }
 
 function displayXPbar() {
-  document.getElementById('main_char_level').innerHTML = player.level;
-  document.getElementById('main_char_curXP').innerHTML = player.xp;
-  document.getElementById('main_char_maxXP').innerHTML = xptolvlup();
-  document.getElementById('HUD_character_barcur_XP').style.width = player.xp / xptolvlup() * 150 + "px";
+  document.getElementById('main-char-level').innerHTML = player.level;
+  document.getElementById('main-char-curXP').innerHTML = player.xp;
+  document.getElementById('main-char-maxXP').innerHTML = xptolvlup();
+  document.getElementById('HUD-character-barcur-XP').style.width = player.xp / xptolvlup() * 150 + "px";
 }
 
 //------------------//
@@ -105,8 +105,8 @@ function goto(newZone) {
   newZone = searchByName(listZones, newZone);
   initMonster();
   player.curArea = newZone;
-  if (document.getElementById('worldmap_window').style.display != "none") document.getElementById('worldmap_window').style.display = "none";
-  document.getElementById('HUD_zone_location').innerHTML = newZone.name;
+  if (document.getElementById('worldmap-window').style.display != "none") document.getElementById('worldmap-window').style.display = "none";
+  document.getElementById('HUD-zone-location').innerHTML = newZone.name;
   if(newZone.isHuntingZone) {
     displayHuntingzone(newZone.name);
     } else {
@@ -121,13 +121,13 @@ function gotokingdomcity() {
 }
 
 function displayHuntingzone(newZone) {
-  document.getElementById('hunting_zone').style.display = "block";
-  document.getElementById('city_zone').style.display = "none";
+  document.getElementById('hunting-zone').style.display = "block";
+  document.getElementById('city-zone').style.display = "none";
 }
 
 function displayCityzone(newZone) {
-  document.getElementById('hunting_zone').style.display = "none";
-  document.getElementById('city_zone').style.display = "block";
+  document.getElementById('hunting-zone').style.display = "none";
+  document.getElementById('city-zone').style.display = "block";
 }
 
 //------------------//
@@ -148,7 +148,7 @@ function sellCraftItem(i) {
 function sellGearItem(i) {
   changecMoney(calculateSellPrice(gearItems[i]));
   gearItems.splice(i, 1);
-  var elShopSell = document.getElementById('shop_window_sell');
+  var elShopSell = document.getElementById('shop-window-sell');
   var elItem = document.getElementById('shopSG' + gearItems.length);
   elShopSell.removeChild(elItem);
   updateInventory();
@@ -156,7 +156,7 @@ function sellGearItem(i) {
 }
 
 function displayShopSell() {
-  var elShopSell = document.getElementById('shop_window_sell');
+  var elShopSell = document.getElementById('shop-window-sell');
   var elItem;
   var i;
   //Craft items
@@ -211,31 +211,31 @@ function updateDisplayTalentSheet() {
 
 
 function updateJob(job) {
-  var elJob = document.getElementById('job_craft_boxes');
+  var elJob = document.getElementById('job-craft-boxes');
   elJob.innerHTML = "";
-  document.getElementById('job_barcur_XP').style.width = job.xp / ((job.progress+1)*50) * 300 + 'px';
-  document.getElementById('job_cur_XP').innerHTML = job.xp;
-  document.getElementById('job_max_XP').innerHTML = (job.progress+1)*50;
-  document.getElementById('job_level').innerHTML = job.progress;
+  document.getElementById('job-barcur-XP').style.width = job.xp / ((job.progress+1)*50) * 300 + 'px';
+  document.getElementById('job-cur-XP').innerHTML = job.xp;
+  document.getElementById('job-max-XP').innerHTML = (job.progress+1)*50;
+  document.getElementById('job-level').innerHTML = job.progress;
 
   for (var i = 0; i < job.recipes.length; i++) {
     var recipe = job.recipes[i];
     if (job.progress >= recipe.level) {
-      var elRecipe = document.getElementById('char_job' + i);
+      var elRecipe = document.getElementById('char-job' + i);
       var isNew = false;
 
       if (elRecipe == null) {
         isNew = true;
         elRecipe = document.createElement('div');
-        elRecipe.setAttribute('class', 'craft_box');
-        elRecipe.id = 'char_job' + i;
+        elRecipe.setAttribute('class', 'craft-box');
+        elRecipe.id = 'char-job' + i;
 
         elJob.appendChild(elRecipe);
       }
 
       if (isNew) {
         var elRecipeTitle = document.createElement('div');
-        elRecipeTitle.setAttribute('class', 'craft_box_title');
+        elRecipeTitle.setAttribute('class', 'craft-box-title');
         elRecipeTitle.innerHTML = recipe.item.name;
 
         elRecipe.appendChild(elRecipeTitle);
@@ -243,36 +243,36 @@ function updateJob(job) {
 
       var canbecrafted = true;
       for (var j = 0; j < recipe.ingredients.length; j++) {
-        var ing_id = recipe.ingredients[j].id;
+        var ingId = recipe.ingredients[j].id;
 
         if (isNew) {
           var elRecipeIngredient = document.createElement('div');
-          elRecipeIngredient.id = 'char_job_ing_' + i + '_' + j;
-          elRecipeIngredient.setAttribute('class', 'craft_box_ingredient');
+          elRecipeIngredient.id = 'char-job-ing-' + i + '-' + j;
+          elRecipeIngredient.setAttribute('class', 'craft-box-ingredient');
 
           var elRecipeIngredientTitle = document.createElement('div');
-          elRecipeIngredientTitle.setAttribute('class', 'craft_box_ingredient_name');
+          elRecipeIngredientTitle.setAttribute('class', 'craft-box-ingredient-name');
           elRecipeIngredientTitle.innerHTML = recipe.ingredients[j].name;
 
           var elRecipeIngredientNumber = document.createElement('div');
-          elRecipeIngredientNumber.setAttribute('class', 'craft_box_ingredient_number');
-          elRecipeIngredientNumber.id = 'char_job_ingN_' + i + '_' + j;
-          elRecipeIngredientNumber.innerHTML = nbCraftItems[ing_id] + "/" + recipe.numbers[j];
+          elRecipeIngredientNumber.setAttribute('class', 'craft-box-ingredient-number');
+          elRecipeIngredientNumber.id = 'char-job-ingN-' + i + '-' + j;
+          elRecipeIngredientNumber.innerHTML = nbCraftItems[ingId] + "/" + recipe.numbers[j];
 
           elRecipeIngredient.appendChild(elRecipeIngredientTitle);
           elRecipeIngredient.appendChild(elRecipeIngredientNumber);
           elRecipe.appendChild(elRecipeIngredient);
         }
         else {
-          document.getElementById('char_job_ingN_' + i + '_' + j).innerHTML = nbCraftItems[ing_id] + "/" + recipe.numbers[j];
+          document.getElementById('char-job-ingN-' + i + '-' + j).innerHTML = nbCraftItems[ingId] + "/" + recipe.numbers[j];
         }
 
-        if (nbCraftItems[ing_id] < recipe.numbers[j]) {
-          document.getElementById('char_job_ing_' + i + '_' + j).style.backgroundColor = "#EDE8DB";
+        if (nbCraftItems[ingId] < recipe.numbers[j]) {
+          document.getElementById('char-job-ing-' + i + '-' + j).style.backgroundColor = "#EDE8DB";
           canbecrafted = false;
         }
         else {
-          document.getElementById('char_job_ing_' + i + '_' + j).style.backgroundColor = "#D4DCB9";
+          document.getElementById('char-job-ing-' + i + '-' + j).style.backgroundColor = "#D4DCB9";
         }
       }
       if (canbecrafted) elRecipe.style.backgroundColor = "#B9D6AD";
@@ -280,18 +280,18 @@ function updateJob(job) {
 
       if (isNew) {
         var elRecipeXP = document.createElement('div');
-        elRecipeXP.setAttribute('class', 'craft_box_XP');
+        elRecipeXP.setAttribute('class', 'craft-box-XP');
 
         var elRecipeTextXP = document.createElement('span');
-        elRecipeTextXP.id = 'job_recipe_XP' + i;
+        elRecipeTextXP.id = 'job-recipe-XP' + i;
 
         var elRecipeBarXP = document.createElement('div');
-        elRecipeBarXP.setAttribute('class', 'craft_box_bar_XP');
+        elRecipeBarXP.setAttribute('class', 'craft-box-bar-XP');
         elRecipeBarXP.innerHTML = "&nbsp;";
 
         var elRecipeBarcurXP = document.createElement('div');
-        elRecipeBarcurXP.setAttribute('class', 'craft_box_barcur_XP');
-        elRecipeBarcurXP.id = 'job_recipe_XPcur' + i;
+        elRecipeBarcurXP.setAttribute('class', 'craft-box-barcur-XP');
+        elRecipeBarcurXP.id = 'job-recipe-XPcur' + i;
         elRecipeBarcurXP.style.width = recipe.progress / 5 * 100 + 'px';
 
         elRecipeXP.appendChild(elRecipeBarXP);
@@ -300,8 +300,8 @@ function updateJob(job) {
         elRecipe.appendChild(elRecipeXP);
       }
       else {
-        document.getElementById('job_recipe_XP' + i).innerHTML = recipe.progress;
-        document.getElementById('job_recipe_XPcur' + i).style.width = recipe.progress / 5 * 100 + 'px';
+        document.getElementById('job-recipe-XP' + i).innerHTML = recipe.progress;
+        document.getElementById('job-recipe-XPcur' + i).style.width = recipe.progress / 5 * 100 + 'px';
       }
 
       elRecipe.setAttribute('iRecipe', i);
@@ -313,21 +313,21 @@ function updateJob(job) {
 }
 
 function displayGathering() {
-  var elGathering = document.getElementById('gathering_window');
+  var elGathering = document.getElementById('gathering-window');
 
-  var elTxt = document.getElementById("gathering_txt");
+  var elTxt = document.getElementById("gathering-txt");
   if (elTxt == null)
   {
     elTxt = document.createElement('div');
-    elTxt.id = "gathering_txt";
+    elTxt.id = "gathering-txt";
     elTxt.innerHTML = "What resource do you want to gather ?<br/>";
     elGathering.appendChild(elTxt);
   }
-  elTxt = document.getElementById("gathering_mining");
+  elTxt = document.getElementById("gathering-mining");
   if (elTxt == null)
   {
     elTxt = document.createElement('div');
-    elTxt.id = "gathering_mining";
+    elTxt.id = "gathering-mining";
     elGathering.appendChild(elTxt);
   }
   elTxt.innerHTML = "Stones&Metal(lvl "+searchByName(listJobs,"Mining").progress+")<br/>";
@@ -342,34 +342,34 @@ function displayGathering() {
 
 function equipment(item, enchants, quality) {
   this.name = "";
-  this.s_quality = "";
+  this.sQuality = "";
   this.modif = 1;
 
   if (quality >= 6) {
-    this.s_quality += "Legendary";
+    this.sQuality += "Legendary";
     this.modif = 2;
     } else if (quality >= 5) {
-    this.s_quality += "Perfect";
+    this.sQuality += "Perfect";
     this.modif = 1.5;
     } else if (quality >= 4) {
-    this.s_quality += "Great";
+    this.sQuality += "Great";
     this.modif = 1.2;
     } else if (quality >= 3) {
-    this.s_quality += "";
+    this.sQuality += "";
     this.modif = 1;
     } else if (quality >= 2) {
-    this.s_quality += "Passable";
+    this.sQuality += "Passable";
     this.modif = 0.8;
     } else if (quality >= 1) {
-    this.s_quality += "Rubbish";
+    this.sQuality += "Rubbish";
     this.modif = 0.5;
     } else {
-    this.s_quality += "Crappy";
+    this.sQuality += "Crappy";
     this.modif = 0.0;
   }
 
-  if(this.s_quality != "") {
-    this.name += this.s_quality + " ";
+  if(this.sQuality != "") {
+    this.name += this.sQuality + " ";
   }
   this.name += item.name; //TODO partie enchant du nom
   this.type = item.type;
@@ -410,8 +410,8 @@ function changeWeapon(newWeapon) {
     updateInventory();
   }
   player.atk += newWeapon.damage;
-  document.getElementById('main_char_weapon').innerHTML = player.weapon.name;
-  document.getElementById('main_char_weaponatk').innerHTML = player.weapon.damage;
+  document.getElementById('main-char-weapon').innerHTML = player.weapon.name;
+  document.getElementById('main-char-weaponatk').innerHTML = player.weapon.damage;
 }
 
 function changeArmor(newArmor) {
@@ -452,8 +452,8 @@ function changeArmor(newArmor) {
     updateInventory();
   }
   player.def += newArmor.def;
-  document.getElementById('main_char_' + newArmor.part + 'Armor').innerHTML = newArmor.name;
-  document.getElementById('main_char_' + newArmor.part + 'Armordef').innerHTML = newArmor.def;
+  document.getElementById('main-char-' + newArmor.part + 'Armor').innerHTML = newArmor.name;
+  document.getElementById('main-char-' + newArmor.part + 'Armordef').innerHTML = newArmor.def;
 
 }
 //------------------//
@@ -497,25 +497,25 @@ function updateInventory() {
 }
 
 function displayGold() {
-  document.getElementById('char_gold').innerHTML = player.money;
-  document.getElementById('char_gold_shop').innerHTML = player.money;
+  document.getElementById('char-gold').innerHTML = player.money;
+  document.getElementById('char-gold-shop').innerHTML = player.money;
 }
 
 function displayInventory() {
-  var elInventory = document.getElementById('tabs_content_inventory');
+  var elInventory = document.getElementById('tabs-content-inventory');
 
   var inventoryGold = document.createElement('div');
-  inventoryGold.setAttribute("class","menu_inventory_gold");
+  inventoryGold.setAttribute("class","menu-inventory-gold");
   var inventoryGoldAmount = document.createElement('span');
-  inventoryGoldAmount.setAttribute("id","char_gold");
+  inventoryGoldAmount.setAttribute("id","char-gold");
 
   inventoryGold.appendChild(inventoryGoldAmount);
   elInventory.appendChild(inventoryGold);
 
-  var elInventoryResources = document.getElementById('menu_inventory_resources');
+  var elInventoryResources = document.getElementById('menu-inventory-resources');
   elInventoryResources.innerHTML = "";
 
-  var elInventoryEquipments = document.getElementById('menu_inventory_equipments');
+  var elInventoryEquipments = document.getElementById('menu-inventory-equipments');
   elInventoryEquipments.innerHTML = "";
 
   var elItem;
@@ -523,13 +523,13 @@ function displayInventory() {
 
   //Resources
   for (i = 0; i < nbCraftItem; i++) {
-    elItem = document.getElementById('char_cInventory' + i);
+    elItem = document.getElementById('char-cInventory' + i);
     if (nbCraftItems[i] > 0) {
       if (elItem != null) {
         elItem.innerHTML = nbCraftItems[i] + " " + listCraftItems[i].name;
         } else {
         elItem = document.createElement('div');
-        elItem.id = 'char_cInventory' + i;
+        elItem.id = 'char-cInventory' + i;
         elItem.innerHTML = nbCraftItems[i] + " " + listCraftItems[i].name;
         elInventoryResources.appendChild(elItem);
       }
@@ -544,13 +544,13 @@ function displayInventory() {
 
   //Equipments
   for (i = 0; i < gearItems.length; i++) {
-    elItem = document.getElementById('char_gInventory' + i)
+    elItem = document.getElementById('char-gInventory' + i)
 
     if (elItem != null) {
       elItem.innerHTML = gearItems[i].name + "<br/>";
       } else {
       elItem = document.createElement('div');
-      elItem.id = 'char_gInventory' + i;
+      elItem.id = 'char-gInventory' + i;
       elItem.innerHTML = gearItems[i].name;
       if (gearItems[i].def != null)
       elItem.title += "Defense " + gearItems[i].def;
@@ -571,25 +571,25 @@ function displayInventory() {
 //-    Monsters    -//
 //------------------//
 
-function monsterDeath(md_monster, k) {
+function monsterDeath(mdMonster, k) {
   log("You defeated the <b>" + monsters[k].name + "</b> and earned " + monsters[k].XP + "xp.", "INFO");
 
   // Process XP and loot
-  changecXP(md_monster.XP);
+  changecXP(mdMonster.XP);
   var i;
-  for (i = 0; i < md_monster.loots.length; i++) {
-    if ((Math.random() * 100 <= md_monster.loots[i].percentage)) {
-      addcItem(md_monster.loots[i].item, 1);
+  for (i = 0; i < mdMonster.loots.length; i++) {
+    if ((Math.random() * 100 <= mdMonster.loots[i].percentage)) {
+      addcItem(mdMonster.loots[i].item, 1);
     }
   }
 
   // Hide this monster frame
   monsters[k].exist = false;
-  document.getElementById('monster_frame'+k).style.visibility = "hidden";
+  document.getElementById('monster-frame'+k).style.visibility = "hidden";
 
   // Update Quests
   for (i = 0; i < listAcceptedQuests.length; i++) {
-    if (md_monster.name == listAcceptedQuests[i].details && listAcceptedQuests[i].type == "kill") {
+    if (mdMonster.name == listAcceptedQuests[i].details && listAcceptedQuests[i].type == "kill") {
       updateProgress(listAcceptedQuests[i], 1);
     }
   }
@@ -617,10 +617,10 @@ function changemHP(i, dmg) {
     return;
   }
 
-  var elmbarHP = document.getElementById('monster_curHPbar' + i);
+  var elmbarHP = document.getElementById('monster-curHPbar' + i);
 
-  document.getElementById('monster_curHP' + i).innerHTML = monsters[i].currHP;
-  document.getElementById('monster_maxHP' + i).innerHTML = monsters[i].maxHP;
+  document.getElementById('monster-curHP' + i).innerHTML = monsters[i].currHP;
+  document.getElementById('monster-maxHP' + i).innerHTML = monsters[i].maxHP;
   elmbarHP.style.width = monsters[i].currHP / monsters[i].maxHP * 50 + "px";
 
   if (monsters[i].currHP / monsters[i].maxHP < 0.25) {

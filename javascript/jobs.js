@@ -54,7 +54,7 @@ var listSmithingRecipesJSON = {
 function craft(job, iRecipe) {
   var recipe = job.recipes[iRecipe];
   var i;
-  
+
   var N = job.progress - recipe.level;
   var crappy = Math.max(0, 25 - N);
   var rubbish = Math.max(0, 25 - (N / 2));
@@ -63,7 +63,7 @@ function craft(job, iRecipe) {
   var legendary = Math.trunc(N / 50);
   var perfect = N / 2 - legendary;
   var normal = 100 - (crappy + rubbish + passable + great + legendary + perfect);
-  
+
   crappy = crappy;
   rubbish = crappy + rubbish;
   passable = rubbish + passable;
@@ -71,18 +71,18 @@ function craft(job, iRecipe) {
   great = normal + great;
   perfect = great + perfect;
   legendary = perfect + legendary;
-  
+
   for (i = 0; i < recipe.ingredients.length; i++) {
-    ing_id = recipe.ingredients[i].id;
-    if (nbCraftItems[ing_id] < recipe.numbers[i]) {
+    ingId = recipe.ingredients[i].id;
+    if (nbCraftItems[ingId] < recipe.numbers[i]) {
       log("You don't have the ingredients.", "ERROR");
       return;
     }
   }
-  
+
   // TODO Create a formula
   var recipexpearned = 10;
-  
+
   job.xp += recipexpearned;
   while (job.xp >= (job.progress+1)*50) {
     job.xp -= (job.progress+1)*50;
@@ -95,13 +95,13 @@ function craft(job, iRecipe) {
       recipe.xp -= 100;
     }
   }
-  
+
   log("You crafted a " + recipe.item.name + ".", "INFO");
   log(job.name + ": You earned " + recipexpearned + "xp.", "INFO");
-  
+
   for (i = 0; i < recipe.ingredients.length; i++)
   addcItem(recipe.ingredients[i], -recipe.numbers[i]);
-  
+
   var quality;
   var rand = Math.random() * 100;
   if (rand <= crappy) quality = 0;
@@ -111,7 +111,7 @@ function craft(job, iRecipe) {
   else if (rand <= great) quality = 4;
   else if (rand <= perfect) quality = 5;
   else quality = 6;
-  
+
   addgItem(new equipment(recipe.item, [], quality));
   updateJob(job);
 }
@@ -141,7 +141,7 @@ function gather(zone,job)
     }
   }
   var xpGathering = 10;
-  
+
   log(job.name + ": You earned " + xpGathering + "xp.", "INFO");
   job.xp += xpGathering;
   while (job.xp >= (job.progress+1)*50) {
@@ -152,7 +152,7 @@ function gather(zone,job)
 
 function initJobs() {
   console.log("Initialisation des métiers..");
-  
+
   listJobs = [];
   nbJobs = 0;
   for (var property in listJobsJSON) {
@@ -160,25 +160,25 @@ function initJobs() {
       listJobs.push(new job(listJobsJSON[property]));
     }
   }
-  
+
   /*Tailoring recipes*/
-  
+
   var Tailoring = searchByName(listJobs,"Tailoring");
-  
+
   for (var property in listTailoringRecipesJSON) {
     if (listTailoringRecipesJSON.hasOwnProperty(property)) {
       Tailoring.recipes.push(new recipe(listTailoringRecipesJSON[property]));
     }
   }
-  
+
   /*Smithing recipes*/
-  
+
   var Smithing = searchByName(listJobs,"Smithing");
-  
+
   for (var property in listSmithingRecipesJSON) {
     if (listSmithingRecipesJSON.hasOwnProperty(property)) {
       Smithing.recipes.push(new recipe(listSmithingRecipesJSON[property]));
     }
   }
-  
+
 }

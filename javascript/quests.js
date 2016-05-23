@@ -2,7 +2,7 @@
 var listAcceptedQuests = [];
 var listAvailableQuests = [];
 var listQuests = [];
-var c_nbQuests = 0;
+var cNbQuests = 0;
 var maxQuests = 3;
 var nbQuests = 0;
 var avDisplayedQuests = 0;
@@ -38,12 +38,12 @@ function displayQuickCharQuest() {
   var j;
 
   for (j = 0; j < listAcceptedQuests.length; j++) {
-    if (document.getElementById('char_curquest' + j).innerHTML == "") curDisplayedQuests++;
-    if (listAcceptedQuests[j].progress != listAcceptedQuests[j].number) document.getElementById('char_curquest' + j).innerHTML = "<b>" + listAcceptedQuests[j].name + "</b><br/>&#8250; " + listAcceptedQuests[j].type + " " + listAcceptedQuests[j].number + " " + listAcceptedQuests[j].details + " (" + listAcceptedQuests[j].progress + "/" + listAcceptedQuests[j].number + ")";
-    else document.getElementById('char_curquest' + j).innerHTML = "<b>" + listAcceptedQuests[j].name + "</b><br/>&#8250; return to " + listAcceptedQuests[j].areaend;
+    if (document.getElementById('char-curquest' + j).innerHTML == "") curDisplayedQuests++;
+    if (listAcceptedQuests[j].progress != listAcceptedQuests[j].number) document.getElementById('char-curquest' + j).innerHTML = "<b>" + listAcceptedQuests[j].name + "</b><br/>&#8250; " + listAcceptedQuests[j].type + " " + listAcceptedQuests[j].number + " " + listAcceptedQuests[j].details + " (" + listAcceptedQuests[j].progress + "/" + listAcceptedQuests[j].number + ")";
+    else document.getElementById('char-curquest' + j).innerHTML = "<b>" + listAcceptedQuests[j].name + "</b><br/>&#8250; return to " + listAcceptedQuests[j].areaend;
   }
   for (j; j < curDisplayedQuests; j++) {
-    document.getElementById('char_curquest' + j).innerHTML = "";
+    document.getElementById('char-curquest' + j).innerHTML = "";
     minusQuests++;
   }
   curDisplayedQuests -= minusQuests;
@@ -58,8 +58,8 @@ function displayCityQuest() {
   for (var i = 0; i < listAcceptedQuests.length; i++) {
     if (listAcceptedQuests[i].finished == true && listAcceptedQuests[i].areaend == player.curArea.name) {
       elQuest = document.createElement('span');
-      elQuest.id = 'char_avacquest' + i;
-      elQuest.className = 'clickable city_available_quest';
+      elQuest.id = 'char-avacquest' + i;
+      elQuest.className = 'clickable city-available-quest';
       elQuest.setAttribute('iquest', i);
       elQuest.onclick = function () {
         clickFinishedQuest(this.getAttribute('iquest'));
@@ -70,11 +70,11 @@ function displayCityQuest() {
   }
 
   for (i = 0; i < listAvailableQuests.length; i++) {
-    elQuest = document.getElementById('char_city_available_quest' + i)
+    elQuest = document.getElementById('char-city-available-quest' + i)
     if (listAvailableQuests[i].available == 1 && listAvailableQuests[i].areabegin == player.curArea.name) {
       elQuest = document.createElement('span');
-      elQuest.id = 'char_city_available_quest' + i;
-      elQuest.className = 'clickable city_available_quest';
+      elQuest.id = 'char-city-available-quest' + i;
+      elQuest.className = 'clickable city-available-quest';
       elQuest.setAttribute('iquest', i);
       elQuest.onclick = function () {
         clickQuest(this.getAttribute('iquest'));
@@ -91,17 +91,17 @@ var finished = false;
 function clickQuest(i) {
   checkingQuest = i;
   finished = false;
-  document.getElementById('city_status').style.display = "none";
-  document.getElementById('quest_status').style.display = "inline";
-  document.getElementById('city_quest_description').innerHTML = listAvailableQuests[i].textbegin;
+  document.getElementById('city-status').style.display = "none";
+  document.getElementById('quest-status').style.display = "inline";
+  document.getElementById('city-quest-description').innerHTML = listAvailableQuests[i].textbegin;
 }
 
 function clickFinishedQuest(i) {
   checkingQuest = i;
   finished = true;
-  document.getElementById('city_status').style.display = "none";
-  document.getElementById('quest_status').style.display = "inline";
-  document.getElementById('city_quest_description').innerHTML = listAcceptedQuests[i].textend;
+  document.getElementById('city-status').style.display = "none";
+  document.getElementById('quest-status').style.display = "inline";
+  document.getElementById('city-quest-description').innerHTML = listAcceptedQuests[i].textend;
 }
 
 function acceptcheckQuest() {
@@ -112,19 +112,19 @@ function acceptcheckQuest() {
 
 function refusecheckQuest() {
   checkingQuest = -1;
-  document.getElementById('city_status').style.display = "inline";
-  document.getElementById('quest_status').style.display = "none";
+  document.getElementById('city-status').style.display = "inline";
+  document.getElementById('quest-status').style.display = "none";
 }
 
 function acceptQuest(i) {
-  if (c_nbQuests < maxQuests) {
+  if (cNbQuests < maxQuests) {
     log("Quest <b>[" + listAvailableQuests[i].name + "]</b> accepted.", "INFO");
 
     q = removeAvailableQuest(listAvailableQuests[i].name);
     listAcceptedQuests.push(q);
     q.available = 0;
     q.active = 1;
-    c_nbQuests++;
+    cNbQuests++;
     //If it's a collect quest, check inventory
     if (q.type == "collect") {
       var i;
@@ -212,7 +212,7 @@ function completeQuest(quest) {
   for (i = 0; i < listAcceptedQuests.length; i++) {
     if (listAcceptedQuests[i].name == quest.name) {
       listAcceptedQuests.splice(i, 1);
-      c_nbQuests--;
+      cNbQuests--;
     }
   }
   // update the UI display
