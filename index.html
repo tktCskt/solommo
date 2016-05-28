@@ -58,8 +58,8 @@
           </div>
           <div class="HUD-minimap">
             <div class="HUD-minimap-btn">
-              <img class="clickable minimap-btn" title="Display the map of the world" onclick="displayMenuMap();" src="images/map.png"></img>
-              <img class="clickable minimap-btn" title="Return to the main city of the current kingdom" onclick="gotokingdomcity();" src="images/singlehouse.png"></img>
+              <img id="idMap" class="clickable minimap-btn" title="Display the map of the world" onclick="displayMenuMap();" src="images/map.png"></img>
+              <img id="idReturnCity" class="clickable minimap-btn" title="Return to the main city of the current kingdom" onclick="gotokingdomcity();" src="images/singlehouse.png"></img>
             </div>
             <div class="HUD-minimap-content">
               <span id="generalLocation">Appomy</span>
@@ -86,6 +86,7 @@
             <br/>- <span class="clickable menu-worldmap-zone" onclick="goto('Wheatcity')">Wheatcity</span>
             <br/>- <span class="clickable menu-worldmap-zone" onclick="goto('Knajo fields')">Knajo fields</span>
             <br/>- <span class="clickable menu-worldmap-zone" onclick="goto('Wheatcity - Tavern')">Wheatcity - Tavern</span>
+            <br/>- <span class="clickable menu-worldmap-zone" onclick="goto('Knajo fields - dungeon')">Knajo fields - dungeon</span>
             <br/>
           </div>
           <div class="zone-frame" id="hunting-zone">

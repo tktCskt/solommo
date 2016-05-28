@@ -10,35 +10,39 @@ var gameData = {};
 
 function changecHP(dmg) {
   player.curHP += dmg;
-
+  
   if (player.curHP < 0) player.curHP = 0;
   else if (player.curHP > player.maxHP) player.curHP = player.maxHP;
-
+  
   if (player.dead && player.curHP == player.maxHP) {
     log("You feel well again!", "INFO");
     player.dead = false;
     } else if (player.curHP == 0) {
     log("You died.", "INFO");
     player.dead = true;
+    if(player.curArea.isDungeonZone)
+    {
+      leaveDungeon(player.curArea, false);
+    }
   }
-
+  
   displayHPbar();
 }
 
 function changecMP(mana) {
   player.curMP += mana;
-
+  
   if (player.curMP < 0) player.curMP = 0;
   else if (player.curMP > player.maxMP) player.curMP = player.maxMP;
-
+  
   displayMPbar();
 }
 
 function changecXP(xp) {
   player.xp += xp;
-
+  
   while (player.xp >= xptolvlup()) lvlup();
-
+  
   displayXPbar();
 }
 
@@ -50,27 +54,27 @@ function xptolvlup() {
 
 function lvlup() {
   player.xp = player.xp - (xptolvlup());
-  player.level++;
+player.level++;
 
-  player.avTalent++;
-  player.avPoint += 5;
+player.avTalent++;
+player.avPoint += 5;
 
-  changecHP(player.maxHP);
-  changecMP(player.maxMP);
+changecHP(player.maxHP);
+changecMP(player.maxMP);
 
-  updateDisplayCharSheet();
-  updateDisplayTalentSheet();
+updateDisplayCharSheet();
+updateDisplayTalentSheet();
 
-  log("Level up! You are level <b>" + player.level + "</b>.", "INFO");
+log("Level up! You are level <b>" + player.level + "</b>.", "INFO");
 }
 
 function displayHPbar() {
   var elbarHP = document.getElementById('HUD-character-barcur-HP');
-
+  
   document.getElementById('main-char-curHP').innerHTML = Math.floor(player.curHP);
   document.getElementById('main-char-maxHP').innerHTML = player.maxHP;
   elbarHP.style.width = player.curHP / player.maxHP * 150 + "px";
-
+  
   if (player.dead) {
     elbarHP.style.backgroundColor = "#ff0000";
     } else if (player.curHP / player.maxHP < 0.25) {
@@ -107,17 +111,30 @@ function goto(newZone) {
   player.curArea = newZone;
   if (document.getElementById('worldmap-window').style.display != "none") document.getElementById('worldmap-window').style.display = "none";
   document.getElementById('HUD-zone-location').innerHTML = newZone.name;
-  if(newZone.isHuntingZone) {
+  if(newZone.isDungeonZone) {
+    displayDungeonZone(newZone.name);
+    } else if(newZone.isHuntingZone) {
     displayHuntingzone(newZone.name);
     } else {
     displayCityzone(newZone.name);
   }
-
+  
   displayQuests();
 }
 
 function gotokingdomcity() {
   goto("Wheatcity");
+}
+
+function displayDungeonZone(newZone) {
+  var elMap = document.getElementById('idMap');
+  var elReturnCity = document.getElementById('idReturnCity');
+  elMap.setAttribute("title","You can not leave the dungeon until you're dead or the boss is.");
+  elMap.setAttribute("onclick","");
+  elReturnCity.setAttribute("title","You can not leave the dungeon until you're dead or the boss is.");
+  elReturnCity.setAttribute("onclick","");
+  document.getElementById('hunting-zone').style.display = "block";
+  document.getElementById('city-zone').style.display = "none";
 }
 
 function displayHuntingzone(newZone) {
@@ -128,6 +145,26 @@ function displayHuntingzone(newZone) {
 function displayCityzone(newZone) {
   document.getElementById('hunting-zone').style.display = "none";
   document.getElementById('city-zone').style.display = "block";
+}
+
+function leaveDungeon(dungeon, success) 
+{
+  dungeon.spawnNumber = 0;
+  if(success) 
+  {
+    log("You finished " + dungeon.name, "INFO");
+  }
+  else
+  {
+    log("You failed " + dungeon.name, "INFO");
+  }
+  var elMap = document.getElementById('idMap');
+  var elReturnCity = document.getElementById('idReturnCity');
+  elMap.setAttribute("title","Display the map of the world");
+  elMap.setAttribute("onclick","displayMenuMap();");
+  elReturnCity.setAttribute("title","Return to the main city of the current kingdom");
+  elReturnCity.setAttribute("onclick","gotokingdomcity();");
+  gotokingdomcity();
 }
 
 //------------------//
@@ -182,10 +219,10 @@ function displayShopSell() {
     }
   }
   //gear
-
+  
   for (i = 0; i < gearItems.length; i++) {
     elItem = document.getElementById('shopSG' + i);
-
+    
     if (elItem != null) {
       elItem.innerHTML = gearItems[i].name + "- " + calculateSellPrice(gearItems[i]) + " g" + "<br/>";
       } else {
@@ -217,48 +254,48 @@ function updateJob(job) {
   document.getElementById('job-cur-XP').innerHTML = job.xp;
   document.getElementById('job-max-XP').innerHTML = (job.progress+1)*50;
   document.getElementById('job-level').innerHTML = job.progress;
-
+  
   for (var i = 0; i < job.recipes.length; i++) {
     var recipe = job.recipes[i];
     if (job.progress >= recipe.level) {
       var elRecipe = document.getElementById('char-job' + i);
       var isNew = false;
-
+      
       if (elRecipe == null) {
         isNew = true;
         elRecipe = document.createElement('div');
         elRecipe.setAttribute('class', 'craft-box');
         elRecipe.id = 'char-job' + i;
-
+        
         elJob.appendChild(elRecipe);
       }
-
+      
       if (isNew) {
         var elRecipeTitle = document.createElement('div');
         elRecipeTitle.setAttribute('class', 'craft-box-title');
         elRecipeTitle.innerHTML = recipe.item.name;
-
+        
         elRecipe.appendChild(elRecipeTitle);
       }
-
+      
       var canbecrafted = true;
       for (var j = 0; j < recipe.ingredients.length; j++) {
         var ingId = recipe.ingredients[j].id;
-
+        
         if (isNew) {
           var elRecipeIngredient = document.createElement('div');
           elRecipeIngredient.id = 'char-job-ing-' + i + '-' + j;
           elRecipeIngredient.setAttribute('class', 'craft-box-ingredient');
-
+          
           var elRecipeIngredientTitle = document.createElement('div');
           elRecipeIngredientTitle.setAttribute('class', 'craft-box-ingredient-name');
           elRecipeIngredientTitle.innerHTML = recipe.ingredients[j].name;
-
+          
           var elRecipeIngredientNumber = document.createElement('div');
           elRecipeIngredientNumber.setAttribute('class', 'craft-box-ingredient-number');
           elRecipeIngredientNumber.id = 'char-job-ingN-' + i + '-' + j;
           elRecipeIngredientNumber.innerHTML = nbCraftItems[ingId] + "/" + recipe.numbers[j];
-
+          
           elRecipeIngredient.appendChild(elRecipeIngredientTitle);
           elRecipeIngredient.appendChild(elRecipeIngredientNumber);
           elRecipe.appendChild(elRecipeIngredient);
@@ -266,7 +303,7 @@ function updateJob(job) {
         else {
           document.getElementById('char-job-ingN-' + i + '-' + j).innerHTML = nbCraftItems[ingId] + "/" + recipe.numbers[j];
         }
-
+        
         if (nbCraftItems[ingId] < recipe.numbers[j]) {
           document.getElementById('char-job-ing-' + i + '-' + j).style.backgroundColor = "#EDE8DB";
           canbecrafted = false;
@@ -277,23 +314,23 @@ function updateJob(job) {
       }
       if (canbecrafted) elRecipe.style.backgroundColor = "#B9D6AD";
       else elRecipe.style.backgroundColor = "#E7E0CF";
-
+      
       if (isNew) {
         var elRecipeXP = document.createElement('div');
         elRecipeXP.setAttribute('class', 'craft-box-XP');
-
+        
         var elRecipeTextXP = document.createElement('span');
         elRecipeTextXP.id = 'job-recipe-XP' + i;
-
+        
         var elRecipeBarXP = document.createElement('div');
         elRecipeBarXP.setAttribute('class', 'craft-box-bar-XP');
         elRecipeBarXP.innerHTML = "&nbsp;";
-
+        
         var elRecipeBarcurXP = document.createElement('div');
         elRecipeBarcurXP.setAttribute('class', 'craft-box-barcur-XP');
         elRecipeBarcurXP.id = 'job-recipe-XPcur' + i;
         elRecipeBarcurXP.style.width = recipe.progress / 5 * 100 + 'px';
-
+        
         elRecipeXP.appendChild(elRecipeBarXP);
         elRecipeXP.appendChild(elRecipeBarcurXP);
         elRecipeBarXP.appendChild(elRecipeTextXP);
@@ -303,7 +340,7 @@ function updateJob(job) {
         document.getElementById('job-recipe-XP' + i).innerHTML = recipe.progress;
         document.getElementById('job-recipe-XPcur' + i).style.width = recipe.progress / 5 * 100 + 'px';
       }
-
+      
       elRecipe.setAttribute('iRecipe', i);
       elRecipe.onclick = function () {
         craft(job, this.getAttribute('iRecipe'));
@@ -314,7 +351,7 @@ function updateJob(job) {
 
 function displayGathering() {
   var elGathering = document.getElementById('gathering-window');
-
+  
   var elTxt = document.getElementById("gathering-txt");
   if (elTxt == null)
   {
@@ -344,7 +381,7 @@ function equipment(item, enchants, quality) {
   this.name = "";
   this.sQuality = "";
   this.modif = 1;
-
+  
   if (quality >= 6) {
     this.sQuality += "Legendary";
     this.modif = 2;
@@ -367,7 +404,7 @@ function equipment(item, enchants, quality) {
     this.sQuality += "Crappy";
     this.modif = 0.0;
   }
-
+  
   if(this.sQuality != "") {
     this.name += this.sQuality + " ";
   }
@@ -402,7 +439,7 @@ function equipGearItems(i) {
 function changeWeapon(newWeapon) {
   var oldWeapon = player.weapon;
   player.weapon = newWeapon;
-
+  
   if (oldWeapon != "" && oldWeapon.name != "Fists") {
     addgItem(oldWeapon);
     player.atk -= oldWeapon.damage;
@@ -444,7 +481,7 @@ function changeArmor(newArmor) {
     default:
     console.debug("changeArmor - error : unknown part for the following object : " + newArmor);
   }
-
+  
   if (oldArmor != "" && oldArmor.name != "Nothing") {
     addgItem(oldArmor);
     player.def -= oldArmor.def;
@@ -454,7 +491,7 @@ function changeArmor(newArmor) {
   player.def += newArmor.def;
   document.getElementById('main-char-' + newArmor.part + 'Armor').innerHTML = newArmor.name;
   document.getElementById('main-char-' + newArmor.part + 'Armordef').innerHTML = newArmor.def;
-
+  
 }
 //------------------//
 //-   Inventory    -//
@@ -481,9 +518,9 @@ function addcItem(item, number) {
   else
   log("You lost " + Math.abs(number) + " <b>[" + item.name + "]</b>", "INFO");
   nbCraftItems[item.id] += number;
-
+  
   updateInventory();
-
+  
   for (i = 0; i < listAcceptedQuests.length; i++) {
     if (item.name == listAcceptedQuests[i].details && listAcceptedQuests[i].type == "collect") {
       updateProgress(listAcceptedQuests[i], number);
@@ -503,24 +540,24 @@ function displayGold() {
 
 function displayInventory() {
   var elInventory = document.getElementById('tabs-content-inventory');
-
+  
   var inventoryGold = document.createElement('div');
   inventoryGold.setAttribute("class","menu-inventory-gold");
   var inventoryGoldAmount = document.createElement('span');
   inventoryGoldAmount.setAttribute("id","char-gold");
-
+  
   inventoryGold.appendChild(inventoryGoldAmount);
   elInventory.appendChild(inventoryGold);
-
+  
   var elInventoryResources = document.getElementById('menu-inventory-resources');
   elInventoryResources.innerHTML = "";
-
+  
   var elInventoryEquipments = document.getElementById('menu-inventory-equipments');
   elInventoryEquipments.innerHTML = "";
-
+  
   var elItem;
   var i;
-
+  
   //Resources
   for (i = 0; i < nbCraftItem; i++) {
     elItem = document.getElementById('char-cInventory' + i);
@@ -539,13 +576,13 @@ function displayInventory() {
       }
     }
   }
-
+  
   //Items
-
+  
   //Equipments
   for (i = 0; i < gearItems.length; i++) {
     elItem = document.getElementById('char-gInventory' + i)
-
+    
     if (elItem != null) {
       elItem.innerHTML = gearItems[i].name + "<br/>";
       } else {
@@ -562,9 +599,9 @@ function displayInventory() {
     elItem.onclick = function () {
       equipGearItems(this.getAttribute('iItem'));
     }
-
+    
   }
-
+  
 }
 
 //------------------//
@@ -573,7 +610,7 @@ function displayInventory() {
 
 function monsterDeath(mdMonster, k) {
   log("You defeated the <b>" + monsters[k].name + "</b> and earned " + monsters[k].XP + "xp.", "INFO");
-
+  
   // Process XP and loot
   changecXP(mdMonster.XP);
   var i;
@@ -582,11 +619,11 @@ function monsterDeath(mdMonster, k) {
       addcItem(mdMonster.loots[i].item, 1);
     }
   }
-
+  
   // Hide this monster frame
   monsters[k].exist = false;
   document.getElementById('monster-frame'+k).style.visibility = "hidden";
-
+  
   // Update Quests
   for (i = 0; i < listAcceptedQuests.length; i++) {
     if (mdMonster.name == listAcceptedQuests[i].details && listAcceptedQuests[i].type == "kill") {
@@ -599,7 +636,7 @@ function clickmonster(i) {
   if (player.dead) log("You can't do that when you're dead.", "ERROR");
   else if (monsters[i].currHP > 0) {
     changemHP(i, -((player.atk + player.bDMG) * player.mDMG));
-
+    
     if (monsters[i].currHP > 0) {
       var damage = -monsters[i].atk + player.def;
       if (damage > 0) damage = 0;
@@ -610,19 +647,19 @@ function clickmonster(i) {
 
 function changemHP(i, dmg) {
   monsters[i].currHP += dmg;
-
+  
   if (monsters[i].currHP > monsters[i].maxHP) monsters[i].currHP = monsters[i].maxHP;
   else if (monsters[i].currHP <= 0) {
     monsterDeath(monsters[i], i);
     return;
   }
-
+  
   var elmbarHP = document.getElementById('monster-curHPbar' + i);
-
+  
   document.getElementById('monster-curHP' + i).innerHTML = monsters[i].currHP;
   document.getElementById('monster-maxHP' + i).innerHTML = monsters[i].maxHP;
   elmbarHP.style.width = monsters[i].currHP / monsters[i].maxHP * 50 + "px";
-
+  
   if (monsters[i].currHP / monsters[i].maxHP < 0.25) {
     elmbarHP.style.backgroundColor = "#E75D21";
     } else if (monsters[i].currHP / monsters[i].maxHP < 0.5) {
@@ -643,12 +680,12 @@ var idle = function () {
   // character regeneration
   if (player.curHP < player.maxHP) changecHP(player.regenHP);
   if (player.curMP < player.maxMP) changecMP(player.regenMP);
-
+  
   // skills regeneration
-
+  
   // repop
   var thisarea = player.curArea;
-  if(thisarea.listMonsters.length > 0) {
+  if(thisarea.isHuntingZone) {
     for (var i = 0; i < 3; i++) {
       if (!monsters[i].exist) {
         if (Math.random() * 100 < 25) {
@@ -660,16 +697,63 @@ var idle = function () {
               break;
             }
           }
-
+          
           monsters[i].exist = true;
           monsters[i].currHP = monsters[i].maxHP;
-
+          
           displayNewMonster(i, monsters[i]);
         }
       }
     }
+  } 
+  else if (thisarea.isDungeonZone)
+  {
+    var respawnNeeded = true;
+    for(var i = 0; i < 3; i++)
+    {
+      if(monsters[i].exist)
+      {
+        respawnNeeded = false;
+      }
+    }
+    if(respawnNeeded)
+    {
+      thisarea.spawnNumber++;
+      if(thisarea.spawnNumber == thisarea.maxSpawn)
+      {
+        for(var i = 0; i < Math.min(thisarea.boss.length, 3); i++)
+        {
+          monsters[i] = Object.assign({}, thisarea.boss[i]);
+          displayNewMonster(i, monsters[i]);
+        }
+      }
+      else if(thisarea.spawnNumber > thisarea.maxSpawn)
+      {
+        leaveDungeon(thisarea,true); 
+      }
+      else
+      {
+        for(var i = 0; i < 3; i++)
+        {
+          var monsterRate = Math.random() * 100;
+          for (var j = 0; j < thisarea.listMonsters.length; j++) {
+            if (monsterRate <= thisarea.monstersRate[j]) {
+              thisarea.monstersRate;
+              monsters[i] = Object.assign({}, thisarea.listMonsters[j]);
+              break;
+            }
+          }
+          
+          monsters[i].exist = true;
+          monsters[i].currHP = monsters[i].maxHP;
+          
+          displayNewMonster(i, monsters[i]);
+        }
+      }
+      
+    }
   }
-
+  
   // chat event
   if (Math.random() * 300 < 1) {
     var canal = Math.floor(Math.random() * 3);
@@ -677,10 +761,10 @@ var idle = function () {
     else if (canal == 1) log(dialogCommerce[Math.floor(Math.random() * dialogCommerce.length)], "COMMERCE");
     else if (canal == 2) log(dialogRecruitment[Math.floor(Math.random() * dialogRecruitment.length)], "RECRUITMENT");
   }
-
+  
   // save
   localStorage.setItem('gameData', JSON.stringify(gameData));
-
+  
   // wait 1s
   setTimeout(idle, 1000);
 }
