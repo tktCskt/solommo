@@ -555,6 +555,14 @@ footer {
   border-style: dotted;
   padding: 10px;
 }
+.zone-frame-description {
+  width: 100%;
+  background-color: orange;
+  color:#fff;
+  text-shadow: 1px 1px 1px #000;
+  text-align:center;
+  margin-bottom:2px;
+}
 .zone-frame-title {
   width: 100%;
   background-color: #FF2500;

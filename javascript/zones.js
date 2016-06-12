@@ -7,6 +7,7 @@ var listZones = [];
 
 function Zone(zone, options) {
   zone.name = options.name;
+  zone.description = options.description;
   zone.listResources = options.listResources;
   zone.resourcesRate = options.resourcesRate;
   nbZones++;
@@ -40,16 +41,23 @@ function DungeonZone(options) {
 /* JSON */
 
 var listHuntingZonesJSON = {
-  "Knajo fields" : {"name" : "Knajo fields", "listMonsters" : [searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")], "monstersRate" : [60,95,100], "listResources" : [searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper")], "resourcesRate" : [75,75]},
-  "Wheatcity - Tavern" : {"name" : "Wheatcity - Tavern", "listMonsters" : [searchByName(listMonsters,"Wheatcity's mafia sbire"),searchByName(listMonsters,"Wheatcity's mafia leader")], "monstersRate" : [95,100], "listResources" : [], "resourcesRate" : []}
+  "Knajo fields" : {"name" : "Knajo fields", "listMonsters" : [searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken"),searchByName(listMonsters,"Blood Rabbit")],
+    "monstersRate" : [60,95,100], "listResources" : [searchByName(listCraftItems,"Iron"),searchByName(listCraftItems,"Copper")], "resourcesRate" : [75,75],
+    "description" : "Just some simple fields."},
+  "Wheatcity - Tavern" : {"name" : "Wheatcity - Tavern", "listMonsters" : [searchByName(listMonsters,"Wheatcity's mafia sbire"),searchByName(listMonsters,"Wheatcity's mafia leader")],
+    "monstersRate" : [95,100], "listResources" : [], "resourcesRate" : [],
+    "description" : "A dirty tavern."}
 };
 
 var listSafeZonesJSON = {
-  "Wheatcity" : {"name" : "Wheatcity", "listResources" : [searchByName(listCraftItems,"Iron")], "resourcesRate" : [50]}
+  "Wheatcity" : {"name" : "Wheatcity", "listResources" : [searchByName(listCraftItems,"Iron")], "resourcesRate" : [50],
+    "description" : "A wonderful and great city !"}
 };
 
 var listDungeonZonesJSON = {
-  "Knajo fields - dungeon" : {"name" : "Knajo fields - dungeon", "maxSpawn" : 2, "boss" : [searchByName(listMonsters,"Blood Rabbit")], "listMonsters" : [searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken")], "monstersRate" : [70,100], "listResources" : [], "resourcesRate" : []},
+  "Knajo fields - dungeon" : {"name" : "Knajo fields - dungeon", "maxSpawn" : 2, "boss" : [searchByName(listMonsters,"Blood Rabbit")],
+  "listMonsters" : [searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken")], "monstersRate" : [70,100], "listResources" : [], "resourcesRate" : [],
+    "description" : "A charming place with lovely rabbits.. but you can't find the exit and they want to kill you."},
 };
 
 /* Init */

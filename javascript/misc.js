@@ -3,6 +3,7 @@
 //------------------//
 
 var gameData = {};
+var NB_MAX_MONSTRES = 3;
 
 //------------------//
 //-   Char frame   -//
@@ -112,11 +113,11 @@ function goto(newZone) {
   if (document.getElementById('worldmap-window').style.display != "none") document.getElementById('worldmap-window').style.display = "none";
   document.getElementById('HUD-zone-location').innerHTML = newZone.name;
   if(newZone.isDungeonZone) {
-    displayDungeonZone(newZone.name);
+    displayDungeonZone(newZone);
     } else if(newZone.isHuntingZone) {
-    displayHuntingzone(newZone.name);
+    displayHuntingzone(newZone);
     } else {
-    displayCityzone(newZone.name);
+    displayCityzone(newZone);
   }
   
   displayQuests();
@@ -133,11 +134,19 @@ function displayDungeonZone(newZone) {
   elMap.setAttribute("onclick","");
   elReturnCity.setAttribute("title","You can not leave the dungeon until you're dead or the boss is.");
   elReturnCity.setAttribute("onclick","");
+  /*Update description & name*/
+  document.getElementById("huntingZoneDescription").innerHTML = newZone.description;
+  document.getElementById("huntingZoneTitle").innerHTML = newZone.name;
+  /*Display the block*/
   document.getElementById('hunting-zone').style.display = "block";
   document.getElementById('city-zone').style.display = "none";
 }
 
 function displayHuntingzone(newZone) {
+  /*Update description & name*/
+  document.getElementById("huntingZoneDescription").innerHTML = newZone.description;
+  document.getElementById("huntingZoneTitle").innerHTML = newZone.name;
+  /*Display the block*/
   document.getElementById('hunting-zone').style.display = "block";
   document.getElementById('city-zone').style.display = "none";
 }
@@ -632,15 +641,37 @@ function monsterDeath(mdMonster, k) {
   }
 }
 
-function clickmonster(i) {
-  if (player.dead) log("You can't do that when you're dead.", "ERROR");
-  else if (monsters[i].currHP > 0) {
-    changemHP(i, -((player.atk + player.bDMG) * player.mDMG));
-    
-    if (monsters[i].currHP > 0) {
-      var damage = -monsters[i].atk + player.def;
-      if (damage > 0) damage = 0;
-      changecHP(damage);
+function clickmonster(iMonstre) {
+  if (player.dead) 
+  {
+    log("You can't do that when you're dead.", "ERROR");
+  }
+  else 
+  {
+    if (monsters[iMonstre].currHP > 0)
+    {
+      changemHP(iMonstre, -((player.atk + player.bDMG) * player.mDMG));
+    }
+    if(player.curArea.isDungeonZone)
+    {
+      for(var i=0; i<NB_MAX_MONSTRES; i++)
+      {
+        if (monsters[i].currHP > 0)
+        {
+          var damage = -monsters[iMonstre].atk + player.def;
+          if (damage > 0) damage = 0;
+          changecHP(damage);
+        }
+      }
+    }
+    else
+    {
+      if (monsters[iMonstre].currHP > 0)
+      {
+        var damage = -monsters[iMonstre].atk + player.def;
+        if (damage > 0) damage = 0;
+        changecHP(damage);
+      }
     }
   }
 }
@@ -686,7 +717,7 @@ var idle = function () {
   // repop
   var thisarea = player.curArea;
   if(thisarea.isHuntingZone) {
-    for (var i = 0; i < 3; i++) {
+    for (var i = 0; i < NB_MAX_MONSTRES; i++) {
       if (!monsters[i].exist) {
         if (Math.random() * 100 < 25) {
           var monsterRate = Math.random() * 100;
@@ -709,7 +740,7 @@ var idle = function () {
   else if (thisarea.isDungeonZone)
   {
     var respawnNeeded = true;
-    for(var i = 0; i < 3; i++)
+    for(var i = 0; i < NB_MAX_MONSTRES; i++)
     {
       if(monsters[i].exist)
       {
@@ -721,7 +752,7 @@ var idle = function () {
       thisarea.spawnNumber++;
       if(thisarea.spawnNumber == thisarea.maxSpawn)
       {
-        for(var i = 0; i < Math.min(thisarea.boss.length, 3); i++)
+        for(var i = 0; i < Math.min(thisarea.boss.length, NB_MAX_MONSTRES); i++)
         {
           monsters[i] = Object.assign({}, thisarea.boss[i]);
           displayNewMonster(i, monsters[i]);
@@ -733,7 +764,7 @@ var idle = function () {
       }
       else
       {
-        for(var i = 0; i < 3; i++)
+        for(var i = 0; i < NB_MAX_MONSTRES; i++)
         {
           var monsterRate = Math.random() * 100;
           for (var j = 0; j < thisarea.listMonsters.length; j++) {
