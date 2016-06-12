@@ -55,18 +55,18 @@ function xptolvlup() {
 
 function lvlup() {
   player.xp = player.xp - (xptolvlup());
-player.level++;
-
-player.avTalent++;
-player.avPoint += 5;
-
-changecHP(player.maxHP);
-changecMP(player.maxMP);
-
-updateDisplayCharSheet();
-updateDisplayTalentSheet();
-
-log("Level up! You are level <b>" + player.level + "</b>.", "INFO");
+  player.level++;
+  
+  player.avTalent++;
+  player.avPoint += 5;
+  
+  changecHP(player.maxHP);
+  changecMP(player.maxMP);
+  
+  updateDisplayCharSheet();
+  updateDisplayTalentSheet();
+  
+  log("Level up! You are level <b>" + player.level + "</b>.", "INFO");
 }
 
 function displayHPbar() {
@@ -648,12 +648,14 @@ function clickmonster(iMonstre) {
   }
   else 
   {
-    if (monsters[iMonstre].currHP > 0)
-    {
-      changemHP(iMonstre, -((player.atk + player.bDMG) * player.mDMG));
-    }
     if(player.curArea.isDungeonZone)
     {
+      if (monsters[iMonstre].currHP > 0)
+      {
+        var playerToMonsterDamage = -((player.atk + player.bDMG) * player.mDMG);
+        
+        changemHP(iMonstre, playerToMonsterDamage);
+      }
       for(var i=0; i<NB_MAX_MONSTRES; i++)
       {
         if (monsters[i].currHP > 0)
@@ -663,9 +665,25 @@ function clickmonster(iMonstre) {
           changecHP(damage);
         }
       }
+      //order 5
+      for(var i=0; i<NB_MAX_MONSTRES; i++)
+      {
+        for(var j = 0; j<monsters[i].specialSkills.length; j++)
+        {
+          var skill = monsters[i].specialSkills[j];
+          if (skill.order == 5)
+          {
+            skill.effect(monsters[i].name,player, monsters, iMonstre, playerToMonsterDamage);
+          }
+        }
+      }
     }
     else
     {
+      if (monsters[iMonstre].currHP > 0)
+      {
+        changemHP(iMonstre, -((player.atk + player.bDMG) * player.mDMG));
+      }
       if (monsters[iMonstre].currHP > 0)
       {
         var damage = -monsters[iMonstre].atk + player.def;
@@ -677,6 +695,7 @@ function clickmonster(iMonstre) {
 }
 
 function changemHP(i, dmg) {
+  console.log("papapapapapaapap");
   monsters[i].currHP += dmg;
   
   if (monsters[i].currHP > monsters[i].maxHP) monsters[i].currHP = monsters[i].maxHP;
@@ -689,17 +708,17 @@ function changemHP(i, dmg) {
   
   document.getElementById('monster-curHP' + i).innerHTML = monsters[i].currHP;
   document.getElementById('monster-maxHP' + i).innerHTML = monsters[i].maxHP;
-  elmbarHP.style.width = monsters[i].currHP / monsters[i].maxHP * 50 + "px";
-  
-  if (monsters[i].currHP / monsters[i].maxHP < 0.25) {
-    elmbarHP.style.backgroundColor = "#E75D21";
-    } else if (monsters[i].currHP / monsters[i].maxHP < 0.5) {
-    elmbarHP.style.backgroundColor = "#DBA744";
-    } else if (monsters[i].currHP / monsters[i].maxHP < 1) {
-    elmbarHP.style.backgroundColor = "#66A366";
-    } else if (monsters[i].currHP == monsters[i].maxHP) {
-    elmbarHP.style.backgroundColor = "#006600";
-  }
+elmbarHP.style.width = monsters[i].currHP / monsters[i].maxHP * 50 + "px";
+
+if (monsters[i].currHP / monsters[i].maxHP < 0.25) {
+elmbarHP.style.backgroundColor = "#E75D21";
+} else if (monsters[i].currHP / monsters[i].maxHP < 0.5) {
+elmbarHP.style.backgroundColor = "#DBA744";
+} else if (monsters[i].currHP / monsters[i].maxHP < 1) {
+elmbarHP.style.backgroundColor = "#66A366";
+} else if (monsters[i].currHP == monsters[i].maxHP) {
+elmbarHP.style.backgroundColor = "#006600";
+}
 }
 
 
@@ -708,96 +727,96 @@ function changemHP(i, dmg) {
 //------------------//
 
 var idle = function () {
-  // character regeneration
-  if (player.curHP < player.maxHP) changecHP(player.regenHP);
-  if (player.curMP < player.maxMP) changecMP(player.regenMP);
-  
-  // skills regeneration
-  
-  // repop
-  var thisarea = player.curArea;
-  if(thisarea.isHuntingZone) {
-    for (var i = 0; i < NB_MAX_MONSTRES; i++) {
-      if (!monsters[i].exist) {
-        if (Math.random() * 100 < 25) {
-          var monsterRate = Math.random() * 100;
-          for (var j = 0; j < thisarea.listMonsters.length; j++) {
-            if (monsterRate <= thisarea.monstersRate[j]) {
-              thisarea.monstersRate;
-              monsters[i] = Object.assign({}, thisarea.listMonsters[j]);
-              break;
-            }
-          }
-          
-          monsters[i].exist = true;
-          monsters[i].currHP = monsters[i].maxHP;
-          
-          displayNewMonster(i, monsters[i]);
-        }
-      }
-    }
-  } 
-  else if (thisarea.isDungeonZone)
-  {
-    var respawnNeeded = true;
-    for(var i = 0; i < NB_MAX_MONSTRES; i++)
-    {
-      if(monsters[i].exist)
-      {
-        respawnNeeded = false;
-      }
-    }
-    if(respawnNeeded)
-    {
-      thisarea.spawnNumber++;
-      if(thisarea.spawnNumber == thisarea.maxSpawn)
-      {
-        for(var i = 0; i < Math.min(thisarea.boss.length, NB_MAX_MONSTRES); i++)
-        {
-          monsters[i] = Object.assign({}, thisarea.boss[i]);
-          displayNewMonster(i, monsters[i]);
-        }
-      }
-      else if(thisarea.spawnNumber > thisarea.maxSpawn)
-      {
-        leaveDungeon(thisarea,true); 
-      }
-      else
-      {
-        for(var i = 0; i < NB_MAX_MONSTRES; i++)
-        {
-          var monsterRate = Math.random() * 100;
-          for (var j = 0; j < thisarea.listMonsters.length; j++) {
-            if (monsterRate <= thisarea.monstersRate[j]) {
-              thisarea.monstersRate;
-              monsters[i] = Object.assign({}, thisarea.listMonsters[j]);
-              break;
-            }
-          }
-          
-          monsters[i].exist = true;
-          monsters[i].currHP = monsters[i].maxHP;
-          
-          displayNewMonster(i, monsters[i]);
-        }
-      }
-      
-    }
-  }
-  
-  // chat event
-  if (Math.random() * 300 < 1) {
-    var canal = Math.floor(Math.random() * 3);
-    if (canal == 0) log(dialogGeneral[Math.floor(Math.random() * dialogGeneral.length)], "GENERAL");
-    else if (canal == 1) log(dialogCommerce[Math.floor(Math.random() * dialogCommerce.length)], "COMMERCE");
-    else if (canal == 2) log(dialogRecruitment[Math.floor(Math.random() * dialogRecruitment.length)], "RECRUITMENT");
-  }
-  
-  // save
-  localStorage.setItem('gameData', JSON.stringify(gameData));
-  
-  // wait 1s
-  setTimeout(idle, 1000);
+// character regeneration
+if (player.curHP < player.maxHP) changecHP(player.regenHP);
+if (player.curMP < player.maxMP) changecMP(player.regenMP);
+
+// skills regeneration
+
+// repop
+var thisarea = player.curArea;
+if(thisarea.isHuntingZone) {
+for (var i = 0; i < NB_MAX_MONSTRES; i++) {
+if (!monsters[i].exist) {
+if (Math.random() * 100 < 25) {
+var monsterRate = Math.random() * 100;
+for (var j = 0; j < thisarea.listMonsters.length; j++) {
+if (monsterRate <= thisarea.monstersRate[j]) {
+thisarea.monstersRate;
+monsters[i] = Object.assign({}, thisarea.listMonsters[j]);
+break;
+}
+}
+
+monsters[i].exist = true;
+monsters[i].currHP = monsters[i].maxHP;
+
+displayNewMonster(i, monsters[i]);
+}
+}
+}
+} 
+else if (thisarea.isDungeonZone)
+{
+var respawnNeeded = true;
+for(var i = 0; i < NB_MAX_MONSTRES; i++)
+{
+if(monsters[i].exist)
+{
+respawnNeeded = false;
+}
+}
+if(respawnNeeded)
+{
+thisarea.spawnNumber++;
+if(thisarea.spawnNumber == thisarea.maxSpawn)
+{
+for(var i = 0; i < Math.min(thisarea.boss.length, NB_MAX_MONSTRES); i++)
+{
+monsters[i] = Object.assign({}, thisarea.boss[i]);
+displayNewMonster(i, monsters[i]);
+}
+}
+else if(thisarea.spawnNumber > thisarea.maxSpawn)
+{
+leaveDungeon(thisarea,true); 
+}
+else
+{
+for(var i = 0; i < NB_MAX_MONSTRES; i++)
+{
+var monsterRate = Math.random() * 100;
+for (var j = 0; j < thisarea.listMonsters.length; j++) {
+if (monsterRate <= thisarea.monstersRate[j]) {
+thisarea.monstersRate;
+monsters[i] = Object.assign({}, thisarea.listMonsters[j]);
+break;
+}
+}
+
+monsters[i].exist = true;
+monsters[i].currHP = monsters[i].maxHP;
+
+displayNewMonster(i, monsters[i]);
+}
+}
+
+}
+}
+
+// chat event
+if (Math.random() * 300 < 1) {
+var canal = Math.floor(Math.random() * 3);
+if (canal == 0) log(dialogGeneral[Math.floor(Math.random() * dialogGeneral.length)], "GENERAL");
+else if (canal == 1) log(dialogCommerce[Math.floor(Math.random() * dialogCommerce.length)], "COMMERCE");
+else if (canal == 2) log(dialogRecruitment[Math.floor(Math.random() * dialogRecruitment.length)], "RECRUITMENT");
+}
+
+// save
+localStorage.setItem('gameData', JSON.stringify(gameData));
+
+// wait 1s
+setTimeout(idle, 1000);
 }
 
 var dialogGeneral = ["[1] <b>Chin chong</b>: Sell 3 000 000 000 gold for 1 000$! Check it out in mmomaster-farmgold.com !", "[1] <b>Sayorg the ugly</b>: Someone to play LoL or HotS here?", "<b>Herta</b>: I AM NOT ANGRY OMG !!"];

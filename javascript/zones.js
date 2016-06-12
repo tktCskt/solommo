@@ -55,8 +55,8 @@ var listSafeZonesJSON = {
 };
 
 var listDungeonZonesJSON = {
-  "Knajo fields - dungeon" : {"name" : "Knajo fields - dungeon", "maxSpawn" : 2, "boss" : [searchByName(listMonsters,"Blood Rabbit")],
-  "listMonsters" : [searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Chicken")], "monstersRate" : [70,100], "listResources" : [], "resourcesRate" : [],
+  "Knajo fields - dungeon" : {"name" : "Knajo fields - dungeon", "maxSpawn" : 3, "boss" : [searchByName(listMonsters,"Blood Rabbit")],
+  "listMonsters" : [searchByName(listMonsters,"Rabbit"),searchByName(listMonsters,"Priest Rabbit")], "monstersRate" : [70,100], "listResources" : [], "resourcesRate" : [],
     "description" : "A charming place with lovely rabbits.. but you can't find the exit and they want to kill you."},
 };
 
