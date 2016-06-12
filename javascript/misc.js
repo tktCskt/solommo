@@ -695,7 +695,6 @@ function clickmonster(iMonstre) {
 }
 
 function changemHP(i, dmg) {
-  console.log("papapapapapaapap");
   monsters[i].currHP += dmg;
   
   if (monsters[i].currHP > monsters[i].maxHP) monsters[i].currHP = monsters[i].maxHP;
