@@ -10,6 +10,7 @@
   <script src="javascript/weapons.js"></script>
   <script src="javascript/jobs.js"></script>
   <script src="javascript/mainCharacter.js"></script>
+  <script src="javascript/playerSkills.js"></script>
   <script src="javascript/monstersSkills.js"></script>
   <script src="javascript/monsters.js"></script>
   <script src="javascript/zones.js"></script>
@@ -117,6 +118,10 @@
               </div>
               <div id="monster-name2" class="monster-name">unknown monster</div>
             </div>
+            <div id = "skillBar">
+              <div onclick="callTheHound.effect();">Call the hound !
+              </div>  
+            </div>
           </div>
 
           <div class="zone-frame" id="city-zone">
@@ -216,6 +221,10 @@
             (Def: <span id="main-char-LegsArmordef"></span>)<br/>
             Shoulders: <span class="equipment" id="main-char-ShouldersArmor"></span>
             (Def: <span id="main-char-ShouldersArmordef"></span>)
+          </div>
+          <div class="menu-character-equipment">
+            <div class="menu-character-equipment-title">Skills</div>
+            Available skill points : <span id="availableSkillPoints"></span>
           </div>
         </div>
 

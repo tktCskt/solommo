@@ -29,10 +29,10 @@ function healAllies(options)
 {
   monsterSkill(this,options);
   this.order = 5;
-  this.effect = function(monsterName,player, monsters, target, damage)
+  this.effect = function(icaster, player, monsters, target, damage)
   {
     if (Math.random() * 100 < this.percentProc) {
-      log(monsterName + "heal his allies !", "INFO");
+      log(monsters[icaster].name + "heal his allies !", "INFO");
       for(var i = 0; i < monsters.length; i++)
       {
         if(monsters[i].exist)
@@ -44,8 +44,35 @@ function healAllies(options)
   };
 }  
 
+/* 
+  Skill which can take a hit instead of another ally
+*/
+function tank(options)
+{
+  monsterSkill(this,options);
+  this.order = 2;
+  this.effect = function(icaster,player, monsters, target, damage)
+  {
+  console.log("lulz "+damage);
+    if (damage != 0 && Math.random() * 100 < this.percentProc)
+    {
+  console.log("test");
+      log(monsters[icaster].name + "take the hit to protect his ally !", "INFO");
+      changemHP(icaster, damage);
+      damage = 0;
+    }
+    return damage;
+  }
+}
+
 var opts_healRabbit = {
   fixedValue : 10,
   percentValue : 0,
 percentProc : 100   };
+var opts_tankRabbit = {
+  fixedValue : 0,
+  percentValue : 0,
+  percentProc : 50 
+}
 var healRabbit = new healAllies(opts_healRabbit);
+var tankRabbit = new tank(opts_tankRabbit);

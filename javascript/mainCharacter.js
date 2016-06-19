@@ -159,3 +159,64 @@ function addcPoint(value) {
     log("You don't have any point available.", "ERROR");
   }
 }
+
+function changecHP(dmg) {
+  player.curHP += dmg;
+  
+  if (player.curHP < 0) player.curHP = 0;
+  else if (player.curHP > player.maxHP) player.curHP = player.maxHP;
+  
+  if (player.dead && player.curHP == player.maxHP) {
+    log("You feel well again!", "INFO");
+    player.dead = false;
+    } else if (player.curHP == 0) {
+    log("You died.", "INFO");
+    player.dead = true;
+    if(player.curArea.isDungeonZone)
+    {
+      leaveDungeon(player.curArea, false);
+    }
+  }
+  
+  displayHPbar();
+}
+
+function changecMP(mana) {
+  player.curMP += mana;
+  
+  if (player.curMP < 0) player.curMP = 0;
+  else if (player.curMP > player.maxMP) player.curMP = player.maxMP;
+  
+  displayMPbar();
+}
+
+function changecXP(xp) {
+  player.xp += xp;
+  
+  while (player.xp >= xptolvlup()) lvlup();
+  
+  displayXPbar();
+}
+
+function xptolvlup() {
+  if (player.level == 1) return 100
+  else if (player.level == 2) return 130;
+  else return player.level * player.level * 20;
+}
+
+function lvlup() {
+  player.xp = player.xp - (xptolvlup());
+  player.level++;
+  
+  player.avTalent++;
+  player.avPoint += 5;
+  
+  changecHP(player.maxHP);
+  changecMP(player.maxMP);
+  
+  updateDisplayCharSheet();
+  updateDisplayTalentSheet();
+  updateDisplayTalents();
+  
+  log("Level up! You are level <b>" + player.level + "</b>.", "INFO");
+}

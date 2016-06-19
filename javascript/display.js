@@ -113,3 +113,7 @@ function updateDisplayCharSheet() {
 
   document.getElementById("char-points").innerHTML = player.avPoint;
 }
+
+function updateDisplayTalents() {
+  document.getElementById("availableSkillPoints").innerHTML = player.avTalent;
+}

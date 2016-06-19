@@ -100,6 +100,7 @@ function initDisplay() {
   updateInventory();
 
   updateStat();
+  updateDisplayTalents();
 }
 
 function initMonster() {
