@@ -1,22 +1,32 @@
 
-function f_callTheHound ()
+function f_callTheHound (level)
 {
-  this.name = "Call the hound";
-  this.level = 0;
-  this.cooldDown = 30 - level;
-  this.manaCost = 2 + level;
-  this.path = "Hunter";
-  this.type = "";
   var self = this;
-  this.delay = 1000;
-  this.nbTics = 3+level;;
-  this.tic = 0;
-  var value = 10*(level+1);
-  this.effect = function() 
-  {
+  self.name = "Call the hound";
+  self.level = level;
+  self.cooldDown = 30 - self.level;
+  self.manaCost = 2 + self.level;
+  self.path = "Hunter";
+  self.type = "";
+  
+  self.delay = 1000;
+  self.nbTics = 3 + self.level;;
+  self.tic = 0;
+  var value = 10*(self.level+1);
+  self.effect = function(iteration) 
+  { 
+    // Before the first effect, check if the character has enough MP and use them
+    if(iteration === 0)
+    {
+      if(player.curMP >= self.manaCost)
+      {
+        changecMP(-self.manaCost);
+      }
+      else return;
+    }
     if(self.tic++ < self.nbTics)
     {
-      setTimeout(self.effect, self.delay);
+      setTimeout(self.effect, self.delay, ++iteration);
       for(var i = 0; i < monsters.length; i++) 
       {
         if(monsters[i].exist) 
@@ -33,4 +43,4 @@ function f_callTheHound ()
   }
 }
 
-callTheHound = new f_callTheHound();
+callTheHound = new f_callTheHound(0);

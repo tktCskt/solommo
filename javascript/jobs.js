@@ -125,11 +125,13 @@ function updatejProgress(job, number) {
 function gather(zone,job)
 {
   var i;
+  var atLeastOne = false; //true if at least one resource has been gathered
   for(i=0;i<zone.listResources.length;i++)
   {
     var K = 0.03;
     if(zone.listResources[i].type2 == job.details)
     {
+      atLeastOne = true;
       var n = K * zone.resourcesRate[i] * Math.sqrt(job.progress);
       var number = Math.trunc(n);
       var r = Math.random();
@@ -140,14 +142,18 @@ function gather(zone,job)
       addcItem(zone.listResources[i],number);
     }
   }
-  var xpGathering = 10;
-
-  log(job.name + ": You earned " + xpGathering + "xp.", "INFO");
-  job.xp += xpGathering;
-  while (job.xp >= (job.progress+1)*50) {
-    job.xp -= (job.progress+1)*50;
-    updatejProgress(job,1);
+  if(atLeastOne)
+  {
+    var xpGathering = 10;
+    log(job.name + ": You earned " + xpGathering + "xp.", "INFO");
+    job.xp += xpGathering;
+    while (job.xp >= (job.progress+1)*50) {
+      job.xp -= (job.progress+1)*50;
+      updatejProgress(job,1);
+    }
+    displayGathering();
   }
+  else log("No resources have been found");
 }
 
 function initJobs() {
